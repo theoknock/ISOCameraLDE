@@ -1,24 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_5" orientation="portrait" appearance="dark"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Camera View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <viewController id="BYZ-38-t0r" customClass="CameraViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleAspectFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="systemBackgroundColor"/>
+                        <subviews>
+                            <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xzt-iO-ced" customClass="CameraView">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9f-cE-wZk">
+                                        <rect key="frame" x="182.33333333333334" y="827.33333333333337" width="49.333333333333343" height="47.666666666666629"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" image="largecircle.fill.circle" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="toggleMovieRecording:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Q0n-sK-hwx"/>
+                                        </connections>
+                                    </button>
+                                    <view opaque="NO" contentMode="scaleToFill" id="yrR-tK-TKW" customClass="CameraControlsView">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" distribution="fillEqually" alignment="center" spacing="21" translatesAutoresizingMaskIntoConstraints="NO" id="wHL-OA-ZVm">
+                                                <rect key="frame" x="181" y="351" width="52" height="193"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCC-wi-bYd">
+                                                        <rect key="frame" x="0.0" y="0.0" width="52" height="50.333333333333336"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                        <state key="normal" image="sun.max.fill" catalog="system">
+                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                        </state>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmG-81-aAG">
+                                                        <rect key="frame" x="1.3333333333333321" y="71.333333333333329" width="49.333333333333343" height="50.333333333333329"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                        <state key="normal" image="viewfinder.circle" catalog="system">
+                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                        </state>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BM-EC-R7x">
+                                                        <rect key="frame" x="1.3333333333333321" y="142.66666666666666" width="49.333333333333343" height="50.333333333333343"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                        <state key="normal" image="bolt.circle" catalog="system">
+                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="toggleTorch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qf2-7w-OoP"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <gestureRecognizers/>
+                                        <viewLayoutGuide key="safeArea" id="ssS-h9-3Rp"/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="cWr-Yh-Exz" appends="YES" id="Dp7-V6-OF4"/>
+                                        </connections>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="d9f-cE-wZk" firstAttribute="bottom" secondItem="Xzt-iO-ced" secondAttribute="bottom" constant="-21" id="YAs-Tv-KJ8"/>
+                                    <constraint firstItem="d9f-cE-wZk" firstAttribute="centerX" secondItem="Xzt-iO-ced" secondAttribute="centerX" id="imJ-lJ-1a9"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="9hx-fX-7BZ"/>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="Poo-Av-TiR"/>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="gty-J0-nZv"/>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="lVk-JT-9XQ"/>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="mdd-3s-Zwf"/>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="oFg-8P-qJV"/>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="wFt-2Q-C3V"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="cameraControlsView" destination="yrR-tK-TKW" id="gsB-Bt-dq4"/>
+                        <outlet property="cameraView" destination="Xzt-iO-ced" id="vMy-j3-xKz"/>
+                        <outlet property="recordButton" destination="d9f-cE-wZk" id="ii2-1M-s5v"/>
+                        <outlet property="torchButton" destination="6BM-EC-R7x" id="QJ9-U2-nHH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="cWr-Yh-Exz">
+                    <connections>
+                        <action selector="handlePanGesture:" destination="yrR-tK-TKW" id="4YW-Uz-pas"/>
+                        <outlet property="delegate" destination="yrR-tK-TKW" id="qz3-y2-Lch"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="139" y="138"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="bolt.circle" catalog="system" width="64" height="62"/>
+        <image name="largecircle.fill.circle" catalog="system" width="64" height="62"/>
+        <image name="sun.max.fill" catalog="system" width="64" height="62"/>
+        <image name="viewfinder.circle" catalog="system" width="64" height="62"/>
+    </resources>
 </document>

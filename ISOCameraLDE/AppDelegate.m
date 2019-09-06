@@ -1,8 +1,8 @@
 //
 //  AppDelegate.m
-//  ISOCameraLDE
+//  asdfg
 //
-//  Created by Xcode Developer on 6/17/19.
+//  Created by Xcode Developer on 8/23/19.
 //  Copyright © 2019 The Life of a Demoniac. All rights reserved.
 //
 
@@ -18,11 +18,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     return YES;
-}
-
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
 

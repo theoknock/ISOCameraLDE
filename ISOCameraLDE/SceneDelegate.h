@@ -1,8 +1,8 @@
 //
 //  SceneDelegate.h
-//  ISOCameraLDE
+//  asdfg
 //
-//  Created by Xcode Developer on 6/17/19.
+//  Created by Xcode Developer on 8/23/19.
 //  Copyright © 2019 The Life of a Demoniac. All rights reserved.
 //
 
