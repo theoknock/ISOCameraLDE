@@ -769,7 +769,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 // Camera controls playground
 
-- (void)incrementFocus:(float)increment
+- (void)incrementFocus
 {
     NSLog(@"%s | Focus %f", __PRETTY_FUNCTION__, self.focus);
     if ( [self.videoDevice lockForConfiguration:nil] ) {
@@ -786,7 +786,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 }
 
 
-- (void)decrementFocus:(float)decrement
+- (void)decrementFocus
 {
     NSLog(@"%s | Focus %f", __PRETTY_FUNCTION__, self.focus);
     if ( [self.videoDevice lockForConfiguration:nil] ) {

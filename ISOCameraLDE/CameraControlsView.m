@@ -83,8 +83,8 @@
         firstTouchInView.x = 0;
     } else if (sender.state == UIGestureRecognizerStateChanged) {
         CGPoint location = [sender locationInView:self];
-        if ([(NSObject *)self.delegate respondsToSelector:@selector(incrementFocus:)] || [(NSObject *)self.delegate respondsToSelector:@selector(decrementFocus:)])
-            (location.x > firstTouchInView.x) ? [self.delegate incrementFocus:(location.x - firstTouchInView.x) * .1] : [self.delegate decrementFocus:(firstTouchInView.x - location.x) * .1];
+        if ([(NSObject *)self.delegate respondsToSelector:@selector(incrementFocus)] || [(NSObject *)self.delegate respondsToSelector:@selector(decrementFocus)])
+            (location.x > firstTouchInView.x) ? [self.delegate incrementFocus] : [self.delegate decrementFocus];
         else
             NSLog(@"%@", [(NSObject *)_delegate description]);
     }

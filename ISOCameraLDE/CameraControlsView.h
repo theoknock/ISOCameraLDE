@@ -20,8 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
 
-- (void)incrementFocus:(float)increment;
-- (void)decrementFocus:(float)decrement;
+- (void)incrementFocus;
+- (void)decrementFocus;
 
 - (void)incrementISO:(float)increment;
 - (void)decrementISO:(float)decrement;
