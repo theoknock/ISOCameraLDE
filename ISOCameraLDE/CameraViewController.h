@@ -11,20 +11,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CameraViewController : UIViewController <UIGestureRecognizerDelegate, CameraControlsDelegate>
+@class CameraControlsView;
 
-@property (weak, nonatomic) IBOutlet CameraControlsView *cameraControlsView;
+@interface CameraViewController : UIViewController
+
 @property (assign) float ISO;
 - (void)setISO:(float)ISO;
 
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
+- (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration;
 
 - (void)incrementFocus;
 - (void)decrementFocus;
 
-- (void)incrementISO:(float)increment;
-- (void)decrementISO:(float)decrement;
+- (void)incrementISO;
+- (void)decrementISO;
+
+- (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 
 @end
 

@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CameraViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol CameraControlsDelegate
+@protocol CameraControlsDelegate <NSObject>
 
 @required
 
@@ -20,11 +21,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
 
+- (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration;
+
 - (void)incrementFocus;
 - (void)decrementFocus;
 
-- (void)incrementISO:(float)increment;
-- (void)decrementISO:(float)decrement;
+- (void)incrementISO;
+- (void)decrementISO;
+
+- (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 
 @end
 
@@ -35,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, nullable) id<CameraControlsDelegate> delegate;
 
 @property (nonatomic, nullable) UIPanGestureRecognizer *panGestureRecognizer;
+- (IBAction)record:(id)sender;
+- (IBAction)focus:(id)sender;
 
 @end
 

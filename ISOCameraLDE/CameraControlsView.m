@@ -45,15 +45,15 @@
 
 - (void)awakeFromNib
 {
-//    self = [super init];
-//    if (self) {
-        [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        [self setOpaque:FALSE];
-        [self setBackgroundColor:[UIColor clearColor]];
-        
-        [self setupGestureRecognizers];
-//    }
-//    return self;
+    //    self = [super init];
+    //    if (self) {
+    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [self setOpaque:FALSE];
+    [self setBackgroundColor:[UIColor clearColor]];
+    
+    [self setupGestureRecognizers];
+    //    }
+    //    return self;
 }
 
 - (void)setupGestureRecognizers
@@ -77,16 +77,34 @@
 }
 
 - (IBAction)handlePanGesture:(UIPanGestureRecognizer *)sender {
+    
     if (sender.state == UIGestureRecognizerStateBegan) {
         firstTouchInView = [sender locationInView:self];
     } else if (sender.state == UIGestureRecognizerStateEnded) {
         firstTouchInView.x = 0;
+//        if ([(UIButton *)[self viewWithTag:2] isSelected])
+//        {
+//             [(UIButton *)[self viewWithTag:2] setImage:[UIImage systemImageNamed:@"sun.max.fill"] forState:UIControlStateSelected];
+//        } else if ([(UIButton *)[self viewWithTag:1] isSelected]) {
+//            [(UIButton *)[self viewWithTag:2] setImage:[UIImage systemImageNamed:@"viewfinder.circle.fill"] forState:UIControlStateSelected];
+//        }
     } else if (sender.state == UIGestureRecognizerStateChanged) {
         CGPoint location = [sender locationInView:self];
-        if ([(NSObject *)self.delegate respondsToSelector:@selector(incrementFocus)] || [(NSObject *)self.delegate respondsToSelector:@selector(decrementFocus)])
-            (location.x > firstTouchInView.x) ? [self.delegate incrementFocus] : [self.delegate decrementFocus];
-        else
-            NSLog(@"%@", [(NSObject *)_delegate description]);
+        if ([(UIButton *)[self viewWithTag:2] isSelected])
+        {
+            [(UIButton *)[self viewWithTag:2] setImage:[UIImage systemImageNamed:@"sun.max.fill"] forState:UIControlStateSelected];
+            if ([(NSObject *)self.delegate respondsToSelector:@selector(incrementFocus)] || [(NSObject *)self.delegate respondsToSelector:@selector(decrementFocus)])
+                (location.x > firstTouchInView.x) ? [self.delegate incrementFocus] : [self.delegate decrementFocus];
+            else
+                NSLog(@"%@", [(NSObject *)_delegate description]);
+            NSString *numberedImageName = [NSString stringWithFormat:@"%ld.square.fill", (long)(self.delegate.focus * 10.0)];
+            [(UIButton *)[self viewWithTag:2] setImage:[UIImage systemImageNamed:numberedImageName] forState:UIControlStateSelected];
+        } else if ([(UIButton *)[self viewWithTag:1] isSelected]) {
+            if ([(NSObject *)self.delegate respondsToSelector:@selector(incrementISO)] || [(NSObject *)self.delegate respondsToSelector:@selector(decrementISO)])
+                (location.x > firstTouchInView.x) ? [self.delegate incrementISO] : [self.delegate decrementISO];
+            else
+                NSLog(@"%@", [(NSObject *)_delegate description]);
+        }
     }
 }
 
@@ -95,6 +113,43 @@
     return self.delegate;
 }
 
-- (IBAction)panGestureRecognizer:(UIPanGestureRecognizer *)sender {
+- (IBAction)record:(id)sender
+{
+    [self.delegate toggleRecordingWithCompletionHandler:^(BOOL isRunning, NSError * _Nonnull error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (isRunning)
+                [(UIButton *)[self viewWithTag:4] setImage:[UIImage systemImageNamed:@"camera.circle.fill"] forState:UIControlStateNormal];
+            else
+                [(UIButton *)[self viewWithTag:4] setImage:[UIImage systemImageNamed:@"camera.circle"] forState:UIControlStateNormal];
+        });
+    }];
 }
+
+// When focus button is selected, the exposure duration changes to 1/30th of second
+- (IBAction)focus:(id)sender
+{
+    [(UIButton *)[self viewWithTag:1] setSelected:FALSE];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [sender setSelected:![sender isSelected]];
+    if ([sender isSelected])
+    {
+        [(UIButton *)sender setImage:[UIImage systemImageNamed:@"viewfinder.circle.fill"] forState:UIControlStateSelected];
+        [self.delegate normalizeExposureDuration:TRUE];
+    } else {
+        [(UIButton *)sender setImage:[UIImage systemImageNamed:@"viewfinder.circle"] forState:UIControlStateNormal];
+        [self.delegate normalizeExposureDuration:FALSE];
+    }
+}
+
+- (IBAction)ISOButton:(UIButton *)sender
+{
+    [(UIButton *)[self viewWithTag:2] setSelected:FALSE];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [sender setSelected:![sender isSelected]];
+    if ([sender isSelected])
+        [(UIButton *)sender setImage:[UIImage systemImageNamed:@"sun.max.fill"] forState:UIControlStateSelected];
+    else
+        [(UIButton *)sender setImage:[UIImage systemImageNamed:@"sun.max"] forState:UIControlStateNormal];
+}
+
 @end

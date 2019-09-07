@@ -34,8 +34,8 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 @property (weak, nonatomic) IBOutlet CameraView *cameraView;
 @property (nonatomic, weak) IBOutlet UILabel *cameraUnavailableLabel;
 @property (nonatomic, weak) IBOutlet UIButton *resumeButton;
-@property (weak, nonatomic) IBOutlet UIButton *recordButton;
 
+@property (weak, nonatomic) IBOutlet CameraControlsView *cameraControlsView;
 
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *recordTapGestureRecognizer;
 @property (nonatomic, weak) IBOutlet UIButton *torchButton;
@@ -78,10 +78,11 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 {
     [super viewDidLoad];
     [self.cameraControlsView setDelegate:(id<CameraControlsDelegate> _Nullable)self];
+    [self setISO:self.videoDevice.activeFormat.minISO];
     
     // Disable UI until the session starts running
-//    [self.recordButton setUserInteractionEnabled:false];
-//    [self.recordButton setTintColor:[UIColor darkGrayColor]];
+    //    //[self.recordButton setUserInteractionEnabled:false];
+    //    //[self.recordButton setTintColor:[UIColor darkGrayColor]];
     
     self.HUDButton.enabled = NO;
     
@@ -365,8 +366,8 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             self.movieFileOutput = movieFileOutput;
             
             dispatch_async( dispatch_get_main_queue(), ^{
-                [self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor redColor]] forState:UIControlStateNormal];
-                [self.recordButton setTintColor:[UIColor redColor]];
+                //                //[self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor redColor]] forState:UIControlStateNormal];
+                //                //[self.recordButton setTintColor:[UIColor redColor]];
             } );
         }
         
@@ -495,12 +496,34 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 - (void)changeISO:(id)sender
 {
-    UISlider *control = sender;
     __autoreleasing NSError *error = nil;
     
     if ( [self.videoDevice lockForConfiguration:&error] ) {
         @try {
-            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:control.value completionHandler:nil];
+            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:([self.torchButton isSelected]) ? self.videoDevice.activeFormat.maxISO : self.videoDevice.activeFormat.minISO completionHandler:nil];
+        } @catch (NSException *exception) {
+            NSLog( @"Exposure mode AVCaptureExposureModeCustom is not supported.");
+        } @finally {
+            
+        }
+        
+        [self.videoDevice unlockForConfiguration];
+    }
+    else {
+        NSLog( @"Could not lock device for configuration: %@", error );
+    }
+}
+
+- (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration
+{
+    __autoreleasing NSError *error = nil;
+    
+    if ( [self.videoDevice lockForConfiguration:&error] ) {
+        @try {
+            if (shouldNormalizeExposureDuration)
+                [self.videoDevice setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
+            else
+                [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:([self.torchButton isSelected]) ? self.videoDevice.activeFormat.maxISO : self.videoDevice.activeFormat.minISO completionHandler:nil];
         } @catch (NSException *exception) {
             NSLog( @"Exposure mode AVCaptureExposureModeCustom is not supported.");
         } @finally {
@@ -516,7 +539,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 #pragma mark Recording Movies
 
-- (IBAction)toggleMovieRecording:(id)sender
+- (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler
 {
     // Retrieve the video preview layer's video orientation on the main queue before entering the session queue. We do this to ensure UI
     // elements are accessed on the main thread and session configuration is done on the session queue.
@@ -525,8 +548,8 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     dispatch_async( self.sessionQueue, ^{
         if ( ! self.movieFileOutput.isRecording ) {
             dispatch_async( dispatch_get_main_queue(), ^{
-                [self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor whiteColor]] forState:UIControlStateNormal];
-                [self.recordButton setTintColor:[UIColor whiteColor]];
+                //[self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor whiteColor]] forState:UIControlStateNormal];
+                //[self.recordButton setTintColor:[UIColor whiteColor]];
             });
             if ( [UIDevice currentDevice].isMultitaskingSupported ) {
                 // Setup background task. This is needed because the -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:]
@@ -543,14 +566,15 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             NSString *outputFileName = [NSProcessInfo processInfo].globallyUniqueString;
             NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
             [self.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
-            
+            completionHandler(TRUE, nil);
         }
         else {
             [self.movieFileOutput stopRecording];
             dispatch_async( dispatch_get_main_queue(), ^{
-                [self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor redColor]] forState:UIControlStateNormal];
-                [self.recordButton setTintColor:[UIColor redColor]];
+                //[self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor redColor]] forState:UIControlStateNormal];
+                //[self.recordButton setTintColor:[UIColor redColor]];
             });
+            completionHandler(FALSE, nil);
         }
     } );
 }
@@ -560,8 +584,8 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     // Enable the Record button to let the user stop the recording
     dispatch_async( dispatch_get_main_queue(), ^{
-        [self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle.fill"] imageWithTintColor:[UIColor whiteColor]] forState:UIControlStateNormal];
-        [self.recordButton setTintColor:[UIColor whiteColor]];
+        //[self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle.fill"] imageWithTintColor:[UIColor whiteColor]] forState:UIControlStateNormal];
+        //[self.recordButton setTintColor:[UIColor whiteColor]];
     });
 }
 
@@ -683,8 +707,8 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
         }
         dispatch_async( dispatch_get_main_queue(), ^{
             dispatch_async( dispatch_get_main_queue(), ^{
-                [self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor redColor]] forState:UIControlStateNormal];
-                [self.recordButton setTintColor:[UIColor redColor]];
+                //[self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor redColor]] forState:UIControlStateNormal];
+                //[self.recordButton setTintColor:[UIColor redColor]];
             });
         } );
     }
@@ -773,10 +797,10 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 {
     NSLog(@"%s | Focus %f", __PRETTY_FUNCTION__, self.focus);
     if ( [self.videoDevice lockForConfiguration:nil] ) {
-        if (self.focus + .1 < 1.0)
+        if (self.focus + .01 < 1.0)
         {
-            [self.videoDevice setFocusModeLockedWithLensPosition:self.focus + .1 completionHandler:nil];
-            [self setFocus:self.focus + .1];
+            [self.videoDevice setFocusModeLockedWithLensPosition:self.focus + .01 completionHandler:nil];
+            [self setFocus:self.focus + .01];
         }
         [self.videoDevice unlockForConfiguration];
     }
@@ -790,10 +814,10 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 {
     NSLog(@"%s | Focus %f", __PRETTY_FUNCTION__, self.focus);
     if ( [self.videoDevice lockForConfiguration:nil] ) {
-        if (self.focus - .1 > 0.0)
+        if (self.focus - .01 > 0.0)
         {
-            [self.videoDevice setFocusModeLockedWithLensPosition:self.focus - .1 completionHandler:nil];
-            [self setFocus:self.focus - .1];
+            [self.videoDevice setFocusModeLockedWithLensPosition:self.focus - .01 completionHandler:nil];
+            [self setFocus:self.focus - .01];
         }
         [self.videoDevice unlockForConfiguration];
     }
@@ -802,6 +826,46 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     }
 }
 
+- (void)incrementISO
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if ( [self.videoDevice lockForConfiguration:nil] ) {
+        @try {
+            [self setISO:self.ISO + 1.0];
+            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self.ISO completionHandler:nil];
+            NSLog(@"ISO %f", self.ISO);
+        } @catch (NSException *exception) {
+            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self.ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
+        } @finally {
+            
+        }
+        
+        [self.videoDevice unlockForConfiguration];
+    }
+    else {
+        NSLog( @"Could not lock device for configuration: %@", nil );
+    }
+}
+
+- (void)decrementISO
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if ( [self.videoDevice lockForConfiguration:nil] ) {
+        @try {
+            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:_ISO - 1 completionHandler:nil];
+            NSLog(@"ISO %f", self.ISO);
+        } @catch (NSException *exception) {
+            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self.ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
+        } @finally {
+            
+        }
+        
+        [self.videoDevice unlockForConfiguration];
+    }
+    else {
+        NSLog( @"Could not lock device for configuration: %@", nil );
+    }
+}
 //- (void)decrementISO:(float)decrement {
 //    <#code#>
 //}
