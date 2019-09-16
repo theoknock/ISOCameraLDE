@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) float ISO;
 - (void)setISO:(float)ISO;
 
-@property (assign) float focus;
+@property (nonatomic, assign) float focus;
 - (void)setFocus:(float)focus;
 - (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration;
 

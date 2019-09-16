@@ -23,9 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration;
 
-- (void)incrementFocus;
-- (void)decrementFocus;
-
 - (void)incrementISO;
 - (void)decrementISO;
 

@@ -273,16 +273,17 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 - (IBAction)toggleTorch:(id)sender
 {
+    NSProcessInfoThermalState thermalState = [[NSProcessInfo processInfo] thermalState];
     dispatch_async(dispatch_get_main_queue(), ^{
         __autoreleasing NSError *error;
         if ([self->_videoDevice lockForConfiguration:&error]) {
-            if ([self->_videoDevice isTorchActive])
+            if ((thermalState != NSProcessInfoThermalStateCritical && thermalState != NSProcessInfoThermalStateSerious) && ![self->_videoDevice isTorchActive])
             {
-                [self->_videoDevice setTorchMode:0];
-                [self.torchButton setImage:[UIImage systemImageNamed:@"bolt.circle"] forState:UIControlStateNormal];
-            } else {
                 [self->_videoDevice setTorchModeOnWithLevel:AVCaptureMaxAvailableTorchLevel error:nil];
                 [self.torchButton setImage:[UIImage systemImageNamed:@"bolt.circle.fill"] forState:UIControlStateNormal];
+            } else if (![sender isKindOfClass:[UIButton class]] || [self->_videoDevice isTorchActive] || (thermalState == NSProcessInfoThermalStateCritical || thermalState == NSProcessInfoThermalStateSerious)) {
+                [self->_videoDevice setTorchMode:0];
+                [self.torchButton setImage:[UIImage systemImageNamed:@"bolt.circle"] forState:UIControlStateNormal];
             }
         } else {
             NSLog(@"AVCaptureDevice lockForConfiguration returned error\t%@", error);
@@ -658,6 +659,8 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     // interruption reasons.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionWasInterrupted:) name:AVCaptureSessionWasInterruptedNotification object:self.session];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionInterruptionEnded:) name:AVCaptureSessionInterruptionEndedNotification object:self.session];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleTorch:) name:NSProcessInfoThermalStateDidChangeNotification object:nil];
 }
 
 - (void)removeObservers
@@ -876,14 +879,35 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 //}
 //
 //
-//- (void)setFocus:(float)focus {
-//    <#code#>
-//}
+- (void)setFocus:(float)focus {
+    if ( [self.videoDevice lockForConfiguration:nil] ) {
+        [self.videoDevice setFocusModeLockedWithLensPosition:focus completionHandler:nil];
+        [self.videoDevice unlockForConfiguration];
+        _focus = focus;
+    } else {
+        NSLog( @"Could not lock device for focus configuration: %@", nil );
+    }
+}
 //
 //
-//- (void)setISO:(float)ISO {
-//    <#code#>
-//}
+- (void)setISO:(float)ISO {
+    ISO = ((self.videoDevice.activeFormat.maxISO - self.videoDevice.activeFormat.minISO) * ISO) + self.videoDevice.activeFormat.minISO;
+    if ( [self.videoDevice lockForConfiguration:nil] ) {
+        @try {
+            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:ISO completionHandler:nil];
+            _ISO = ISO;
+        } @catch (NSException *exception) {
+            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
+        } @finally {
+            
+        }
+        
+        [self.videoDevice unlockForConfiguration];
+    }
+    else {
+        NSLog( @"Could not lock device for configuration: %@", nil );
+    }
+}
 //
 //
 //
