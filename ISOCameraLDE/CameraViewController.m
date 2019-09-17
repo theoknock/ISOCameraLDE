@@ -70,7 +70,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 @implementation CameraViewController
 
-@synthesize focus = _focus;
+@synthesize focus = _focus, ISO = _ISO, exposureDuration = _exposureDuration;
 
 #pragma mark View Controller Life Cycle
 
@@ -524,7 +524,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             if (shouldNormalizeExposureDuration)
                 [self.videoDevice setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
             else
-                [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:([self.torchButton isSelected]) ? self.videoDevice.activeFormat.maxISO : self.videoDevice.activeFormat.minISO completionHandler:nil];
+                [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self->_ISO completionHandler:nil];
         } @catch (NSException *exception) {
             NSLog( @"Exposure mode AVCaptureExposureModeCustom is not supported.");
         } @finally {
@@ -794,114 +794,26 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     }
 }
 
-// Camera controls playground
-
-- (void)incrementFocus
-{
-    NSLog(@"%s | Focus %f", __PRETTY_FUNCTION__, self.focus);
-    if ( [self.videoDevice lockForConfiguration:nil] ) {
-        if (self.focus + .01 < 1.0)
-        {
-            [self.videoDevice setFocusModeLockedWithLensPosition:self.focus + .01 completionHandler:nil];
-            [self setFocus:self.focus + .01];
-        }
-        [self.videoDevice unlockForConfiguration];
-    }
-    else {
-        NSLog( @"Could not lock device for focus configuration: %@", nil );
-    }
-}
-
-
-- (void)decrementFocus
-{
-    NSLog(@"%s | Focus %f", __PRETTY_FUNCTION__, self.focus);
-    if ( [self.videoDevice lockForConfiguration:nil] ) {
-        if (self.focus - .01 > 0.0)
-        {
-            [self.videoDevice setFocusModeLockedWithLensPosition:self.focus - .01 completionHandler:nil];
-            [self setFocus:self.focus - .01];
-        }
-        [self.videoDevice unlockForConfiguration];
-    }
-    else {
-        NSLog( @"Could not lock device for focus configuration: %@", nil );
-    }
-}
-
-//- (void)incrementISO
-//{
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
-//    if ( [self.videoDevice lockForConfiguration:nil] ) {
-//        @try {
-//            [self setISO:self.ISO + 1.0];
-//            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self.ISO completionHandler:nil];
-//            NSLog(@"ISO %f", self.ISO);
-//        } @catch (NSException *exception) {
-//            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self.ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
-//        } @finally {
-//            
-//        }
-//        
-//        [self.videoDevice unlockForConfiguration];
-//    }
-//    else {
-//        NSLog( @"Could not lock device for configuration: %@", nil );
-//    }
-//}
-//
-//- (void)decrementISO
-//{
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
-//    if ( [self.videoDevice lockForConfiguration:nil] ) {
-//        @try {
-//            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:_ISO - 1 completionHandler:nil];
-//            NSLog(@"ISO %f", self.ISO);
-//        } @catch (NSException *exception) {
-//            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self.ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
-//        } @finally {
-//            
-//        }
-//        
-//        [self.videoDevice unlockForConfiguration];
-//    }
-//    else {
-//        NSLog( @"Could not lock device for configuration: %@", nil );
-//    }
-//}
-//- (void)decrementISO:(float)decrement {
-//    <#code#>
-//}
-//
-//
-//- (void)incrementISO:(float)increment {
-//    <#code#>
-//}
-//
-//
 - (void)setFocus:(float)focus {
     if ( [self.videoDevice lockForConfiguration:nil] ) {
         [self.videoDevice setFocusModeLockedWithLensPosition:focus completionHandler:nil];
         [self.videoDevice unlockForConfiguration];
-        _focus = focus;
     } else {
         NSLog( @"Could not lock device for focus configuration: %@", nil );
     }
 }
-//
-//
 
 - (void)setISO:(float)ISO {
     if ( [self.videoDevice lockForConfiguration:nil] ) {
         @try {
             float maxISO = self.videoDevice.activeFormat.maxISO;
             float minISO = self.videoDevice.activeFormat.minISO;
-            ISO = minISO + (ISO * (maxISO - minISO));
+            self->_ISO = minISO + (ISO * (maxISO - minISO));
             NSLog(@"ISO\t%f", ISO);
-            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:ISO completionHandler:nil];
+            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self->_ISO completionHandler:nil];
             
         } @catch (NSException *exception) {
-            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
+            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self->_ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
         } @finally {
             
         }

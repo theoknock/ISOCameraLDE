@@ -15,18 +15,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CameraViewController : UIViewController
 
-@property (assign) float ISO;
+@property (assign) Float64 exposureDuration;
+- (void)setExposureDuration:(Float64)exposureDuration;
+
+@property (nonatomic, assign) float ISO;
 - (void)setISO:(float)ISO;
 
-@property (nonatomic, assign) float focus;
+@property (assign) float focus;
 - (void)setFocus:(float)focus;
+
 - (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration;
-
-- (void)incrementFocus;
-- (void)decrementFocus;
-
-- (void)incrementISO;
-- (void)decrementISO;
 
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 

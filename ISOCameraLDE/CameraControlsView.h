@@ -11,9 +11,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, ControlButtonTag) {
+    ControlButtonTagFocus = 2,
+    ControlButtonTagISO = 1
+};
+
 @protocol CameraControlsDelegate <NSObject>
 
 @required
+
+@property (assign) Float64 exposureDuration;
+- (void)setExposureDuration:(Float64)exposureDuration;
 
 @property (assign) float ISO;
 - (void)setISO:(float)ISO;
@@ -35,7 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable) UIPanGestureRecognizer *panGestureRecognizer;
 - (IBAction)record:(id)sender;
-- (IBAction)focus:(id)sender;
+- (IBAction)focus:(UIButton *)sender;
+- (IBAction)exposureDuration:(UIButton *)sender;
+- (IBAction)iso:(UIButton *)sender;
 
 @end
 
