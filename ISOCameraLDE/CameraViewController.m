@@ -829,46 +829,46 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     }
 }
 
-- (void)incrementISO
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    if ( [self.videoDevice lockForConfiguration:nil] ) {
-        @try {
-            [self setISO:self.ISO + 1.0];
-            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self.ISO completionHandler:nil];
-            NSLog(@"ISO %f", self.ISO);
-        } @catch (NSException *exception) {
-            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self.ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
-        } @finally {
-            
-        }
-        
-        [self.videoDevice unlockForConfiguration];
-    }
-    else {
-        NSLog( @"Could not lock device for configuration: %@", nil );
-    }
-}
-
-- (void)decrementISO
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    if ( [self.videoDevice lockForConfiguration:nil] ) {
-        @try {
-            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:_ISO - 1 completionHandler:nil];
-            NSLog(@"ISO %f", self.ISO);
-        } @catch (NSException *exception) {
-            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self.ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
-        } @finally {
-            
-        }
-        
-        [self.videoDevice unlockForConfiguration];
-    }
-    else {
-        NSLog( @"Could not lock device for configuration: %@", nil );
-    }
-}
+//- (void)incrementISO
+//{
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    if ( [self.videoDevice lockForConfiguration:nil] ) {
+//        @try {
+//            [self setISO:self.ISO + 1.0];
+//            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self.ISO completionHandler:nil];
+//            NSLog(@"ISO %f", self.ISO);
+//        } @catch (NSException *exception) {
+//            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self.ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
+//        } @finally {
+//            
+//        }
+//        
+//        [self.videoDevice unlockForConfiguration];
+//    }
+//    else {
+//        NSLog( @"Could not lock device for configuration: %@", nil );
+//    }
+//}
+//
+//- (void)decrementISO
+//{
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    if ( [self.videoDevice lockForConfiguration:nil] ) {
+//        @try {
+//            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:_ISO - 1 completionHandler:nil];
+//            NSLog(@"ISO %f", self.ISO);
+//        } @catch (NSException *exception) {
+//            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self.ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
+//        } @finally {
+//            
+//        }
+//        
+//        [self.videoDevice unlockForConfiguration];
+//    }
+//    else {
+//        NSLog( @"Could not lock device for configuration: %@", nil );
+//    }
+//}
 //- (void)decrementISO:(float)decrement {
 //    <#code#>
 //}
@@ -890,12 +890,16 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 }
 //
 //
+
 - (void)setISO:(float)ISO {
-    ISO = ((self.videoDevice.activeFormat.maxISO - self.videoDevice.activeFormat.minISO) * ISO) + self.videoDevice.activeFormat.minISO;
     if ( [self.videoDevice lockForConfiguration:nil] ) {
         @try {
+            float maxISO = self.videoDevice.activeFormat.maxISO;
+            float minISO = self.videoDevice.activeFormat.minISO;
+            ISO = minISO + (ISO * (maxISO - minISO));
+            NSLog(@"ISO\t%f", ISO);
             [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:ISO completionHandler:nil];
-            _ISO = ISO;
+            
         } @catch (NSException *exception) {
             NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
         } @finally {

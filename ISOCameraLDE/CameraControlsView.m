@@ -106,11 +106,12 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
                 NSString *numberedImageName = [NSString stringWithFormat:@"%ld.square.fill", (long)(self.delegate.focus * 10.0)];
                 [(UIButton *)[self viewWithTag:2] setImage:[UIImage systemImageNamed:numberedImageName] forState:UIControlStateSelected];
             } else if ([(UIButton *)[self viewWithTag:1] isSelected]) {
-                if ([(NSObject *)self.delegate respondsToSelector:@selector(incrementISO)] || [(NSObject *)self.delegate respondsToSelector:@selector(decrementISO)])
+//                if ([(NSObject *)self.delegate respondsToSelector:@selector(incrementISO)] || [(NSObject *)self.delegate respondsToSelector:@selector(decrementISO)])
 //                    (location.x > firstTouchInView.x) ? [self.delegate incrementISO] : [self.delegate decrementISO];
                     [self.delegate setISO:location.x / CGRectGetWidth(sender.view.frame)];
-                else
-                    NSLog(@"%@", [(NSObject *)_delegate description]);
+//                NSLog(@"ISO\t%f", location.x / CGRectGetWidth(sender.view.frame));
+//                else
+//                    NSLog(@"%@", [(NSObject *)_delegate description]);
             }
         }
     });
@@ -158,9 +159,13 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setSelected:![sender isSelected]];
         if ([sender isSelected])
+        {
             [(UIButton *)sender setImage:[UIImage systemImageNamed:@"sun.max.fill"] forState:UIControlStateSelected];
-        else
+            [self.delegate normalizeExposureDuration:TRUE];
+        } else {
             [(UIButton *)sender setImage:[UIImage systemImageNamed:@"sun.max"] forState:UIControlStateNormal];
+            [self.delegate normalizeExposureDuration:FALSE];
+        }
     });
 }
 

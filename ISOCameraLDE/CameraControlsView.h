@@ -23,9 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration;
 
-- (void)incrementISO;
-- (void)decrementISO;
-
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 
 @end
