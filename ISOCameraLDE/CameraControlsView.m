@@ -132,7 +132,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         [(UIButton *)[self viewWithTag:ControlButtonTagISO] setHighlighted:FALSE];
         NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setSelected:![sender isSelected]];
-        [(UIButton *)sender setHighlighted:![(UIButton *)sender isHighlighted]];
+        [(UIButton *)sender setHighlighted:[sender isSelected]];
     });
 }
 
@@ -140,8 +140,8 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setSelected:![sender isSelected]];
-        [(UIButton *)sender setHighlighted:![sender isHighlighted]];
-        [self.delegate normalizeExposureDuration:[sender isHighlighted]];
+        [(UIButton *)sender setHighlighted:[sender isSelected]];
+        [self.delegate normalizeExposureDuration:[sender isSelected]];
     });
 }
 
@@ -151,7 +151,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setHighlighted:FALSE];
         NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setSelected:![sender isSelected]];
-        [(UIButton *)sender setHighlighted:![(UIButton *)sender isHighlighted]];
+        [(UIButton *)sender setHighlighted:[sender isSelected]];
     });
 }
 

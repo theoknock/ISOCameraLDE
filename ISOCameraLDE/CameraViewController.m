@@ -524,9 +524,9 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             if (shouldNormalizeExposureDuration)
                 [self.videoDevice setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
             else
-                [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self->_ISO completionHandler:nil];
+                [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:(self.ISO < self.videoDevice.activeFormat.minISO) ? self.videoDevice.activeFormat.minISO : self.ISO completionHandler:nil];
         } @catch (NSException *exception) {
-            NSLog( @"Exposure mode AVCaptureExposureModeCustom is not supported.");
+            NSLog( @"Error setting exposure mode to AVCaptureExposureModeCustom:\t%@\n%@.", error.description, exception.description);
         } @finally {
             
         }
@@ -809,8 +809,9 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             float maxISO = self.videoDevice.activeFormat.maxISO;
             float minISO = self.videoDevice.activeFormat.minISO;
             self->_ISO = minISO + (ISO * (maxISO - minISO));
-            NSLog(@"ISO\t%f", ISO);
-            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self->_ISO completionHandler:nil];
+            [self normalizeExposureDuration:FALSE];
+//            NSLog(@"ISO\t%f", ISO);
+//            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self->_ISO completionHandler:nil];
             
         } @catch (NSException *exception) {
             NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self->_ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
