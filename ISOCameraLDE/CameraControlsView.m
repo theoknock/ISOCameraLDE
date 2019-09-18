@@ -83,25 +83,17 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 
 - (IBAction)handlePanGesture:(UIPanGestureRecognizer *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (sender.state == UIGestureRecognizerStateBegan) {
-            firstTouchInView = [sender locationInView:self];
-        } else if (sender.state == UIGestureRecognizerStateEnded) {
-            firstTouchInView.x = 0;
-            //        if ([(UIButton *)[self viewWithTag:2] isSelected])
-            //        {
-            //             [(UIButton *)[self viewWithTag:2] setImage:[UIImage systemImageNamed:@"sun.max.fill"] forState:UIControlStateSelected];
-            //        } else if ([(UIButton *)[self viewWithTag:1] isSelected]) {
-            //            [(UIButton *)[self viewWithTag:2] setImage:[UIImage systemImageNamed:@"viewfinder.circle.fill"] forState:UIControlStateSelected];
-            //        }
-        } else if (sender.state == UIGestureRecognizerStateChanged) {
-            CGPoint location = [sender locationInView:self];
+        if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
+//            [self adjustCameraSetting:([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected]) ? ControlButtonTagFocus : ControlButtonTagISO usingTouchAtPoint:CGPointZero];
+            CGFloat location = [sender locationInView:self].x / CGRectGetWidth(self.frame);
             if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
             {
-                [self.delegate setFocus:location.x / CGRectGetWidth(sender.view.frame)];
-              NSString *numberedImageName = [NSString stringWithFormat:@"%ld.square.fill", (long)(self.delegate.focus * 10.0)];
+                [self.delegate setFocus:location];
+                NSString *numberedImageName = [NSString stringWithFormat:@"%ld.square.fill", (long)(self.delegate.focus * 10.0)];
                 [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setImage:[UIImage systemImageNamed:numberedImageName] forState:UIControlStateSelected];
-            } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected]) {
-                [self.delegate setISO:location.x / CGRectGetWidth(sender.view.frame)];
+            } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected])
+            {
+                [self.delegate setISO:location];
             }
         }
     });
@@ -141,7 +133,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setSelected:![sender isSelected]];
         [(UIButton *)sender setHighlighted:[sender isSelected]];
-        [self.delegate normalizeExposureDuration:[sender isSelected]];
+        [self.delegate setExposureDuration:([sender isSelected]) ? CMTimeMakeWithSeconds(1.0/33.0, 1000*1000*1000) : CMTimeMakeWithSeconds(1.0/3.0, 1000*1000*1000)];
     });
 }
 

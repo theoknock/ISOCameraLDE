@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreMedia/CoreMedia.h>
 #import "CameraControlsView.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -15,16 +16,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CameraViewController : UIViewController
 
-@property (assign) Float64 exposureDuration;
-- (void)setExposureDuration:(Float64)exposureDuration;
+@property (assign) CMTime exposureDuration;
+- (void)setExposureDuration:(CMTime)exposureDuration;
 
 @property (nonatomic, assign) float ISO;
 - (void)setISO:(float)ISO;
 
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
-
-- (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration;
 
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 

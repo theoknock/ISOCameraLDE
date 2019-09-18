@@ -20,16 +20,14 @@ typedef NS_ENUM(NSUInteger, ControlButtonTag) {
 
 @required
 
-@property (assign) Float64 exposureDuration;
-- (void)setExposureDuration:(Float64)exposureDuration;
+@property (assign) CMTime exposureDuration;
+- (void)setExposureDuration:(CMTime)exposureDuration;
 
 @property (assign) float ISO;
 - (void)setISO:(float)ISO;
 
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
-
-- (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration;
 
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 

@@ -78,7 +78,6 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 {
     [super viewDidLoad];
     [self.cameraControlsView setDelegate:(id<CameraControlsDelegate> _Nullable)self];
-    [self setISO:self.videoDevice.activeFormat.minISO];
     
     // Disable UI until the session starts running
     //    //[self.recordButton setUserInteractionEnabled:false];
@@ -432,7 +431,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             
             if ( [self.videoDevice isExposureModeSupported:AVCaptureExposureModeCustom] ) {
                 self.videoDevice.exposureMode = AVCaptureExposureModeCustom;
-                [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:AVCaptureISOCurrent completionHandler:nil];
+                [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds((1.0/3.0), 1000*1000*1000) ISO:self.videoDevice.activeFormat.minISO completionHandler:nil];
                 [self.videoDevice unlockForConfiguration];
             }
             else {
@@ -515,28 +514,27 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     }
 }
 
-- (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration
-{
-    __autoreleasing NSError *error = nil;
-    
-    if ( [self.videoDevice lockForConfiguration:&error] ) {
-        @try {
-            if (shouldNormalizeExposureDuration)
-                [self.videoDevice setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
-            else
-                [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:(self.ISO < self.videoDevice.activeFormat.minISO) ? self.videoDevice.activeFormat.minISO : self.ISO completionHandler:nil];
-        } @catch (NSException *exception) {
-            NSLog( @"Error setting exposure mode to AVCaptureExposureModeCustom:\t%@\n%@.", error.description, exception.description);
-        } @finally {
-            
-        }
-        
-        [self.videoDevice unlockForConfiguration];
-    }
-    else {
-        NSLog( @"Could not lock device for configuration: %@", error );
-    }
-}
+//- (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration
+//{
+//    __autoreleasing NSError *error = nil;
+//    if ( [self.videoDevice lockForConfiguration:&error] ) {
+//        @try {
+//            if (shouldNormalizeExposureDuration)
+//                [self.videoDevice setExposureModeCustomWithDuration:kCMTimeInvalid /*CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 )*/ ISO:self.videoDevice.activeFormat.maxISO completionHandler:nil];
+//            else
+//                [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:(self.ISO < self.videoDevice.activeFormat.minISO) ? self.videoDevice.activeFormat.minISO : self.ISO completionHandler:nil];
+//        } @catch (NSException *exception) {
+//            NSLog( @"Error setting exposure mode to AVCaptureExposureModeCustom:\t%@\n%@.", error.description, exception.description);
+//        } @finally {
+//
+//        }
+//
+//        [self.videoDevice unlockForConfiguration];
+//    }
+//    else {
+//        NSLog( @"Could not lock device for configuration: %@", error );
+//    }
+//}
 
 #pragma mark Recording Movies
 
@@ -794,13 +792,40 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     }
 }
 
+- (CMTime)exposureDuration
+{
+    return self->_exposureDuration;
+}
+
+- (void)setExposureDuration:(CMTime)exposureDuration
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    CMTimeShow(exposureDuration);
+    self->_exposureDuration = exposureDuration;
+    __autoreleasing NSError *error = nil;
+    if ( [self.videoDevice lockForConfiguration:&error] ) {
+        @try {
+            CMTime maxExposureDuration = self.videoDevice.activeFormat.maxExposureDuration;
+            CMTime minExposureDuration = self.videoDevice.activeFormat.minExposureDuration;
+            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMaximum(self->_exposureDuration, self.videoDevice.activeFormat.minExposureDuration) ISO:(self.ISO < self.videoDevice.activeFormat.minISO) ? self.videoDevice.activeFormat.minISO : self.ISO completionHandler:nil];
+        } @catch (NSException *exception) {
+            NSLog( @"Error setting exposure mode to AVCaptureExposureModeCustom:\t%@\n%@.", error.description, exception.description);
+        } @finally {
+            [self.videoDevice unlockForConfiguration];
+        }
+    }
+    else {
+        NSLog( @"Could not lock device for configuration: %@", error );
+    }
+}
+
 - (void)setFocus:(float)focus {
     if ( [self.videoDevice lockForConfiguration:nil] ) {
         [self.videoDevice setFocusModeLockedWithLensPosition:focus completionHandler:nil];
         [self.videoDevice unlockForConfiguration];
     } else {
         NSLog( @"Could not lock device for focus configuration: %@", nil );
-    }
+    } 
 }
 
 - (void)setISO:(float)ISO {
@@ -809,17 +834,12 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             float maxISO = self.videoDevice.activeFormat.maxISO;
             float minISO = self.videoDevice.activeFormat.minISO;
             self->_ISO = minISO + (ISO * (maxISO - minISO));
-            [self normalizeExposureDuration:FALSE];
-//            NSLog(@"ISO\t%f", ISO);
-//            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:self->_ISO completionHandler:nil];
-            
+            [self.videoDevice setExposureModeCustomWithDuration:self->_exposureDuration ISO:self->_ISO completionHandler:nil];
         } @catch (NSException *exception) {
             NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self->_ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
         } @finally {
-            
+            [self.videoDevice unlockForConfiguration];
         }
-        
-        [self.videoDevice unlockForConfiguration];
     }
     else {
         NSLog( @"Could not lock device for configuration: %@", nil );
