@@ -133,7 +133,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setSelected:![sender isSelected]];
         [(UIButton *)sender setHighlighted:[sender isSelected]];
-        [self.delegate setExposureDuration:([sender isSelected]) ? CMTimeMakeWithSeconds(1.0/33.0, 1000*1000*1000) : CMTimeMakeWithSeconds(1.0/3.0, 1000*1000*1000)];
+        [self.delegate setExposureDuration:([sender isSelected]) ? CMTimeMakeWithSeconds(1.0/30.0, 1000*1000*1000) : CMTimeMakeWithSeconds(1.0/3.0, 1000*1000*1000)];
     });
 }
 
