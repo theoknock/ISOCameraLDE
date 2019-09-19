@@ -16,9 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CameraViewController : UIViewController
 
-@property (assign) CMTime exposureDuration;
-- (void)setExposureDuration:(CMTime)exposureDuration;
-
 @property (nonatomic, assign) float ISO;
 - (void)setISO:(float)ISO;
 

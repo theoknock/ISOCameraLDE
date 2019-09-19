@@ -128,12 +128,42 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     });
 }
 
+static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(ExposureDurationMode exposureDurationMode)
+{
+    switch (exposureDurationMode) {
+        case ExposureDurationModeNormal:
+            return CMTimeMakeWithSeconds(1.0/30.0, 1000*1000*1000);
+            break;
+            
+        case ExposureDurationModeLong:
+            return CMTimeMakeWithSeconds(1.0/3.0, 1000*1000*1000);
+            break;
+             
+        default:
+            return kCMTimeInvalid;
+            break;
+    }
+};
+
 - (IBAction)exposureDuration:(UIButton *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"%s", __PRETTY_FUNCTION__);
-        [sender setSelected:![sender isSelected]];
-        [(UIButton *)sender setHighlighted:[sender isSelected]];
-        [self.delegate setExposureDuration:([sender isSelected]) ? CMTimeMakeWithSeconds(1.0/30.0, 1000*1000*1000) : CMTimeMakeWithSeconds(1.0/3.0, 1000*1000*1000)];
+        if ([sender isEnabled])
+        {
+            [sender setEnabled:FALSE];
+            ExposureDurationMode targetExposureDurationMode = ([sender isSelected]) ? ExposureDurationModeNormal : ExposureDurationModeLong;
+            CMTime targetExposureDuration = exposureDurationForMode(targetExposureDurationMode);
+            [self.delegate targetExposureDuration:targetExposureDuration withCompletionHandler:^(CMTime currentExposureDuration) {
+                [sender setEnabled:TRUE];
+                BOOL shouldHighlightExposureDurationModeButton = (targetExposureDurationMode == ExposureDurationModeLong) ? TRUE : FALSE;
+                [sender setSelected:shouldHighlightExposureDurationModeButton];
+                [(UIButton *)sender setHighlighted:shouldHighlightExposureDurationModeButton];
+
+                NSLog(@"Current and target exposure duration mismatch");
+                CMTimeShow(currentExposureDuration);
+                CMTimeShow(targetExposureDuration);
+            }];
+        }
     });
 }
 

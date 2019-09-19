@@ -16,12 +16,18 @@ typedef NS_ENUM(NSUInteger, ControlButtonTag) {
     ControlButtonTagISO = 1
 };
 
+typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
+    ExposureDurationModeNormal,
+    ExposureDurationModeLong
+};
+
+typedef void (^ExposureDurationModeConfigurationCompletionBlock)(CMTime currentExposureDuration);
+
 @protocol CameraControlsDelegate <NSObject>
 
 @required
 
-@property (assign) CMTime exposureDuration;
-- (void)setExposureDuration:(CMTime)exposureDuration;
+- (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(ExposureDurationModeConfigurationCompletionBlock)completionBlock;
 
 @property (assign) float ISO;
 - (void)setISO:(float)ISO;
