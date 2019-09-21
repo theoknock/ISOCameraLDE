@@ -29,17 +29,17 @@
     self->_measuringUnit = measuringUnit;
     
     CATextLayer *textLayer = [CATextLayer layer];
-    NSMutableParagraphStyle *rightAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-    rightAlignedParagraphStyle.alignment                = NSTextAlignmentLeft;
-    NSDictionary *rightAlignedTextAttributes            = @{NSForegroundColorAttributeName:[UIColor blackColor],
+    NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+    centerAlignedParagraphStyle.alignment                = NSTextAlignmentCenter;
+    NSDictionary *centerAlignedTextAttributes            = @{NSForegroundColorAttributeName:[UIColor systemBlueColor],
                                                             NSFontAttributeName:[UIFont systemFontOfSize:16.0],
-                                                            NSParagraphStyleAttributeName:rightAlignedParagraphStyle};
+                                                            NSParagraphStyleAttributeName:centerAlignedParagraphStyle};
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:_measuringUnit
-                                                                           attributes:rightAlignedTextAttributes];
+                                                                           attributes:centerAlignedTextAttributes];
     dispatch_async(dispatch_get_main_queue(), ^{
         __block CGFloat textLayerFrameY = CGRectGetMinY(self.contentView.bounds);
         [textLayer setOpaque:FALSE];
-        [textLayer setAlignmentMode:kCAAlignmentLeft];
+        [textLayer setAlignmentMode:kCAAlignmentCenter];
         textLayer.string = attributedString;
         
         CGSize textLayerframeSize = [self suggestFrameSizeWithConstraints:self.contentView.bounds.size forAttributedString:attributedString];

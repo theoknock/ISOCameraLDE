@@ -211,7 +211,7 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     CollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    [cell.contentView setBackgroundColor:[UIColor lightGrayColor]];
+    [cell.contentView setBackgroundColor:[UIColor clearColor]];
     [cell setMeasuringUnit:[NSString stringWithFormat:@"%lu", indexPath.item]];
     
     return cell;
@@ -224,12 +224,12 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 10;
+    return 11;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(150.0, 50.0);
+    return CGSizeMake(CGRectGetWidth(self.frame), 50.0);
 }
 
 @end

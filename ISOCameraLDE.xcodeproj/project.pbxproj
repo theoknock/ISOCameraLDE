@@ -21,7 +21,7 @@
 
 /* Begin PBXFileReference section */
 		B96B273023367DB20060C9A9 /* CollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionViewCell.h; sourceTree = "<group>"; };
-		B96B273123367DB20060C9A9 /* CollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionViewCell.m; sourceTree = "<group>"; };
+		B96B273123367DB20060C9A9 /* CollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionViewCell.m; sourceTree = "<group>"; wrapsLines = 0; };
 		B96EB364230FC8F40054F514 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		B96EB365230FC8F40054F514 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		B9CEED452321BAD100DEC88A /* CameraControlsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraControlsView.h; sourceTree = "<group>"; wrapsLines = 0; };
