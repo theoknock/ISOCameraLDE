@@ -121,8 +121,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 - (IBAction)focus:(UIButton *)sender
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [(UIButton *)[self viewWithTag:ControlButtonTagISO] setSelected:FALSE];
-        [(UIButton *)[self viewWithTag:ControlButtonTagISO] setHighlighted:FALSE];
+        [self deselectAllControlButtonsExceptWithTag:ControlButtonTagFocus];
         [sender setSelected:![sender isSelected]];
         [(UIButton *)sender setHighlighted:[sender isSelected]];
     });
@@ -165,24 +164,39 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 
 - (IBAction)iso:(UIButton *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setSelected:FALSE];
-        [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setHighlighted:FALSE];
+        [self deselectAllControlButtonsExceptWithTag:ControlButtonTagISO];
         [sender setSelected:![sender isSelected]];
         [(UIButton *)sender setHighlighted:[sender isSelected]];
     });
 }
 
 - (IBAction)torch:(UIButton *)sender
-{   
+{
+    NSLog(@"torch level %f", [[self.delegate videoDevice] torchLevel]);
     dispatch_async(dispatch_get_main_queue(), ^{
-        [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:FALSE];
+        [self deselectAllControlButtonsExceptWithTag:ControlButtonTagTorch];
     });
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
-            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
             [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
-            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:TRUE];
+            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
+//            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:TRUE];
         }];
+    });
+}
+
+
+- (void)deselectAllControlButtonsExceptWithTag:(ControlButtonTag)tag
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+    for (ControlButtonTag t = 1; t < 4; t++)
+    {
+        if (t != tag)
+        {
+            [(UIButton *)[self viewWithTag:t] setSelected:FALSE];
+            [(UIButton *)[self viewWithTag:t] setHighlighted:FALSE];
+        }
+    }
     });
 }
 

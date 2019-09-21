@@ -40,7 +40,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 @property (nonatomic) AVCaptureSession *session;
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
 @property (nonatomic) AVCaptureDeviceDiscoverySession *videoDeviceDiscoverySession;
-@property (nonatomic) AVCaptureDevice *videoDevice;
+
 @property (nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
 
 // Utilities

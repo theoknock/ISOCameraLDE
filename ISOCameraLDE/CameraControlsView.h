@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -25,6 +26,8 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 @protocol CameraControlsDelegate <NSObject>
 
 @required
+
+@property (nonatomic) AVCaptureDevice *videoDevice;
 
 - (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler;
 
