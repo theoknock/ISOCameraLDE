@@ -42,6 +42,9 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 
 - (void)toggleTorchWithCompletionHandler:(void (^)(BOOL isTorchActive))completionHandler;
+
+- (void)scrollSliderControlToItemAtIndexPath:(NSIndexPath *)indexPath;
+
 @end
 
 @interface CameraControlsView : UIView <UIGestureRecognizerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>

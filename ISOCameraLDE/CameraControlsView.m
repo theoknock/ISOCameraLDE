@@ -89,6 +89,9 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
             //            [self adjustCameraSetting:([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected]) ? ControlButtonTagFocus : ControlButtonTagISO usingTouchAtPoint:CGPointZero];
             CGFloat location = [sender locationInView:self].x / CGRectGetWidth(self.frame);
+            CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
+            [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)([sender locationInView:self].x / CGRectGetWidth(scrollRect) * 10.0) inSection:0]];
+//            [(UICollectionView *)[self viewWithTag:6] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(self.delegate.focus * 10.0) inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:TRUE]; // scrollRectToVisible:CGRectMake(scrollRect.size.width * location, scrollRect.origin.y, 150.0, scrollRect.size.height) animated:TRUE];
             if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
             {
                 [self.delegate setFocus:location];
@@ -211,8 +214,8 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     CollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    [cell.contentView setBackgroundColor:[UIColor clearColor]];
-    [cell setMeasuringUnit:[NSString stringWithFormat:@"%lu", indexPath.item]];
+    [cell.contentView setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.25]];
+    [cell setMeasuringUnit:[NSString stringWithFormat:@"| | | | %lu | | | |", indexPath.item]];
     
     return cell;
 }

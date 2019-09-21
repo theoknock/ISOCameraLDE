@@ -798,6 +798,14 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     });
 }
 
+- (void)scrollSliderControlToItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"Scrolling to item %lu", indexPath.item);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.SliderControlCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:TRUE]; // scrollRectToVisible:CGRectMake(scrollRect.size.width * location, scrollRect.origin.y, 150.0, scrollRect.size.height) animated:TRUE];
+    });
+}
+
 //
 //
 //

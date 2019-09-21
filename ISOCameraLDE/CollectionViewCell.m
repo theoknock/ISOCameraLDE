@@ -32,7 +32,7 @@
     NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     centerAlignedParagraphStyle.alignment                = NSTextAlignmentCenter;
     NSDictionary *centerAlignedTextAttributes            = @{NSForegroundColorAttributeName:[UIColor systemBlueColor],
-                                                            NSFontAttributeName:[UIFont systemFontOfSize:16.0],
+                                                            NSFontAttributeName:[UIFont systemFontOfSize:32.0],
                                                             NSParagraphStyleAttributeName:centerAlignedParagraphStyle};
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:_measuringUnit
                                                                            attributes:centerAlignedTextAttributes];
@@ -43,7 +43,7 @@
         textLayer.string = attributedString;
         
         CGSize textLayerframeSize = [self suggestFrameSizeWithConstraints:self.contentView.bounds.size forAttributedString:attributedString];
-        CGRect frame = CGRectMake(CGRectGetMinX(self.contentView.bounds), (CGRectGetMinY(self.contentView.bounds) + textLayerFrameY), textLayerframeSize.width, textLayerframeSize.height);
+        CGRect frame = CGRectMake(CGRectGetMinX(self.contentView.bounds), (CGRectGetMinY(self.contentView.bounds) + textLayerFrameY), /*textLayerframeSize.width*/CGRectGetWidth(self.contentView.frame), textLayerframeSize.height);
         textLayer.frame = frame;
         textLayerFrameY += textLayerframeSize.height;
         
