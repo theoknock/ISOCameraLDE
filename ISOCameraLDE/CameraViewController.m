@@ -12,6 +12,7 @@
 #import "CameraViewController.h"
 #import "CameraView.h"
 #import "CameraControlsView.h"
+#import "CollectionViewCell.h"
 
 static void * SessionRunningContext = &SessionRunningContext;
 static void * LensPositionContext = &LensPositionContext;
@@ -61,7 +62,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.SliderControlCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    [self.SliderControlCollectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     [self.SliderControlCollectionView setDelegate:(id<UICollectionViewDelegate>)self.cameraControlsView];
     [self.SliderControlCollectionView setDataSource:(id<UICollectionViewDataSource>)self.cameraControlsView];
     

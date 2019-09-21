@@ -44,7 +44,7 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 - (void)toggleTorchWithCompletionHandler:(void (^)(BOOL isTorchActive))completionHandler;
 @end
 
-@interface CameraControlsView : UIView <UIGestureRecognizerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface CameraControlsView : UIView <UIGestureRecognizerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 //+ (nonnull CameraControlsView *)cameraControls;
 

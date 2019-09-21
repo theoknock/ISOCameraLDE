@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B96B273223367DB20060C9A9 /* CollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B96B273123367DB20060C9A9 /* CollectionViewCell.m */; };
 		B96EB366230FC8F40054F514 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B96EB365230FC8F40054F514 /* SceneDelegate.m */; };
 		B9CEED472321BAD100DEC88A /* CameraControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CEED462321BAD100DEC88A /* CameraControlsView.m */; };
 		B9DF14AE22B810DE0028DC47 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DF14AD22B810DE0028DC47 /* AppDelegate.m */; };
@@ -19,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B96B273023367DB20060C9A9 /* CollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionViewCell.h; sourceTree = "<group>"; };
+		B96B273123367DB20060C9A9 /* CollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionViewCell.m; sourceTree = "<group>"; };
 		B96EB364230FC8F40054F514 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		B96EB365230FC8F40054F514 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		B9CEED452321BAD100DEC88A /* CameraControlsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraControlsView.h; sourceTree = "<group>"; wrapsLines = 0; };
@@ -75,6 +78,8 @@
 				B9DF14C922B8126D0028DC47 /* CameraViewController.m */,
 				B9CEED452321BAD100DEC88A /* CameraControlsView.h */,
 				B9CEED462321BAD100DEC88A /* CameraControlsView.m */,
+				B96B273023367DB20060C9A9 /* CollectionViewCell.h */,
+				B96B273123367DB20060C9A9 /* CollectionViewCell.m */,
 				B9DF14C522B811800028DC47 /* CameraView.h */,
 				B9DF14C622B811810028DC47 /* CameraView.m */,
 				B9DF14B522B810DE0028DC47 /* Main.storyboard */,
@@ -161,6 +166,7 @@
 				B9DF14CA22B8126D0028DC47 /* CameraViewController.m in Sources */,
 				B96EB366230FC8F40054F514 /* SceneDelegate.m in Sources */,
 				B9DF14AE22B810DE0028DC47 /* AppDelegate.m in Sources */,
+				B96B273223367DB20060C9A9 /* CollectionViewCell.m in Sources */,
 				B9DF14BF22B810E00028DC47 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

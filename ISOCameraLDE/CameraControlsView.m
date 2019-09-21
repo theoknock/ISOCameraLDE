@@ -7,6 +7,7 @@
 //
 
 #import "CameraControlsView.h"
+#import "CollectionViewCell.h"
 
 @interface CameraControlsView ()
 {
@@ -209,8 +210,10 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    [cell.contentView setBackgroundColor:[UIColor whiteColor]];
+    CollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    [cell.contentView setBackgroundColor:[UIColor lightGrayColor]];
+    [cell setMeasuringUnit:[NSString stringWithFormat:@"%lu", indexPath.item]];
+    
     return cell;
 }
 
@@ -222,6 +225,11 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return 10;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(150.0, 50.0);
 }
 
 @end
