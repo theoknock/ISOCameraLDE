@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CameraViewController.h"
+#import <CoreMedia/CoreMedia.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, ControlButtonTag) {
     ControlButtonTagFocus = 2,
-    ControlButtonTagISO = 1
+    ControlButtonTagISO   = 1,
+    ControlButtonTagTorch = 3
 };
 
 typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
@@ -21,13 +22,11 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
     ExposureDurationModeLong
 };
 
-typedef void (^ExposureDurationModeConfigurationCompletionBlock)(CMTime currentExposureDuration);
-
 @protocol CameraControlsDelegate <NSObject>
 
 @required
 
-- (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(ExposureDurationModeConfigurationCompletionBlock)completionBlock;
+- (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler;
 
 @property (assign) float ISO;
 - (void)setISO:(float)ISO;
@@ -35,8 +34,11 @@ typedef void (^ExposureDurationModeConfigurationCompletionBlock)(CMTime currentE
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
 
+- (void)setTorchLevel:(float)torchLevel;
+
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 
+- (void)toggleTorchWithCompletionHandler:(void (^)(BOOL isTorchActive))completionHandler;
 @end
 
 @interface CameraControlsView : UIView <UIGestureRecognizerDelegate>
@@ -46,10 +48,6 @@ typedef void (^ExposureDurationModeConfigurationCompletionBlock)(CMTime currentE
 @property (nonatomic, assign, nullable) id<CameraControlsDelegate> delegate;
 
 @property (nonatomic, nullable) UIPanGestureRecognizer *panGestureRecognizer;
-- (IBAction)record:(id)sender;
-- (IBAction)focus:(UIButton *)sender;
-- (IBAction)exposureDuration:(UIButton *)sender;
-- (IBAction)iso:(UIButton *)sender;
 
 @end
 

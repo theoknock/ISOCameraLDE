@@ -11,121 +11,105 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="CameraViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleAspectFill" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xzt-iO-ced" customClass="CameraView">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <subviews>
-                                    <view opaque="NO" contentMode="scaleToFill" id="yrR-tK-TKW" customClass="CameraControlsView">
-                                        <rect key="frame" x="0.0" y="153" width="414" height="896"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="21" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-gl-0Yj">
-                                                <rect key="frame" x="40.333333333333343" y="670" width="333.33333333333326" height="50.333333333333371"/>
-                                                <subviews>
-                                                    <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9f-cE-wZk">
-                                                        <rect key="frame" x="0.0" y="0.0" width="49.333333333333336" height="50.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <state key="normal" image="camera.circle" catalog="system">
-                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="record:" destination="yrR-tK-TKW" eventType="touchUpInside" id="F9H-qv-3Ja"/>
-                                                            <action selector="record:" destination="osJ-Ad-Pox" eventType="touchUpInside" id="Of6-J0-H7A"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" tag="5" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1oe-yR-dM8">
-                                                        <rect key="frame" x="70.333333333333343" y="0.0" width="49.333333333333343" height="50.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <state key="normal" image="timer" catalog="system">
-                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="exposureDuration:" destination="yrR-tK-TKW" eventType="touchUpInside" id="e6c-LW-wAE"/>
-                                                            <action selector="exposureDuration:" destination="osJ-Ad-Pox" eventType="touchUpInside" id="wlQ-2n-PS4"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCC-wi-bYd">
-                                                        <rect key="frame" x="140.66666666666666" y="0.0" width="52" height="50.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <state key="normal" image="sun.max" catalog="system">
-                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="iso:" destination="yrR-tK-TKW" eventType="touchUpInside" id="eD7-BS-Hfb"/>
-                                                            <action selector="iso:" destination="osJ-Ad-Pox" eventType="touchUpInside" id="o2q-tM-NCC"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmG-81-aAG">
-                                                        <rect key="frame" x="213.66666666666666" y="0.0" width="49.333333333333343" height="50.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <state key="normal" image="viewfinder.circle" catalog="system">
-                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="focus:" destination="yrR-tK-TKW" eventType="touchUpInside" id="L3X-GT-aZw"/>
-                                                            <action selector="focus:" destination="osJ-Ad-Pox" eventType="touchUpInside" id="Tqk-1j-H5p"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BM-EC-R7x">
-                                                        <rect key="frame" x="284" y="0.0" width="49.333333333333314" height="50.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <state key="normal" image="bolt.circle" catalog="system">
-                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="toggleTorch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qf2-7w-OoP"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstItem="e0d-gl-0Yj" firstAttribute="centerX" secondItem="ssS-h9-3Rp" secondAttribute="centerX" id="XDT-W7-3tX"/>
-                                            <constraint firstItem="ssS-h9-3Rp" firstAttribute="bottom" secondItem="e0d-gl-0Yj" secondAttribute="bottom" constant="141.66666666666663" id="xTF-Zv-8aa"/>
-                                        </constraints>
-                                        <viewLayoutGuide key="safeArea" id="ssS-h9-3Rp"/>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="cWr-Yh-Exz" appends="YES" id="Dp7-V6-OF4"/>
-                                        </connections>
-                                    </view>
-                                </subviews>
+                            <view userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Xzt-iO-ced" customClass="CameraView">
+                                <rect key="frame" x="0.0" y="44" width="414" height="736"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Xzt-iO-ced" secondAttribute="height" multiplier="9:16" id="9zk-RX-B9D"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OMq-o5-EZp" customClass="CameraControlsView">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-gl-0Yj">
+                                        <rect key="frame" x="0.0" y="767.66666666666663" width="414" height="50.333333333333371"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9f-cE-wZk">
+                                                <rect key="frame" x="0.0" y="1.3333333333333712" width="82" height="47.666666666666664"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <state key="normal" image="camera.circle" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="record:" destination="OMq-o5-EZp" eventType="touchUpInside" id="ARR-Pj-CYo"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="5" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1oe-yR-dM8">
+                                                <rect key="frame" x="82" y="1.3333333333333712" width="81.666666666666686" height="47.666666666666664"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <state key="normal" image="timer" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="exposureDuration:" destination="OMq-o5-EZp" eventType="touchUpInside" id="csf-7e-Gnk"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCC-wi-bYd">
+                                                <rect key="frame" x="163.66666666666666" y="0.0" width="86.666666666666657" height="50.333333333333336"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <state key="normal" image="sun.max" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="iso:" destination="OMq-o5-EZp" eventType="touchUpInside" id="4Nw-dS-r90"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmG-81-aAG">
+                                                <rect key="frame" x="250.33333333333334" y="1.3333333333333712" width="81.666666666666657" height="47.666666666666664"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <state key="normal" image="viewfinder.circle" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="focus:" destination="OMq-o5-EZp" eventType="touchUpInside" id="Gim-mm-BPh"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BM-EC-R7x">
+                                                <rect key="frame" x="332" y="1.3333333333333712" width="82" height="47.666666666666664"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <state key="normal" image="bolt.circle" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="torch:" destination="OMq-o5-EZp" eventType="touchUpInside" id="UHz-pA-ZIB"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="e0d-gl-0Yj" secondAttribute="bottom" id="QX4-QO-ElM"/>
+                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="width" secondItem="OMq-o5-EZp" secondAttribute="width" id="W5i-2Q-bFF"/>
+                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="centerX" secondItem="OMq-o5-EZp" secondAttribute="centerX" id="mJU-69-xGl"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Xzt-iO-ced" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="9hx-fX-7BZ"/>
-                            <constraint firstItem="Xzt-iO-ced" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="Poo-Av-TiR"/>
-                            <constraint firstItem="Xzt-iO-ced" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="gty-J0-nZv"/>
-                            <constraint firstItem="Xzt-iO-ced" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="lVk-JT-9XQ"/>
-                            <constraint firstItem="Xzt-iO-ced" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="mdd-3s-Zwf"/>
-                            <constraint firstItem="Xzt-iO-ced" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="oFg-8P-qJV"/>
-                            <constraint firstItem="Xzt-iO-ced" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="wFt-2Q-C3V"/>
+                            <constraint firstItem="OMq-o5-EZp" firstAttribute="centerX" secondItem="Xzt-iO-ced" secondAttribute="centerX" id="1bJ-lt-uGB"/>
+                            <constraint firstItem="OMq-o5-EZp" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="64B-2x-SuY"/>
+                            <constraint firstItem="OMq-o5-EZp" firstAttribute="trailing" secondItem="Xzt-iO-ced" secondAttribute="trailing" id="Adh-oC-LZZ"/>
+                            <constraint firstItem="OMq-o5-EZp" firstAttribute="leading" secondItem="Xzt-iO-ced" secondAttribute="leading" id="GUT-ht-NoL"/>
+                            <constraint firstItem="OMq-o5-EZp" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="S9m-kq-TVO"/>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" id="UKB-5E-Vy4"/>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="g6c-KJ-ODM"/>
+                            <constraint firstItem="Xzt-iO-ced" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ycU-UI-Rck"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="cameraControlsView" destination="yrR-tK-TKW" id="0kD-vK-vua"/>
+                        <outlet property="cameraControlsView" destination="OMq-o5-EZp" id="k3N-jH-0Kv"/>
                         <outlet property="cameraView" destination="Xzt-iO-ced" id="vMy-j3-xKz"/>
-                        <outlet property="torchButton" destination="6BM-EC-R7x" id="QJ9-U2-nHH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <exit id="osJ-Ad-Pox" userLabel="Exit" sceneMemberID="exit"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="cWr-Yh-Exz">
-                    <connections>
-                        <action selector="handlePanGesture:" destination="yrR-tK-TKW" id="4YW-Uz-pas"/>
-                        <outlet property="delegate" destination="yrR-tK-TKW" id="qz3-y2-Lch"/>
-                    </connections>
-                </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="139" y="138"/>
+            <point key="canvasLocation" x="-1639" y="-251"/>
         </scene>
     </scenes>
     <resources>

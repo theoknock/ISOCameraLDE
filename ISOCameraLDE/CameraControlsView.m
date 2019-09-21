@@ -7,7 +7,6 @@
 //
 
 #import "CameraControlsView.h"
-#import "CameraViewController.h"
 
 @interface CameraControlsView ()
 {
@@ -81,10 +80,10 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
 }
 
-- (IBAction)handlePanGesture:(UIPanGestureRecognizer *)sender {
+- (void)handlePanGesture:(UIPanGestureRecognizer *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
-//            [self adjustCameraSetting:([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected]) ? ControlButtonTagFocus : ControlButtonTagISO usingTouchAtPoint:CGPointZero];
+            //            [self adjustCameraSetting:([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected]) ? ControlButtonTagFocus : ControlButtonTagISO usingTouchAtPoint:CGPointZero];
             CGFloat location = [sender locationInView:self].x / CGRectGetWidth(self.frame);
             if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
             {
@@ -94,6 +93,9 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
             } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected])
             {
                 [self.delegate setISO:location];
+            } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected])
+            {
+                [self.delegate setTorchLevel:location];
             }
         }
     });
@@ -104,14 +106,13 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     return self.delegate;
 }
 
-- (IBAction)record:(id)sender
+- (IBAction)record:(UIButton *)sender
 {
     [self.delegate toggleRecordingWithCompletionHandler:^(BOOL isRunning, NSError * _Nonnull error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (isRunning)
-                [(UIButton *)[self viewWithTag:4] setImage:[UIImage systemImageNamed:@"camera.circle.fill"] forState:UIControlStateNormal];
-            else
-                [(UIButton *)[self viewWithTag:4] setImage:[UIImage systemImageNamed:@"camera.circle"] forState:UIControlStateNormal];
+            [(UIButton *)[self viewWithTag:ControlButtonTagISO] setSelected:isRunning];
+            [(UIButton *)[self viewWithTag:ControlButtonTagISO] setHighlighted:isRunning];
+            [(UIButton *)[self viewWithTag:4] setImage:[UIImage systemImageNamed:(isRunning) ? @"camera.circle.fill" : @"camera.circle"] forState:UIControlStateNormal];
         });
     }];
 }
@@ -122,7 +123,6 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     dispatch_async(dispatch_get_main_queue(), ^{
         [(UIButton *)[self viewWithTag:ControlButtonTagISO] setSelected:FALSE];
         [(UIButton *)[self viewWithTag:ControlButtonTagISO] setHighlighted:FALSE];
-        NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setSelected:![sender isSelected]];
         [(UIButton *)sender setHighlighted:[sender isSelected]];
     });
@@ -138,7 +138,7 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
         case ExposureDurationModeLong:
             return CMTimeMakeWithSeconds(1.0/3.0, 1000*1000*1000);
             break;
-             
+            
         default:
             return kCMTimeInvalid;
             break;
@@ -158,10 +158,6 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
                 BOOL shouldHighlightExposureDurationModeButton = (targetExposureDurationMode == ExposureDurationModeLong) ? TRUE : FALSE;
                 [sender setSelected:shouldHighlightExposureDurationModeButton];
                 [(UIButton *)sender setHighlighted:shouldHighlightExposureDurationModeButton];
-
-                NSLog(@"Current and target exposure duration mismatch");
-                CMTimeShow(currentExposureDuration);
-                CMTimeShow(targetExposureDuration);
             }];
         }
     });
@@ -171,9 +167,22 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
     dispatch_async(dispatch_get_main_queue(), ^{
         [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setSelected:FALSE];
         [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setHighlighted:FALSE];
-        NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setSelected:![sender isSelected]];
         [(UIButton *)sender setHighlighted:[sender isSelected]];
+    });
+}
+
+- (IBAction)torch:(UIButton *)sender
+{   
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:FALSE];
+    });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
+            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
+            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
+            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:TRUE];
+        }];
     });
 }
 

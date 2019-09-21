@@ -32,26 +32,8 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 @interface CameraViewController () <AVCaptureFileOutputRecordingDelegate>
 
 @property (weak, nonatomic) IBOutlet CameraView *cameraView;
-@property (nonatomic, weak) IBOutlet UILabel *cameraUnavailableLabel;
-@property (nonatomic, weak) IBOutlet UIButton *resumeButton;
 
 @property (weak, nonatomic) IBOutlet CameraControlsView *cameraControlsView;
-
-@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *recordTapGestureRecognizer;
-@property (nonatomic, weak) IBOutlet UIButton *torchButton;
-@property (nonatomic, weak) IBOutlet UIButton *HUDButton;
-
-@property (nonatomic, weak) IBOutlet UIView *manualHUD;
-
-@property (nonatomic, weak) IBOutlet UIView *manualHUDFocusView;
-@property (nonatomic, weak) IBOutlet UISlider *lensPositionSlider;
-@property (nonatomic, weak) IBOutlet UILabel *lensPositionNameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *lensPositionValueLabel;
-
-@property (nonatomic, weak) IBOutlet UIView *manualHUDExposureView;
-@property (nonatomic, weak) IBOutlet UISlider *ISOSlider;
-@property (nonatomic, weak) IBOutlet UILabel *ISONameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *ISOValueLabel;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue;
@@ -70,7 +52,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 @implementation CameraViewController
 
-@synthesize focus = _focus, ISO = _ISO, exposureDuration = _exposureDuration;
+@synthesize focus = _focus, ISO = _ISO;
 
 #pragma mark View Controller Life Cycle
 
@@ -78,16 +60,6 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 {
     [super viewDidLoad];
     [self.cameraControlsView setDelegate:(id<CameraControlsDelegate> _Nullable)self];
-    
-    // Disable UI until the session starts running
-    //    //[self.recordButton setUserInteractionEnabled:false];
-    //    //[self.recordButton setTintColor:[UIColor darkGrayColor]];
-    
-    self.HUDButton.enabled = NO;
-    
-    self.manualHUD.hidden = YES;
-    self.manualHUDFocusView.hidden = YES;
-    self.manualHUDExposureView.hidden = YES;
     
     // Create the AVCaptureSession
     self.session = [[AVCaptureSession alloc] init];
@@ -155,7 +127,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             case AVCamManualSetupResultSuccess:
             {
                 // Only setup observers and start the session running if setup succeeded
-                [self addObservers];
+                //                [self addObservers];
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
                 break;
@@ -196,7 +168,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     dispatch_async( self.sessionQueue, ^{
         if ( self.setupResult == AVCamManualSetupResultSuccess ) {
             [self.session stopRunning];
-            [self removeObservers];
+            //            [self removeObservers];
         }
     } );
     
@@ -253,77 +225,22 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 #pragma mark HUD
 
-- (void)configureManualHUD
-{
-    if (self.videoDevice != nil)
-    {
-        if (([self.videoDevice isFocusModeSupported:AVCaptureFocusModeLocked]       && self.videoDevice.focusMode == AVCaptureFocusModeLocked) &&
-            ([self.videoDevice isExposureModeSupported:AVCaptureExposureModeCustom] && self.videoDevice.exposureMode == AVCaptureExposureModeCustom))
-        {
-            self.ISOSlider.minimumValue = self.videoDevice.activeFormat.minISO;
-            self.ISOSlider.maximumValue = self.videoDevice.activeFormat.maxISO;
-            self.ISOSlider.value = self.videoDevice.ISO;
-            self.ISOSlider.enabled = ( self.videoDevice.exposureMode == AVCaptureExposureModeCustom );
-        }
-    }
-    
-    
-}
-
-- (IBAction)toggleTorch:(id)sender
-{
-    NSProcessInfoThermalState thermalState = [[NSProcessInfo processInfo] thermalState];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __autoreleasing NSError *error;
-        if ([self->_videoDevice lockForConfiguration:&error]) {
-            if ((thermalState != NSProcessInfoThermalStateCritical && thermalState != NSProcessInfoThermalStateSerious) && ![self->_videoDevice isTorchActive])
-            {
-                [self->_videoDevice setTorchModeOnWithLevel:AVCaptureMaxAvailableTorchLevel error:nil];
-                [self.torchButton setImage:[UIImage systemImageNamed:@"bolt.circle.fill"] forState:UIControlStateNormal];
-            } else if (![sender isKindOfClass:[UIButton class]] || [self->_videoDevice isTorchActive] || (thermalState == NSProcessInfoThermalStateCritical || thermalState == NSProcessInfoThermalStateSerious)) {
-                [self->_videoDevice setTorchMode:0];
-                [self.torchButton setImage:[UIImage systemImageNamed:@"bolt.circle"] forState:UIControlStateNormal];
-            }
-        } else {
-            NSLog(@"AVCaptureDevice lockForConfiguration returned error\t%@", error);
-        }
-        [self->_videoDevice unlockForConfiguration];
-    });
-}
-
-- (IBAction)toggleHUD:(id)sender
-{
-    self.manualHUD.hidden = ! self.manualHUD.hidden;
-}
-
-- (IBAction)changeManualHUD:(id)sender
-{
-    UISegmentedControl *control = sender;
-    
-    self.manualHUDFocusView.hidden = ( control.selectedSegmentIndex == 1 ) ? NO : YES;
-    self.manualHUDExposureView.hidden = ( control.selectedSegmentIndex == 2 ) ? NO : YES;
-}
-
-- (void)setSlider:(UISlider *)slider highlightColor:(UIColor *)color
-{
-    slider.tintColor = color;
-    
-    if ( slider == self.ISOSlider ) {
-        self.ISONameLabel.textColor = self.ISOValueLabel.textColor = slider.tintColor;
-    }
-}
-
-- (IBAction)sliderTouchBegan:(id)sender
-{
-    UISlider *slider = (UISlider *)sender;
-    [self setSlider:slider highlightColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
-}
-
-- (IBAction)sliderTouchEnded:(id)sender
-{
-    UISlider *slider = (UISlider *)sender;
-    [self setSlider:slider highlightColor:[UIColor yellowColor]];
-}
+//- (void)configureManualHUD
+//{
+//    if (self.videoDevice != nil)
+//    {
+//        if (([self.videoDevice isFocusModeSupported:AVCaptureFocusModeLocked]       && self.videoDevice.focusMode == AVCaptureFocusModeLocked) &&
+//            ([self.videoDevice isExposureModeSupported:AVCaptureExposureModeCustom] && self.videoDevice.exposureMode == AVCaptureExposureModeCustom))
+//        {
+//            self.ISOSlider.minimumValue = self.videoDevice.activeFormat.minISO;
+//            self.ISOSlider.maximumValue = self.videoDevice.activeFormat.maxISO;
+//            self.ISOSlider.value = self.videoDevice.ISO;
+//            self.ISOSlider.enabled = ( self.videoDevice.exposureMode == AVCaptureExposureModeCustom );
+//        }
+//    }
+//
+//
+//}
 
 #pragma mark Session Management
 
@@ -472,7 +389,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
         }
         else {
             dispatch_async( dispatch_get_main_queue(), ^{
-                self.resumeButton.hidden = YES;
+                //                self.resumeButton.hidden = YES;
             } );
         }
     } );
@@ -494,25 +411,25 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     }
 }
 
-- (void)changeISO:(id)sender
-{
-    __autoreleasing NSError *error = nil;
-    
-    if ( [self.videoDevice lockForConfiguration:&error] ) {
-        @try {
-            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:([self.torchButton isSelected]) ? self.videoDevice.activeFormat.maxISO : self.videoDevice.activeFormat.minISO completionHandler:nil];
-        } @catch (NSException *exception) {
-            NSLog( @"Exposure mode AVCaptureExposureModeCustom is not supported.");
-        } @finally {
-            
-        }
-        
-        [self.videoDevice unlockForConfiguration];
-    }
-    else {
-        NSLog( @"Could not lock device for configuration: %@", error );
-    }
-}
+//- (void)changeISO:(id)sender
+//{
+//    __autoreleasing NSError *error = nil;
+//
+//    if ( [self.videoDevice lockForConfiguration:&error] ) {
+//        @try {
+//            [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds( (1.0/3.0), 1000*1000*1000 ) ISO:([self.torchButton isSelected]) ? self.videoDevice.activeFormat.maxISO : self.videoDevice.activeFormat.minISO completionHandler:nil];
+//        } @catch (NSException *exception) {
+//            NSLog( @"Exposure mode AVCaptureExposureModeCustom is not supported.");
+//        } @finally {
+//
+//        }
+//
+//        [self.videoDevice unlockForConfiguration];
+//    }
+//    else {
+//        NSLog( @"Could not lock device for configuration: %@", error );
+//    }
+//}
 
 //- (void)normalizeExposureDuration:(BOOL)shouldNormalizeExposureDuration
 //{
@@ -644,79 +561,79 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 #pragma mark KVO and Notifications
 
-- (void)addObservers
-{
-    [self addObserver:self forKeyPath:@"session.running" options:NSKeyValueObservingOptionNew context:SessionRunningContext];
-    [self addObserver:self forKeyPath:@"videoDevice.lensPosition" options:NSKeyValueObservingOptionNew context:LensPositionContext];
-    [self addObserver:self forKeyPath:@"videoDevice.ISO" options:NSKeyValueObservingOptionNew context:ISOContext];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionRuntimeError:) name:AVCaptureSessionRuntimeErrorNotification object:self.session];
-    // A session can only run when the app is full screen. It will be interrupted in a multi-app layout, introduced in iOS 9,
-    // see also the documentation of AVCaptureSessionInterruptionReason. Add observers to handle these session interruptions
-    // and show a preview is paused message. See the documentation of AVCaptureSessionWasInterruptedNotification for other
-    // interruption reasons.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionWasInterrupted:) name:AVCaptureSessionWasInterruptedNotification object:self.session];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionInterruptionEnded:) name:AVCaptureSessionInterruptionEndedNotification object:self.session];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleTorch:) name:NSProcessInfoThermalStateDidChangeNotification object:nil];
-}
-
-- (void)removeObservers
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    [self removeObserver:self forKeyPath:@"session.running" context:SessionRunningContext];
-    [self removeObserver:self forKeyPath:@"videoDevice.lensPosition" context:LensPositionContext];
-    [self removeObserver:self forKeyPath:@"videoDevice.ISO" context:ISOContext];
-}
+//- (void)addObservers
+//{
+//    [self addObserver:self forKeyPath:@"session.running" options:NSKeyValueObservingOptionNew context:SessionRunningContext];
+//    [self addObserver:self forKeyPath:@"videoDevice.lensPosition" options:NSKeyValueObservingOptionNew context:LensPositionContext];
+//    [self addObserver:self forKeyPath:@"videoDevice.ISO" options:NSKeyValueObservingOptionNew context:ISOContext];
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionRuntimeError:) name:AVCaptureSessionRuntimeErrorNotification object:self.session];
+//    // A session can only run when the app is full screen. It will be interrupted in a multi-app layout, introduced in iOS 9,
+//    // see also the documentation of AVCaptureSessionInterruptionReason. Add observers to handle these session interruptions
+//    // and show a preview is paused message. See the documentation of AVCaptureSessionWasInterruptedNotification for other
+//    // interruption reasons.
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionWasInterrupted:) name:AVCaptureSessionWasInterruptedNotification object:self.session];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionInterruptionEnded:) name:AVCaptureSessionInterruptionEndedNotification object:self.session];
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleTorch:) name:NSProcessInfoThermalStateDidChangeNotification object:nil];
+//}
+//
+//- (void)removeObservers
+//{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
+//
+//    [self removeObserver:self forKeyPath:@"session.running" context:SessionRunningContext];
+//    [self removeObserver:self forKeyPath:@"videoDevice.lensPosition" context:LensPositionContext];
+//    [self removeObserver:self forKeyPath:@"videoDevice.ISO" context:ISOContext];
+//}
 
 // TO-DO: Add AVCaptureSession notificatioms related to running and modify record/stop button
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    id newValue = change[NSKeyValueChangeNewKey];
-    
-    if ( context == LensPositionContext ) {
-        if ( newValue && newValue != [NSNull null] ) {
-            AVCaptureFocusMode focusMode = self.videoDevice.focusMode;
-            float newLensPosition = [newValue floatValue];
-            dispatch_async( dispatch_get_main_queue(), ^{
-                if ( focusMode != AVCaptureFocusModeLocked ) {
-                    self.lensPositionSlider.value = newLensPosition;
-                }
-                self.lensPositionValueLabel.text = [NSString stringWithFormat:@"%.1f", newLensPosition];
-            } );
-        }
-    }
-    else if ( context == ISOContext ) {
-        if ( newValue && newValue != [NSNull null] ) {
-            float newISO = [newValue floatValue];
-            AVCaptureExposureMode exposureMode = self.videoDevice.exposureMode;
-            
-            dispatch_async( dispatch_get_main_queue(), ^{
-                if ( exposureMode != AVCaptureExposureModeCustom ) {
-                    self.ISOSlider.value = newISO;
-                }
-                self.ISOValueLabel.text = [NSString stringWithFormat:@"%i", (int)newISO];
-            } );
-        }
-    }
-    else if ( context == SessionRunningContext ) {
-        BOOL isRunning = NO;
-        if ( newValue && newValue != [NSNull null] ) {
-            isRunning = [newValue boolValue];
-        }
-        dispatch_async( dispatch_get_main_queue(), ^{
-            dispatch_async( dispatch_get_main_queue(), ^{
-                //[self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor redColor]] forState:UIControlStateNormal];
-                //[self.recordButton setTintColor:[UIColor redColor]];
-            });
-        } );
-    }
-    else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+//{
+//    id newValue = change[NSKeyValueChangeNewKey];
+//    
+//    if ( context == LensPositionContext ) {
+//        if ( newValue && newValue != [NSNull null] ) {
+//            AVCaptureFocusMode focusMode = self.videoDevice.focusMode;
+//            float newLensPosition = [newValue floatValue];
+//            dispatch_async( dispatch_get_main_queue(), ^{
+//                if ( focusMode != AVCaptureFocusModeLocked ) {
+//                    self.lensPositionSlider.value = newLensPosition;
+//                }
+//                self.lensPositionValueLabel.text = [NSString stringWithFormat:@"%.1f", newLensPosition];
+//            } );
+//        }
+//    }
+//    else if ( context == ISOContext ) {
+//        if ( newValue && newValue != [NSNull null] ) {
+//            float newISO = [newValue floatValue];
+//            AVCaptureExposureMode exposureMode = self.videoDevice.exposureMode;
+//            
+//            dispatch_async( dispatch_get_main_queue(), ^{
+//                if ( exposureMode != AVCaptureExposureModeCustom ) {
+//                    self.ISOSlider.value = newISO;
+//                }
+//                self.ISOValueLabel.text = [NSString stringWithFormat:@"%i", (int)newISO];
+//            } );
+//        }
+//    }
+//    else if ( context == SessionRunningContext ) {
+//        BOOL isRunning = NO;
+//        if ( newValue && newValue != [NSNull null] ) {
+//            isRunning = [newValue boolValue];
+//        }
+//        dispatch_async( dispatch_get_main_queue(), ^{
+//            dispatch_async( dispatch_get_main_queue(), ^{
+//                //[self.recordButton setImage:[[UIImage systemImageNamed:@"stop.circle"] imageWithTintColor:[UIColor redColor]] forState:UIControlStateNormal];
+//                //[self.recordButton setTintColor:[UIColor redColor]];
+//            });
+//        } );
+//    }
+//    else {
+//        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+//    }
+//}
 
 - (void)sessionRuntimeError:(NSNotification *)notification
 {
@@ -732,13 +649,13 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             }
             else {
                 dispatch_async( dispatch_get_main_queue(), ^{
-                    self.resumeButton.hidden = NO;
+                    //                    self.resumeButton.hidden = NO;
                 } );
             }
         } );
     }
     else {
-        self.resumeButton.hidden = NO;
+        //        self.resumeButton.hidden = NO;
     }
 }
 
@@ -756,19 +673,19 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     if ( reason == AVCaptureSessionInterruptionReasonAudioDeviceInUseByAnotherClient ||
         reason == AVCaptureSessionInterruptionReasonVideoDeviceInUseByAnotherClient ) {
         // Simply fade-in a button to enable the user to try to resume the session running
-        self.resumeButton.hidden = NO;
-        self.resumeButton.alpha = 0.0;
-        [UIView animateWithDuration:0.25 animations:^{
-            self.resumeButton.alpha = 1.0;
-        }];
+        //        self.resumeButton.hidden = NO;
+        //        self.resumeButton.alpha = 0.0;
+        //        [UIView animateWithDuration:0.25 animations:^{
+        //            self.resumeButton.alpha = 1.0;
+        //        }];
     }
     else if ( reason == AVCaptureSessionInterruptionReasonVideoDeviceNotAvailableWithMultipleForegroundApps ) {
         // Simply fade-in a label to inform the user that the camera is unavailable
-        self.cameraUnavailableLabel.hidden = NO;
-        self.cameraUnavailableLabel.alpha = 0.0;
-        [UIView animateWithDuration:0.25 animations:^{
-            self.cameraUnavailableLabel.alpha = 1.0;
-        }];
+        //        self.cameraUnavailableLabel.hidden = NO;
+        //        self.cameraUnavailableLabel.alpha = 0.0;
+        //        [UIView animateWithDuration:0.25 animations:^{
+        //            self.cameraUnavailableLabel.alpha = 1.0;
+        //        }];
     }
 }
 
@@ -776,29 +693,29 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 {
     NSLog( @"Capture session interruption ended" );
     
-    if ( ! self.resumeButton.hidden ) {
-        [UIView animateWithDuration:0.25 animations:^{
-            self.resumeButton.alpha = 0.0;
-        } completion:^( BOOL finished ) {
-            self.resumeButton.hidden = YES;
-        }];
-    }
-    if ( ! self.cameraUnavailableLabel.hidden ) {
-        [UIView animateWithDuration:0.25 animations:^{
-            self.cameraUnavailableLabel.alpha = 0.0;
-        } completion:^( BOOL finished ) {
-            self.cameraUnavailableLabel.hidden = YES;
-        }];
-    }
+    //    if ( ! self.resumeButton.hidden ) {
+    //        [UIView animateWithDuration:0.25 animations:^{
+    //            self.resumeButton.alpha = 0.0;
+    //        } completion:^( BOOL finished ) {
+    //            self.resumeButton.hidden = YES;
+    //        }];
+    //    }
+    //    if ( ! self.cameraUnavailableLabel.hidden ) {
+    //        [UIView animateWithDuration:0.25 animations:^{
+    //            self.cameraUnavailableLabel.alpha = 0.0;
+    //        } completion:^( BOOL finished ) {
+    //            self.cameraUnavailableLabel.hidden = YES;
+    //        }];
+    //    }
 }
 
-- (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(ExposureDurationModeConfigurationCompletionBlock)completionBlock
+- (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler
 {
     __autoreleasing NSError *error = nil;
     if ( [self.videoDevice lockForConfiguration:&error] ) {
         @try {
             [self.videoDevice setExposureModeCustomWithDuration:exposureDuration ISO:[self.videoDevice ISO] completionHandler:^(CMTime syncTime) {
-                completionBlock([self.videoDevice exposureDuration]);
+                completionHandler([self.videoDevice exposureDuration]);
             }];
         } @catch (NSException *exception) {
             NSLog( @"Error setting exposure mode to AVCaptureExposureModeCustom:\t%@\n%@.", error.description, exception.description);
@@ -817,7 +734,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
         [self.videoDevice unlockForConfiguration];
     } else {
         NSLog( @"Could not lock device for focus configuration: %@", nil );
-    } 
+    }
 }
 
 - (void)setISO:(float)ISO {
@@ -837,6 +754,43 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
         NSLog( @"Could not lock device for configuration: %@", nil );
     }
 }
+
+- (void)toggleTorchWithCompletionHandler:(void (^)(BOOL isTorchActive))completionHandler;
+{
+    __autoreleasing NSError *error;
+    BOOL isTorchActive = self.videoDevice.isTorchActive;
+        if ([self->_videoDevice lockForConfiguration:&error]) {
+            @try {
+                [self->_videoDevice setTorchMode:!isTorchActive];
+                completionHandler(!isTorchActive);
+            } @catch (NSException *exception) {
+                NSLog(@"Error setting torch level/mode:\t%@", exception.description);
+            } @finally {
+                [self->_videoDevice unlockForConfiguration];
+            }
+        } else {
+            NSLog(@"AVCaptureDevice lockForConfiguration returned error\t%@", error);
+        }
+}
+
+- (void)setTorchLevel:(float)torchLevel
+{
+    NSProcessInfoThermalState thermalState = [[NSProcessInfo processInfo] thermalState];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __autoreleasing NSError *error;
+        if ([self->_videoDevice lockForConfiguration:&error]) {
+            if ([self->_videoDevice isTorchActive] && (thermalState != NSProcessInfoThermalStateCritical && thermalState != NSProcessInfoThermalStateSerious))
+            {
+                [self->_videoDevice setTorchModeOnWithLevel:torchLevel error:nil];
+                
+            }
+        } else {
+            NSLog(@"AVCaptureDevice lockForConfiguration returned error\t%@", error);
+        }
+        [self->_videoDevice unlockForConfiguration];
+    });
+}
+
 //
 //
 //

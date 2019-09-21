@@ -12,9 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CameraControlsView;
-
-@interface CameraViewController : UIViewController
+@interface CameraViewController : UIViewController <CameraControlsDelegate>
 
 @property (nonatomic, assign) float ISO;
 - (void)setISO:(float)ISO;
@@ -23,6 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setFocus:(float)focus;
 
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
+- (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler;
+- (void)toggleTorchWithCompletionHandler:(void (^)(BOOL isTorchActive))completionHandler;
+
+- (void)setTorchLevel:(float)torchLevel;
 
 @end
 
