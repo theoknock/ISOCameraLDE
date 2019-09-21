@@ -180,6 +180,8 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
         [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
             [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
             [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
+            NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
+            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
 //            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:TRUE];
         }];
     });
