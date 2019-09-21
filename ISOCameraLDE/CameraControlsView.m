@@ -93,7 +93,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
             } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected])
             {
                 [self.delegate setISO:location];
-            } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected])
+            } else if ([(UIButton *)[self viewWithTag:ControlButtonTagTorch] isSelected])
             {
                 [self.delegate setTorchLevel:location];
             }
