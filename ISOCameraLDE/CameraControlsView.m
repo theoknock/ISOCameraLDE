@@ -17,6 +17,8 @@
 
 @implementation CameraControlsView
 
+static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
+
 @synthesize delegate = _delegate;
 
 - (void)setDelegate:(id<CameraControlsDelegate>)delegate
@@ -45,7 +47,8 @@
 - (void)awakeFromNib
 {
     //    self = [super init];
-    //    if (self) {
+    //    if (self) 
+    
     [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self setOpaque:FALSE];
     [self setBackgroundColor:[UIColor clearColor]];
@@ -124,6 +127,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         [self deselectAllControlButtonsExceptWithTag:ControlButtonTagFocus];
         [sender setSelected:![sender isSelected]];
         [(UIButton *)sender setHighlighted:[sender isSelected]];
+        [(UICollectionView *)[self viewWithTag:6] setHidden:!([sender isSelected])];
     });
 }
 
@@ -167,6 +171,7 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
         [self deselectAllControlButtonsExceptWithTag:ControlButtonTagISO];
         [sender setSelected:![sender isSelected]];
         [(UIButton *)sender setHighlighted:[sender isSelected]];
+        [(UICollectionView *)[self viewWithTag:6] setHidden:!([sender isSelected])];
     });
 }
 
@@ -183,6 +188,7 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
             NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
             [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
 //            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:TRUE];
+            [(UICollectionView *)[self viewWithTag:6] setHidden:!isTorchActive];
         }];
     });
 }
@@ -200,6 +206,22 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
         }
     }
     });
+}
+
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    [cell.contentView setBackgroundColor:[UIColor whiteColor]];
+    return cell;
+}
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    return 1;
+}
+
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return 10;
 }
 
 @end

@@ -34,6 +34,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 @property (weak, nonatomic) IBOutlet CameraView *cameraView;
 
 @property (weak, nonatomic) IBOutlet CameraControlsView *cameraControlsView;
+@property (weak, nonatomic) IBOutlet UICollectionView *SliderControlCollectionView;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue;
@@ -51,6 +52,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 @end
 
 @implementation CameraViewController
+static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
 @synthesize focus = _focus, ISO = _ISO;
 
@@ -59,6 +61,10 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.SliderControlCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    [self.SliderControlCollectionView setDelegate:(id<UICollectionViewDelegate>)self.cameraControlsView];
+    [self.SliderControlCollectionView setDataSource:(id<UICollectionViewDataSource>)self.cameraControlsView];
+    
     [self.cameraControlsView setDelegate:(id<CameraControlsDelegate> _Nullable)self];
     
     // Create the AVCaptureSession
