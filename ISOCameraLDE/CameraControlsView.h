@@ -15,7 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, ControlButtonTag) {
     ControlButtonTagFocus = 2,
     ControlButtonTagISO   = 1,
-    ControlButtonTagTorch = 3
+    ControlButtonTagTorch = 3,
+    ControlButtonTagExposureDuration = 5
 };
 
 typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
@@ -33,11 +34,11 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 
 @property (assign) float ISO;
 - (void)setISO:(float)ISO;
+- (void)autoExposureWithCompletionHandler:(void (^)(double ISO))completionHandler;
 
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
-
-- (void)autoFocus;
+- (void)autoFocusWithCompletionHandler:(void (^)(double focus))completionHandler;
 
 - (void)setTorchLevel:(float)torchLevel;
 

@@ -720,7 +720,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 - (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler
 {
     __autoreleasing NSError *error = nil;
-    if ( [self.videoDevice lockForConfiguration:&error] ) {
+    if (![self.videoDevice isAdjustingExposure] && [self.videoDevice lockForConfiguration:&error]) {
         @try {
             [self.videoDevice setExposureModeCustomWithDuration:exposureDuration ISO:[self.videoDevice ISO] completionHandler:^(CMTime syncTime) {
                 completionHandler([self.videoDevice exposureDuration]);
@@ -737,34 +737,65 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 }
 
 - (void)setFocus:(float)focus {
-    if ( [self.videoDevice lockForConfiguration:nil] && ![self.videoDevice isAdjustingFocus]) {
-        [self.videoDevice setFocusModeLockedWithLensPosition:focus completionHandler:nil];
-        [self.videoDevice unlockForConfiguration];
-    } else {
-        NSLog( @"Could not lock device for focus configuration: %@", nil );
-    }
+    __autoreleasing NSError *error;
+     @try {
+    if (![self.videoDevice isAdjustingFocus] && [self.videoDevice lockForConfiguration:&error]) {
+       
+            [self.videoDevice setFocusModeLockedWithLensPosition:focus completionHandler:nil];
+        } else {
+            if (![self.videoDevice isAdjustingFocus] && error)
+            NSLog( @"Could not lock device to set focus: %@", error.description );
+        }
+        } @catch (NSException *exception) {
+            NSLog( @"ERROR setting focus:\t%@", exception.description);
+        } @finally {
+            [self.videoDevice unlockForConfiguration];
+        }
+    
 }
 
-- (void)autoFocus
+- (void)autoFocusWithCompletionHandler:(void (^)(double focus))completionHandler
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    if ( [self.videoDevice lockForConfiguration:nil] && ![self.videoDevice isAdjustingFocus]) {
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if (![self.videoDevice isAdjustingFocus] && [self.videoDevice lockForConfiguration:nil]) {
         @try {
             [self.videoDevice setFocusMode:AVCaptureFocusModeAutoFocus];
         } @catch (NSException *exception) {
             NSLog( @"ERROR auto-focusing:\t%@", exception.description);
         } @finally {
             [self.videoDevice unlockForConfiguration];
+            while ([self.videoDevice isAdjustingFocus]) {
+                
+            }
+            completionHandler([self.videoDevice lensPosition]);
         }
-        
-        [self.videoDevice unlockForConfiguration];
+    } else {
+        NSLog( @"Could not lock device for focus configuration: %@", nil );
+    }
+}
+
+
+- (void)autoExposureWithCompletionHandler:(void (^)(double ISO))completionHandler
+{
+    if (![self.videoDevice isAdjustingExposure] && [self.videoDevice lockForConfiguration:nil]) {
+        @try {
+            [self.videoDevice setExposureMode:AVCaptureExposureModeAutoExpose];
+        } @catch (NSException *exception) {
+            NSLog( @"ERROR auto-focusing:\t%@", exception.description);
+        } @finally {
+            [self.videoDevice unlockForConfiguration];
+            while ([self.videoDevice isAdjustingExposure]) {
+                
+            }
+            completionHandler([self.videoDevice ISO]);
+        }
     } else {
         NSLog( @"Could not lock device for focus configuration: %@", nil );
     }
 }
 
 - (void)setISO:(float)ISO {
-    if ( [self.videoDevice lockForConfiguration:nil] ) {
+    if ( [self.videoDevice lockForConfiguration:nil] && ![self.videoDevice isAdjustingExposure]) {
         @try {
             float maxISO = self.videoDevice.activeFormat.maxISO;
             float minISO = self.videoDevice.activeFormat.minISO;

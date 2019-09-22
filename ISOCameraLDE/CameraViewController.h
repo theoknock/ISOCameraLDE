@@ -18,10 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) float ISO;
 - (void)setISO:(float)ISO;
+- (void)autoExposureWithCompletionHandler:(void (^)(double ISO))completionHandler;
 
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
-- (void)autoFocus;
+- (void)autoFocusWithCompletionHandler:(void (^)(double focus))completionHandler;
 
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 - (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler;
