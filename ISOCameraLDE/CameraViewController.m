@@ -348,6 +348,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
         if ( [device lockForConfiguration:&error] ) {
             if ( [self.videoDevice isFocusModeSupported:AVCaptureFocusModeLocked] ) {
                 self.videoDevice.focusMode = AVCaptureFocusModeLocked;
+                self.videoDevice.smoothAutoFocusEnabled = FALSE;
             }
             else {
                 NSLog( @"Focus mode AVCaptureFocusModeLocked is not supported.");
@@ -736,8 +737,26 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 }
 
 - (void)setFocus:(float)focus {
-    if ( [self.videoDevice lockForConfiguration:nil] ) {
+    if ( [self.videoDevice lockForConfiguration:nil] && ![self.videoDevice isAdjustingFocus]) {
         [self.videoDevice setFocusModeLockedWithLensPosition:focus completionHandler:nil];
+        [self.videoDevice unlockForConfiguration];
+    } else {
+        NSLog( @"Could not lock device for focus configuration: %@", nil );
+    }
+}
+
+- (void)autoFocus
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if ( [self.videoDevice lockForConfiguration:nil] && ![self.videoDevice isAdjustingFocus]) {
+        @try {
+            [self.videoDevice setFocusMode:AVCaptureFocusModeAutoFocus];
+        } @catch (NSException *exception) {
+            NSLog( @"ERROR auto-focusing:\t%@", exception.description);
+        } @finally {
+            [self.videoDevice unlockForConfiguration];
+        }
+        
         [self.videoDevice unlockForConfiguration];
     } else {
         NSLog( @"Could not lock device for focus configuration: %@", nil );

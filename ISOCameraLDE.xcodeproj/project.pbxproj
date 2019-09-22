@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A062A062337B04E001D446A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A062A052337B04E001D446A /* UIKit.framework */; };
+		8A062A082337B77B001D446A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A062A072337B77B001D446A /* Foundation.framework */; };
 		B96B273223367DB20060C9A9 /* CollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B96B273123367DB20060C9A9 /* CollectionViewCell.m */; };
 		B96EB366230FC8F40054F514 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B96EB365230FC8F40054F514 /* SceneDelegate.m */; };
 		B9CEED472321BAD100DEC88A /* CameraControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CEED462321BAD100DEC88A /* CameraControlsView.m */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8A062A052337B04E001D446A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		8A062A072337B77B001D446A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B96B273023367DB20060C9A9 /* CollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionViewCell.h; sourceTree = "<group>"; };
 		B96B273123367DB20060C9A9 /* CollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionViewCell.m; sourceTree = "<group>"; wrapsLines = 0; };
 		B96EB364230FC8F40054F514 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -45,17 +49,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A062A062337B04E001D446A /* UIKit.framework in Frameworks */,
+				8A062A082337B77B001D446A /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A062A042337B04D001D446A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8A062A072337B77B001D446A /* Foundation.framework */,
+				8A062A052337B04E001D446A /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B9DF14A022B810DE0028DC47 = {
 			isa = PBXGroup;
 			children = (
 				B9DF14AB22B810DE0028DC47 /* ISOCameraLDE */,
 				B9DF14AA22B810DE0028DC47 /* Products */,
+				8A062A042337B04D001D446A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};

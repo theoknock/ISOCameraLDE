@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
+- (void)autoFocus;
 
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
 - (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler;

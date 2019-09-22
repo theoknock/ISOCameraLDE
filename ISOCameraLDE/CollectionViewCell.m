@@ -30,7 +30,7 @@
     
     CATextLayer *textLayer = [CATextLayer layer];
     NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-    centerAlignedParagraphStyle.alignment                = NSTextAlignmentCenter;
+    centerAlignedParagraphStyle.alignment                = NSTextAlignmentJustified;
     NSDictionary *centerAlignedTextAttributes            = @{NSForegroundColorAttributeName:[UIColor systemBlueColor],
                                                             NSFontAttributeName:[UIFont systemFontOfSize:32.0],
                                                             NSParagraphStyleAttributeName:centerAlignedParagraphStyle};
@@ -39,13 +39,15 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         __block CGFloat textLayerFrameY = CGRectGetMinY(self.contentView.bounds);
         [textLayer setOpaque:FALSE];
-        [textLayer setAlignmentMode:kCAAlignmentCenter];
+        [textLayer setAlignmentMode:kCAAlignmentJustified];
+        [textLayer setWrapped:TRUE];
         textLayer.string = attributedString;
         
         CGSize textLayerframeSize = [self suggestFrameSizeWithConstraints:self.contentView.bounds.size forAttributedString:attributedString];
-        CGRect frame = CGRectMake(CGRectGetMinX(self.contentView.bounds), (CGRectGetMinY(self.contentView.bounds) + textLayerFrameY), /*textLayerframeSize.width*/CGRectGetWidth(self.contentView.frame), textLayerframeSize.height);
+        CGRect frame = CGRectMake(CGRectGetMinX(self.contentView.bounds), (CGRectGetMinY(self.contentView.bounds) + textLayerFrameY), CGRectGetWidth(self.contentView.frame), textLayerframeSize.height);
         textLayer.frame = frame;
         textLayerFrameY += textLayerframeSize.height;
+//        [textLayer setBackgroundColor:[UIColor blueColor].CGColor];
         
         [self.contentView.layer addSublayer:textLayer];
     });

@@ -37,6 +37,8 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 @property (assign) float focus;
 - (void)setFocus:(float)focus;
 
+- (void)autoFocus;
+
 - (void)setTorchLevel:(float)torchLevel;
 
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
@@ -54,6 +56,7 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 @property (nonatomic, assign, nullable) id<CameraControlsDelegate> delegate;
 
 @property (nonatomic, nullable) UIPanGestureRecognizer *panGestureRecognizer;
+@property (nonatomic, nullable) UITapGestureRecognizer *tapGestureRecognizer;
 
 @end
 

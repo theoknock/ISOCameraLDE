@@ -49,7 +49,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 {
     //    self = [super init];
     //    if (self) 
-    
+    [super awakeFromNib];
     [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self setOpaque:FALSE];
     [self setBackgroundColor:[UIColor clearColor]];
@@ -57,17 +57,28 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     [self setupGestureRecognizers];
     //    }
     //    return self;
-    [super awakeFromNib];
+    
 }
 
 - (void)setupGestureRecognizers
 {
+    [self setUserInteractionEnabled:TRUE];
+    [self setMultipleTouchEnabled:TRUE];
+    [self setExclusiveTouch:TRUE];
+    
     self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
     [self.panGestureRecognizer setMaximumNumberOfTouches:1];
     [self.panGestureRecognizer setMinimumNumberOfTouches:1];
     self.panGestureRecognizer.delegate = self;
     [self addGestureRecognizer:self.panGestureRecognizer];
-    self.gestureRecognizers = @[self.panGestureRecognizer];
+    
+    self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [self.tapGestureRecognizer setNumberOfTapsRequired:1];
+    [self.tapGestureRecognizer setNumberOfTouchesRequired:1];
+    self.tapGestureRecognizer.delegate = self;
+    [self addGestureRecognizer:self.tapGestureRecognizer];
+    
+    self.gestureRecognizers = @[self.panGestureRecognizer, self.tapGestureRecognizer];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
@@ -105,6 +116,13 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
                 [self.delegate setTorchLevel:location];
             }
         }
+    });
+}
+
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate autoFocus];
     });
 }
 
@@ -155,9 +173,7 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 - (IBAction)exposureDuration:(UIButton *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"%s", __PRETTY_FUNCTION__);
-        if ([sender isEnabled])
-        {
-            [sender setEnabled:FALSE];
+        [sender setEnabled:FALSE];
             ExposureDurationMode targetExposureDurationMode = ([sender isSelected]) ? ExposureDurationModeNormal : ExposureDurationModeLong;
             CMTime targetExposureDuration = exposureDurationForMode(targetExposureDurationMode);
             [self.delegate targetExposureDuration:targetExposureDuration withCompletionHandler:^(CMTime currentExposureDuration) {
@@ -166,7 +182,6 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
                 [sender setSelected:shouldHighlightExposureDurationModeButton];
                 [(UIButton *)sender setHighlighted:shouldHighlightExposureDurationModeButton];
             }];
-        }
     });
 }
 
