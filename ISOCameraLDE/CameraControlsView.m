@@ -47,17 +47,12 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
 - (void)awakeFromNib
 {
-    //    self = [super init];
-    //    if (self)
     [super awakeFromNib];
     [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self setOpaque:FALSE];
     [self setBackgroundColor:[UIColor clearColor]];
     
     [self setupGestureRecognizers];
-    //    }
-    //    return self;
-    
 }
 
 - (void)setupGestureRecognizers

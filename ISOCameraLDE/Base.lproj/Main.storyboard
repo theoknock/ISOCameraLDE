@@ -24,10 +24,10 @@
                                 </constraints>
                             </view>
                             <view opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RaZ-vM-Bf4" customClass="CameraControlsView">
-                                <rect key="frame" x="0.0" y="780" width="414" height="82"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <subviews>
                                     <stackView opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-gl-0Yj" userLabel="Button Stack View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
+                                        <rect key="frame" x="0.0" y="736" width="414" height="82"/>
                                         <subviews>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9f-cE-wZk" userLabel="Record">
                                                 <rect key="frame" x="0.0" y="0.0" width="76.333333333333329" height="82"/>
@@ -42,7 +42,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="2" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1oe-yR-dM8" userLabel="Exposure Duration">
-                                                <rect key="frame" x="84.333333333333343" y="20.000000000000004" width="76.333333333333343" height="42.333333333333343"/>
+                                                <rect key="frame" x="84.333333333333343" y="20" width="76.333333333333343" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="timer" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -66,7 +66,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmG-81-aAG" userLabel="Focus">
-                                                <rect key="frame" x="253.33333333333334" y="20.000000000000004" width="76.333333333333343" height="42.333333333333343"/>
+                                                <rect key="frame" x="253.33333333333334" y="20" width="76.333333333333343" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="viewfinder.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -78,7 +78,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BM-EC-R7x" userLabel="Torch">
-                                                <rect key="frame" x="337.66666666666669" y="20.000000000000004" width="76.333333333333314" height="42.333333333333343"/>
+                                                <rect key="frame" x="337.66666666666669" y="20" width="76.333333333333314" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="bolt.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -100,7 +100,6 @@
                                 <constraints>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="leading" secondItem="RaZ-vM-Bf4" secondAttribute="leading" id="84G-sZ-vJj"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="width" secondItem="RaZ-vM-Bf4" secondAttribute="width" id="IfS-hg-Wuo"/>
-                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="top" secondItem="RaZ-vM-Bf4" secondAttribute="top" id="Ky2-Cu-xkV"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="centerX" secondItem="RaZ-vM-Bf4" secondAttribute="centerX" id="RJk-HC-kEy"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="trailing" secondItem="RaZ-vM-Bf4" secondAttribute="trailing" id="Sf1-Ta-47v"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="bottom" secondItem="RaZ-vM-Bf4" secondAttribute="bottom" id="jnI-cs-i42"/>
@@ -111,11 +110,12 @@
                         <constraints>
                             <constraint firstItem="RaZ-vM-Bf4" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="DOJ-jr-D88"/>
                             <constraint firstItem="RaZ-vM-Bf4" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="KV1-zL-EkX"/>
-                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="top" secondItem="Xzt-iO-ced" secondAttribute="bottom" id="M2m-KP-clw"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="M2m-KP-clw"/>
                             <constraint firstItem="RaZ-vM-Bf4" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="QCx-WL-CSj"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" id="UKB-5E-Vy4"/>
                             <constraint firstItem="RaZ-vM-Bf4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Ufu-tX-L0r"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="g6c-KJ-ODM"/>
+                            <constraint firstItem="e0d-gl-0Yj" firstAttribute="top" secondItem="Xzt-iO-ced" secondAttribute="bottom" id="osO-rp-I9P"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ycU-UI-Rck"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

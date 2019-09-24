@@ -2,7 +2,7 @@
 //  CameraControlsView.h
 //  ISOCameraLDE
 //
-//  Created by Xcode Developer on 9/5/19.
+//  Created by James Alan Bush on 9/5/19.
 //  Copyright © 2019 The Life of a Demoniac. All rights reserved.
 //
 
