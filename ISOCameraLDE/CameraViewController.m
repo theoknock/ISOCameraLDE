@@ -13,6 +13,8 @@
 #import "CameraView.h"
 #import "CameraControlsView.h"
 #import "CollectionViewCell.h"
+#import "ScaleSliderControlView.h"
+#import "CameraControlsView.h"
 
 static void * SessionRunningContext = &SessionRunningContext;
 static void * LensPositionContext = &LensPositionContext;
@@ -35,7 +37,9 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 @property (weak, nonatomic) IBOutlet CameraView *cameraView;
 
 @property (weak, nonatomic) IBOutlet CameraControlsView *cameraControlsView;
+
 @property (weak, nonatomic) IBOutlet UICollectionView *SliderControlCollectionView;
+@property (weak, nonatomic) IBOutlet ScaleSliderControlView *scaleSliderControlView;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue;
@@ -67,7 +71,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     [self.SliderControlCollectionView setDataSource:(id<UICollectionViewDataSource>)self.cameraControlsView];
     
     [self.cameraControlsView setDelegate:(id<CameraControlsDelegate> _Nullable)self];
-    
+//    [self.scaleSliderScrollView setDelegate:(id<UIScrollViewDelegate> _Nullable)self.cameraControlsView];
     // Create the AVCaptureSession
     self.session = [[AVCaptureSession alloc] init];
     
@@ -405,6 +409,11 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
 #pragma mark Device Configuration
 
+- (IBAction)testAction:(id)sender
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 - (IBAction)changeLensPosition:(id)sender
 {
     UISlider *control = sender;
@@ -465,6 +474,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler
 {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     // Retrieve the video preview layer's video orientation on the main queue before entering the session queue. We do this to ensure UI
     // elements are accessed on the main thread and session configuration is done on the session queue.
     AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.cameraView.layer;

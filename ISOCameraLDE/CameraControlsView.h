@@ -13,10 +13,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, ControlButtonTag) {
-    ControlButtonTagFocus = 2,
-    ControlButtonTagISO   = 1,
-    ControlButtonTagTorch = 3,
-    ControlButtonTagExposureDuration = 5
+    ControlButtonTagRecord = 1,
+    ControlButtonTagExposureDuration = 2,
+    ControlButtonTagISO   = 3,
+    ControlButtonTagFocus = 4,
+    ControlButtonTagTorch = 5
 };
 
 typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
@@ -50,7 +51,7 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 
 @end
 
-@interface CameraControlsView : UIView <UIGestureRecognizerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface CameraControlsView : UIStackView <UIGestureRecognizerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>
 
 //+ (nonnull CameraControlsView *)cameraControls;
 

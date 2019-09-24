@@ -23,110 +23,98 @@
                                     <constraint firstAttribute="width" secondItem="Xzt-iO-ced" secondAttribute="height" multiplier="9:16" id="9zk-RX-B9D"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OMq-o5-EZp" customClass="CameraControlsView">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            <view opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RaZ-vM-Bf4" customClass="CameraControlsView">
+                                <rect key="frame" x="0.0" y="780" width="414" height="82"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-gl-0Yj">
-                                        <rect key="frame" x="0.0" y="767.66666666666663" width="414" height="50.333333333333371"/>
+                                    <stackView opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-gl-0Yj" userLabel="Button Stack View">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
                                         <subviews>
-                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9f-cE-wZk">
-                                                <rect key="frame" x="0.0" y="1.3333333333333712" width="82" height="47.666666666666664"/>
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9f-cE-wZk" userLabel="Record">
+                                                <rect key="frame" x="0.0" y="0.0" width="76.333333333333329" height="82"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="camera.circle" catalog="system">
-                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                                    </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="record:" destination="OMq-o5-EZp" eventType="touchUpInside" id="ARR-Pj-CYo"/>
+                                                    <action selector="record:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="Bix-Lm-WXh"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="5" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1oe-yR-dM8">
-                                                <rect key="frame" x="82" y="1.3333333333333712" width="81.666666666666686" height="47.666666666666664"/>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1oe-yR-dM8" userLabel="Exposure Duration">
+                                                <rect key="frame" x="84.333333333333343" y="20.000000000000004" width="76.333333333333343" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="timer" catalog="system">
-                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                                    </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="exposureDuration:" destination="OMq-o5-EZp" eventType="touchUpInside" id="csf-7e-Gnk"/>
+                                                    <action selector="exposureDuration:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="zet-04-fc6"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCC-wi-bYd">
-                                                <rect key="frame" x="163.66666666666666" y="0.0" width="86.666666666666657" height="50.333333333333336"/>
+                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCC-wi-bYd" userLabel="ISO">
+                                                <rect key="frame" x="168.66666666666666" y="18.666666666666629" width="76.666666666666657" height="45"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="sun.max" catalog="system">
-                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                                    </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="iso:" destination="OMq-o5-EZp" eventType="touchUpInside" id="4Nw-dS-r90"/>
+                                                    <action selector="isoButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="TSv-5C-rhZ"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmG-81-aAG">
-                                                <rect key="frame" x="250.33333333333334" y="1.3333333333333712" width="81.666666666666657" height="47.666666666666664"/>
+                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmG-81-aAG" userLabel="Focus">
+                                                <rect key="frame" x="253.33333333333334" y="20.000000000000004" width="76.333333333333343" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="viewfinder.circle" catalog="system">
-                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                                    </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="focus:" destination="OMq-o5-EZp" eventType="touchUpInside" id="Gim-mm-BPh"/>
+                                                    <action selector="focusButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="HFA-gp-dcv"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BM-EC-R7x">
-                                                <rect key="frame" x="332" y="1.3333333333333712" width="82" height="47.666666666666664"/>
+                                            <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BM-EC-R7x" userLabel="Torch">
+                                                <rect key="frame" x="337.66666666666669" y="20.000000000000004" width="76.333333333333314" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="bolt.circle" catalog="system">
-                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                                    </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="torch:" destination="OMq-o5-EZp" eventType="touchUpInside" id="UHz-pA-ZIB"/>
+                                                    <action selector="torchButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="Fkr-GM-kP7"/>
                                                 </connections>
                                             </button>
                                         </subviews>
-                                    </stackView>
-                                    <collectionView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="6" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="pNF-CU-mBS">
-                                        <rect key="frame" x="0.0" y="717.33333333333337" width="414" height="50.333333333333371"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zGi-Zm-RCS">
-                                            <size key="itemSize" width="50" height="50"/>
-                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        </collectionViewFlowLayout>
-                                        <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionViewCellReuseIdentifier" id="G7p-U0-3xw" customClass="CollectionViewCell">
-                                                <rect key="frame" x="0.0" y="0.33333333333333331" width="50" height="50"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="sMF-h0-K16">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                </collectionViewCellContentView>
-                                            </collectionViewCell>
-                                        </cells>
-                                        <connections>
-                                            <outlet property="dataSource" destination="OMq-o5-EZp" id="QGH-je-rQ3"/>
-                                            <outlet property="delegate" destination="OMq-o5-EZp" id="X8A-DB-gQw"/>
-                                        </connections>
-                                    </collectionView>
+                                        <constraints>
+                                            <constraint firstItem="d9f-cE-wZk" firstAttribute="height" secondItem="e0d-gl-0Yj" secondAttribute="height" id="r1N-JC-8iA"/>
+                                        </constraints>
+                                    </stackView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="pNF-CU-mBS" firstAttribute="height" secondItem="e0d-gl-0Yj" secondAttribute="height" id="0iN-ka-eSB"/>
-                                    <constraint firstItem="pNF-CU-mBS" firstAttribute="leading" secondItem="e0d-gl-0Yj" secondAttribute="leading" id="JcX-Oe-WvP"/>
-                                    <constraint firstAttribute="bottom" secondItem="e0d-gl-0Yj" secondAttribute="bottom" id="QX4-QO-ElM"/>
-                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="width" secondItem="OMq-o5-EZp" secondAttribute="width" id="W5i-2Q-bFF"/>
-                                    <constraint firstItem="pNF-CU-mBS" firstAttribute="centerX" secondItem="e0d-gl-0Yj" secondAttribute="centerX" id="bIA-If-DHq"/>
-                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="centerX" secondItem="OMq-o5-EZp" secondAttribute="centerX" id="mJU-69-xGl"/>
-                                    <constraint firstItem="pNF-CU-mBS" firstAttribute="bottom" secondItem="e0d-gl-0Yj" secondAttribute="top" id="mUc-1v-IEQ"/>
-                                    <constraint firstItem="pNF-CU-mBS" firstAttribute="width" secondItem="e0d-gl-0Yj" secondAttribute="width" id="z5r-xz-6x3"/>
+                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="leading" secondItem="RaZ-vM-Bf4" secondAttribute="leading" id="84G-sZ-vJj"/>
+                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="width" secondItem="RaZ-vM-Bf4" secondAttribute="width" id="IfS-hg-Wuo"/>
+                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="top" secondItem="RaZ-vM-Bf4" secondAttribute="top" id="Ky2-Cu-xkV"/>
+                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="centerX" secondItem="RaZ-vM-Bf4" secondAttribute="centerX" id="RJk-HC-kEy"/>
+                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="trailing" secondItem="RaZ-vM-Bf4" secondAttribute="trailing" id="Sf1-Ta-47v"/>
+                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="bottom" secondItem="RaZ-vM-Bf4" secondAttribute="bottom" id="jnI-cs-i42"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="OMq-o5-EZp" firstAttribute="centerX" secondItem="Xzt-iO-ced" secondAttribute="centerX" id="1bJ-lt-uGB"/>
-                            <constraint firstItem="OMq-o5-EZp" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="64B-2x-SuY"/>
-                            <constraint firstItem="OMq-o5-EZp" firstAttribute="trailing" secondItem="Xzt-iO-ced" secondAttribute="trailing" id="Adh-oC-LZZ"/>
-                            <constraint firstItem="OMq-o5-EZp" firstAttribute="leading" secondItem="Xzt-iO-ced" secondAttribute="leading" id="GUT-ht-NoL"/>
-                            <constraint firstItem="OMq-o5-EZp" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="S9m-kq-TVO"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="DOJ-jr-D88"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="KV1-zL-EkX"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="top" secondItem="Xzt-iO-ced" secondAttribute="bottom" id="M2m-KP-clw"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="QCx-WL-CSj"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" id="UKB-5E-Vy4"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Ufu-tX-L0r"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="g6c-KJ-ODM"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ycU-UI-Rck"/>
                         </constraints>
@@ -134,13 +122,34 @@
                     </view>
                     <connections>
                         <outlet property="SliderControlCollectionView" destination="pNF-CU-mBS" id="ugk-9R-BmL"/>
-                        <outlet property="cameraControlsView" destination="OMq-o5-EZp" id="k3N-jH-0Kv"/>
+                        <outlet property="cameraControlsView" destination="RaZ-vM-Bf4" id="wCh-A6-jqM"/>
                         <outlet property="cameraView" destination="Xzt-iO-ced" id="vMy-j3-xKz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <collectionView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="6" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" id="pNF-CU-mBS">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="50.333333333333336"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zGi-Zm-RCS">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <cells>
+                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionViewCellReuseIdentifier" id="G7p-U0-3xw" customClass="CollectionViewCell">
+                            <rect key="frame" x="0.0" y="0.33333333333333331" width="50" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="sMF-h0-K16">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </collectionViewCellContentView>
+                        </collectionViewCell>
+                    </cells>
+                </collectionView>
             </objects>
-            <point key="canvasLocation" x="-1639" y="-251"/>
+            <point key="canvasLocation" x="-1639.1304347826087" y="-251.11607142857142"/>
         </scene>
     </scenes>
     <resources>

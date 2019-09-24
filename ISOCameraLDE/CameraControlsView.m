@@ -48,7 +48,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 - (void)awakeFromNib
 {
     //    self = [super init];
-    //    if (self) 
+    //    if (self)
     [super awakeFromNib];
     [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self setOpaque:FALSE];
@@ -99,10 +99,10 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     dispatch_async(dispatch_get_main_queue(), ^{
         if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
             //            [self adjustCameraSetting:([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected]) ? ControlButtonTagFocus : ControlButtonTagISO usingTouchAtPoint:CGPointZero];
-            CGFloat location = [sender locationInView:self].x / CGRectGetWidth(self.frame);
-            CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
-//            [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)([sender locationInView:self].x / CGRectGetWidth(scrollRect) * 10.0) inSection:0]];
-//            [(UICollectionView *)[self viewWithTag:6] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(self.delegate.focus * 10.0) inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:TRUE]; // scrollRectToVisible:CGRectMake(scrollRect.size.width * location, scrollRect.origin.y, 150.0, scrollRect.size.height) animated:TRUE];
+            CGFloat location = [sender locationOfTouch:nil inView:sender.view.superview].x / CGRectGetWidth(self.superview.frame);
+//            CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
+            //            [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)([sender locationInView:self].x / CGRectGetWidth(scrollRect) * 10.0) inSection:0]];
+            //            [(UICollectionView *)[self viewWithTag:6] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(self.delegate.focus * 10.0) inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:TRUE]; // scrollRectToVisible:CGRectMake(scrollRect.size.width * location, scrollRect.origin.y, 150.0, scrollRect.size.height) animated:TRUE];
             if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
             {
                 [self.delegate setFocus:location];
@@ -120,19 +120,19 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 }
 
 - (void)handleTapGesture:(UITapGestureRecognizer *)sender {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+    //    NSLog(@"%s", __PRETTY_FUNCTION__);
     dispatch_async(dispatch_get_main_queue(), ^{
-        CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
+//        CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
         if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
         {
             [self.delegate autoFocusWithCompletionHandler:^(double focus) {
-//                [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(focus) * 10.0 inSection:0]];
+                //                [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(focus) * 10.0 inSection:0]];
             }];
         } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected] && ![(UIButton *)[self viewWithTag:ControlButtonTagExposureDuration] isSelected])
         {
             [self.delegate autoExposureWithCompletionHandler:^(double ISO) {
-//                if ([(UIButton *)[self viewWithTag:ControlButtonTagExposureDuration] isSelected]) [self.delegate setISO:ISO];
-//                [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(ISO) * 10.0 inSection:0]];
+                //                if ([(UIButton *)[self viewWithTag:ControlButtonTagExposureDuration] isSelected]) [self.delegate setISO:ISO];
+                //                [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(ISO) * 10.0 inSection:0]];
             }];
         }
         
@@ -146,25 +146,24 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 
 - (IBAction)record:(UIButton *)sender
 {
+    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.delegate toggleRecordingWithCompletionHandler:^(BOOL isRunning, NSError * _Nonnull error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [(UIButton *)[self viewWithTag:ControlButtonTagISO] setSelected:isRunning];
-            [(UIButton *)[self viewWithTag:ControlButtonTagISO] setHighlighted:isRunning];
-            [(UIButton *)[self viewWithTag:4] setImage:[UIImage systemImageNamed:(isRunning) ? @"camera.circle.fill" : @"camera.circle"] forState:UIControlStateNormal];
+            [(UIButton *)[self viewWithTag:ControlButtonTagRecord] setSelected:isRunning];
+            [(UIButton *)[self viewWithTag:ControlButtonTagRecord] setHighlighted:isRunning];
+            //            [(UIButton *)[self viewWithTag:4] setImage:[UIImage systemImageNamed:(isRunning) ? @"camera.circle.fill" : @"camera.circle"] forState:UIControlStateNormal];
         });
     }];
 }
 
 // When focus button is selected, the exposure duration changes to 1/30th of second
-- (IBAction)focus:(UIButton *)sender
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self deselectAllControlButtonsExceptWithTag:ControlButtonTagFocus];
-        [sender setSelected:![sender isSelected]];
-        [(UIButton *)sender setHighlighted:[sender isSelected]];
-//        [(UICollectionView *)[self viewWithTag:6] setHidden:!([sender isSelected])];
-    });
-}
+//- (IBAction)focus:(UIButton *)sender
+//{
+//   dispatch_async(dispatch_get_main_queue(), ^{
+//         [self toggleSelectionStateForButton:sender];
+//    });
+//}
 
 static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(ExposureDurationMode exposureDurationMode)
 {
@@ -187,57 +186,74 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setEnabled:FALSE];
-            ExposureDurationMode targetExposureDurationMode = ([sender isSelected]) ? ExposureDurationModeNormal : ExposureDurationModeLong;
-            CMTime targetExposureDuration = exposureDurationForMode(targetExposureDurationMode);
-            [self.delegate targetExposureDuration:targetExposureDuration withCompletionHandler:^(CMTime currentExposureDuration) {
-                [sender setEnabled:TRUE];
-                BOOL shouldHighlightExposureDurationModeButton = (targetExposureDurationMode == ExposureDurationModeLong) ? TRUE : FALSE;
-                [sender setSelected:shouldHighlightExposureDurationModeButton];
-                [(UIButton *)sender setHighlighted:shouldHighlightExposureDurationModeButton];
-            }];
-    });
-}
-
-- (IBAction)iso:(UIButton *)sender {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self deselectAllControlButtonsExceptWithTag:ControlButtonTagISO];
-        [sender setSelected:![sender isSelected]];
-        [(UIButton *)sender setHighlighted:[sender isSelected]];
-//        [(UICollectionView *)[self viewWithTag:6] setHidden:!([sender isSelected])];
-    });
-}
-
-- (IBAction)torch:(UIButton *)sender
-{
-    NSLog(@"torch level %f", [[self.delegate videoDevice] torchLevel]);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self deselectAllControlButtonsExceptWithTag:ControlButtonTagTorch];
-    });
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
-            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
-            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
-            NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
-            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
-//            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:TRUE];
-//            [(UICollectionView *)[self viewWithTag:6] setHidden:!isTorchActive];
+        ExposureDurationMode targetExposureDurationMode = ([sender isSelected]) ? ExposureDurationModeNormal : ExposureDurationModeLong;
+        CMTime targetExposureDuration = exposureDurationForMode(targetExposureDurationMode);
+        [self.delegate targetExposureDuration:targetExposureDuration withCompletionHandler:^(CMTime currentExposureDuration) {
+            [sender setEnabled:TRUE];
+            BOOL shouldHighlightExposureDurationModeButton = (targetExposureDurationMode == ExposureDurationModeLong) ? TRUE : FALSE;
+            [sender setSelected:shouldHighlightExposureDurationModeButton];
+            [(UIButton *)sender setHighlighted:shouldHighlightExposureDurationModeButton];
         }];
     });
 }
 
-
-- (void)deselectAllControlButtonsExceptWithTag:(ControlButtonTag)tag
+//- (IBAction)iso:(UIButton *)sender {
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//         [self toggleSelectionStateForButton:sender];
+//    });
+//}
+//
+//- (IBAction)torch:(UIButton *)sender
+//{
+//    NSLog(@"torch level %f", [[self.delegate videoDevice] torchLevel]);
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self toggleSelectionStateForButton:sender];
+//    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
+//            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
+//            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
+////            NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
+////            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
+//            //            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:TRUE];
+//            //            [(UICollectionView *)[self viewWithTag:6] setHidden:!isTorchActive];
+//        }];
+//    });
+//}
+- (IBAction)isoButtonActionHandler:(UIButton *)sender
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-    for (ControlButtonTag t = 1; t < 4; t++)
-    {
-        if (t != tag)
+    [self toggleSelectionStateForControlButtonWithTag:ControlButtonTagISO selectedState:sender.isSelected];
+}
+
+- (IBAction)focusButtonActionHandler:(UIButton *)sender
+{
+    [self toggleSelectionStateForControlButtonWithTag:ControlButtonTagFocus selectedState:sender.isSelected];
+}
+
+- (IBAction)torchButtonActionHandler:(UIButton *)sender
+{
+    [self toggleSelectionStateForControlButtonWithTag:ControlButtonTagTorch selectedState:sender.isSelected];
+}
+
+- (void)toggleSelectionStateForControlButtonWithTag:(NSUInteger)buttonTag selectedState:(BOOL)isSelected
+{
+    NSLog(@"buttonTag == %d", buttonTag);
+    for (NSUInteger t = 3; t < 6; t++)
         {
-            [(UIButton *)[self viewWithTag:t] setSelected:FALSE];
-            [(UIButton *)[self viewWithTag:t] setHighlighted:FALSE];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [(UIButton *)[self viewWithTag:t] setSelected:(buttonTag == t) ? !isSelected : FALSE];
+                [(UIButton *)[self viewWithTag:t] setHighlighted:[(UIButton *)[self viewWithTag:t] isSelected]];
+            });
         }
-    }
-    });
+        if (buttonTag == ControlButtonTagTorch) {
+                [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
+                        [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
+                    });
+                }];
+        }
+    
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
