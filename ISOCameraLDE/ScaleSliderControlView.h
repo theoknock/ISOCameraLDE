@@ -7,13 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ScaleView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ScaleSliderControlView : UIView <UIScrollViewDelegate>
+@interface ScaleSliderControlView : UIView <UIScrollViewDelegate, ScaleViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
-@property (strong, nonatomic) UIImageView *contentView;
+@property (strong, nonatomic) UIView *contentView;
+
+@property (assign) NSInteger ticks;
 
 @end
 

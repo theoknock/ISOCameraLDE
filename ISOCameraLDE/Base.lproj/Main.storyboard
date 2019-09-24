@@ -26,11 +26,11 @@
                             <view opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RaZ-vM-Bf4" customClass="CameraControlsView">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <subviews>
-                                    <stackView opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-gl-0Yj" userLabel="Button Stack View">
-                                        <rect key="frame" x="0.0" y="773" width="414" height="45"/>
+                                    <stackView hidden="YES" opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-gl-0Yj" userLabel="Button Stack View">
+                                        <rect key="frame" x="0.0" y="736" width="414" height="82"/>
                                         <subviews>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9f-cE-wZk" userLabel="Record">
-                                                <rect key="frame" x="0.0" y="1.3333333333333712" width="76.333333333333329" height="42.333333333333336"/>
+                                                <rect key="frame" x="0.0" y="20.000000000000004" width="76.333333333333329" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="camera.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -42,7 +42,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="2" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1oe-yR-dM8" userLabel="Exposure Duration">
-                                                <rect key="frame" x="84.333333333333343" y="1.3333333333333712" width="76.333333333333343" height="42.333333333333336"/>
+                                                <rect key="frame" x="84.333333333333343" y="20.000000000000004" width="76.333333333333343" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="timer" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -54,7 +54,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCC-wi-bYd" userLabel="ISO">
-                                                <rect key="frame" x="168.66666666666666" y="0.0" width="76.666666666666657" height="45"/>
+                                                <rect key="frame" x="168.66666666666666" y="18.666666666666629" width="76.666666666666657" height="45"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="sun.max" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -66,7 +66,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmG-81-aAG" userLabel="Focus">
-                                                <rect key="frame" x="253.33333333333334" y="1.3333333333333712" width="76.333333333333343" height="42.333333333333336"/>
+                                                <rect key="frame" x="253.33333333333334" y="20.000000000000004" width="76.333333333333343" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="viewfinder.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -78,7 +78,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BM-EC-R7x" userLabel="Torch">
-                                                <rect key="frame" x="337.66666666666669" y="1.3333333333333712" width="76.333333333333314" height="42.333333333333336"/>
+                                                <rect key="frame" x="337.66666666666669" y="20.000000000000004" width="76.333333333333314" height="42.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="bolt.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -92,17 +92,57 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w0N-TG-oNZ" userLabel="Scale Slider Control" customClass="ScaleSliderControlView">
+                                        <rect key="frame" x="0.0" y="736" width="414" height="82"/>
+                                        <subviews>
+                                            <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="-1" contentMode="scaleToFill" ambiguous="YES" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5gg-FY-OoO">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
+                                                <subviews>
+                                                    <view opaque="NO" tag="-2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I8W-Dw-1Ub" userLabel="Content View" customClass="ScaleView">
+                                                        <rect key="frame" x="0.0" y="0.0" width="828" height="82"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="I8W-Dw-1Ub" firstAttribute="top" secondItem="4cn-Xf-58S" secondAttribute="top" id="2oI-pG-Jfv"/>
+                                                    <constraint firstItem="I8W-Dw-1Ub" firstAttribute="trailing" secondItem="pRd-j0-q7N" secondAttribute="trailing" id="656-Xs-KcF"/>
+                                                    <constraint firstItem="I8W-Dw-1Ub" firstAttribute="leading" secondItem="pRd-j0-q7N" secondAttribute="leading" id="ETM-K3-Qgq"/>
+                                                    <constraint firstItem="I8W-Dw-1Ub" firstAttribute="bottom" secondItem="4cn-Xf-58S" secondAttribute="bottom" id="ckU-wp-ynW"/>
+                                                </constraints>
+                                                <viewLayoutGuide key="contentLayoutGuide" id="pRd-j0-q7N"/>
+                                                <viewLayoutGuide key="frameLayoutGuide" id="4cn-Xf-58S"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="w0N-TG-oNZ" id="0X6-aG-ZDd"/>
+                                                </connections>
+                                            </scrollView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="5gg-FY-OoO" firstAttribute="leading" secondItem="w0N-TG-oNZ" secondAttribute="leading" id="9nQ-Zd-IGr"/>
+                                            <constraint firstItem="5gg-FY-OoO" firstAttribute="top" secondItem="w0N-TG-oNZ" secondAttribute="top" id="JYY-xj-Z3Y"/>
+                                            <constraint firstItem="5gg-FY-OoO" firstAttribute="trailing" secondItem="w0N-TG-oNZ" secondAttribute="trailing" id="TIb-p0-fYp"/>
+                                            <constraint firstItem="I8W-Dw-1Ub" firstAttribute="width" secondItem="w0N-TG-oNZ" secondAttribute="width" multiplier="2" id="U8U-Te-1Wc"/>
+                                            <constraint firstItem="I8W-Dw-1Ub" firstAttribute="height" secondItem="w0N-TG-oNZ" secondAttribute="height" id="d12-B7-2FI"/>
+                                            <constraint firstItem="5gg-FY-OoO" firstAttribute="bottom" secondItem="w0N-TG-oNZ" secondAttribute="bottom" id="qFk-XF-uOJ"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="leading" secondItem="RaZ-vM-Bf4" secondAttribute="leading" id="84G-sZ-vJj"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="trailing" secondItem="RaZ-vM-Bf4" secondAttribute="trailing" id="Sf1-Ta-47v"/>
+                                    <constraint firstItem="w0N-TG-oNZ" firstAttribute="leading" secondItem="RaZ-vM-Bf4" secondAttribute="leading" id="XMg-zB-kzu"/>
+                                    <constraint firstItem="w0N-TG-oNZ" firstAttribute="trailing" secondItem="RaZ-vM-Bf4" secondAttribute="trailing" id="diq-Hd-p64"/>
+                                    <constraint firstItem="w0N-TG-oNZ" firstAttribute="bottom" secondItem="RaZ-vM-Bf4" secondAttribute="bottom" id="hfw-i6-hpX"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="bottom" secondItem="RaZ-vM-Bf4" secondAttribute="bottom" id="jnI-cs-i42"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="w0N-TG-oNZ" firstAttribute="top" secondItem="Xzt-iO-ced" secondAttribute="bottom" id="N8Q-IR-idQ"/>
+                            <constraint firstItem="e0d-gl-0Yj" firstAttribute="top" secondItem="Xzt-iO-ced" secondAttribute="bottom" id="Rzs-lH-raP"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" id="UKB-5E-Vy4"/>
                             <constraint firstItem="RaZ-vM-Bf4" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="eTN-5R-XYX"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="g6c-KJ-ODM"/>

@@ -11,6 +11,7 @@
 		8AC8FBFF23381B2000D1E6E8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AC8FBFE23381B2000D1E6E8 /* AVFoundation.framework */; };
 		8AC8FC0523394B0600D1E6E8 /* ScaleSliderControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC8FC0423394B0600D1E6E8 /* ScaleSliderControlView.m */; };
 		8AC8FC0923394F3200D1E6E8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A062A052337B04E001D446A /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		B967F0A4233ACE1E00B54B8C /* ScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = B967F0A3233ACE1E00B54B8C /* ScaleView.m */; };
 		B96B273223367DB20060C9A9 /* CollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B96B273123367DB20060C9A9 /* CollectionViewCell.m */; };
 		B96EB366230FC8F40054F514 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B96EB365230FC8F40054F514 /* SceneDelegate.m */; };
 		B9CEED472321BAD100DEC88A /* CameraControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CEED462321BAD100DEC88A /* CameraControlsView.m */; };
@@ -28,7 +29,9 @@
 		8A062A072337B77B001D446A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8AC8FBFE23381B2000D1E6E8 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8AC8FC0323394B0600D1E6E8 /* ScaleSliderControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScaleSliderControlView.h; sourceTree = "<group>"; };
-		8AC8FC0423394B0600D1E6E8 /* ScaleSliderControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScaleSliderControlView.m; sourceTree = "<group>"; };
+		8AC8FC0423394B0600D1E6E8 /* ScaleSliderControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScaleSliderControlView.m; sourceTree = "<group>"; wrapsLines = 0; };
+		B967F0A2233ACE1E00B54B8C /* ScaleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScaleView.h; sourceTree = "<group>"; };
+		B967F0A3233ACE1E00B54B8C /* ScaleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScaleView.m; sourceTree = "<group>"; wrapsLines = 0; };
 		B96B273023367DB20060C9A9 /* CollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionViewCell.h; sourceTree = "<group>"; };
 		B96B273123367DB20060C9A9 /* CollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionViewCell.m; sourceTree = "<group>"; wrapsLines = 0; };
 		B96EB364230FC8F40054F514 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -101,6 +104,8 @@
 				B9DF14C922B8126D0028DC47 /* CameraViewController.m */,
 				8AC8FC0323394B0600D1E6E8 /* ScaleSliderControlView.h */,
 				8AC8FC0423394B0600D1E6E8 /* ScaleSliderControlView.m */,
+				B967F0A2233ACE1E00B54B8C /* ScaleView.h */,
+				B967F0A3233ACE1E00B54B8C /* ScaleView.m */,
 				B9CEED452321BAD100DEC88A /* CameraControlsView.h */,
 				B9CEED462321BAD100DEC88A /* CameraControlsView.m */,
 				B96B273023367DB20060C9A9 /* CollectionViewCell.h */,
@@ -190,6 +195,7 @@
 				B9CEED472321BAD100DEC88A /* CameraControlsView.m in Sources */,
 				8AC8FC0523394B0600D1E6E8 /* ScaleSliderControlView.m in Sources */,
 				B9DF14CA22B8126D0028DC47 /* CameraViewController.m in Sources */,
+				B967F0A4233ACE1E00B54B8C /* ScaleView.m in Sources */,
 				B96EB366230FC8F40054F514 /* SceneDelegate.m in Sources */,
 				B9DF14AE22B810DE0028DC47 /* AppDelegate.m in Sources */,
 				B96B273223367DB20060C9A9 /* CollectionViewCell.m in Sources */,
