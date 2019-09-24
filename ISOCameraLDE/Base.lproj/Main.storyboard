@@ -27,10 +27,10 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <subviews>
                                     <stackView opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-gl-0Yj" userLabel="Button Stack View">
-                                        <rect key="frame" x="0.0" y="736" width="414" height="82"/>
+                                        <rect key="frame" x="0.0" y="773" width="414" height="45"/>
                                         <subviews>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9f-cE-wZk" userLabel="Record">
-                                                <rect key="frame" x="0.0" y="0.0" width="76.333333333333329" height="82"/>
+                                                <rect key="frame" x="0.0" y="1.3333333333333712" width="76.333333333333329" height="42.333333333333336"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="camera.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -38,11 +38,11 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="record:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="Bix-Lm-WXh"/>
+                                                    <action selector="recordActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="jIF-C0-Yph"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="2" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1oe-yR-dM8" userLabel="Exposure Duration">
-                                                <rect key="frame" x="84.333333333333343" y="20" width="76.333333333333343" height="42.333333333333343"/>
+                                                <rect key="frame" x="84.333333333333343" y="1.3333333333333712" width="76.333333333333343" height="42.333333333333336"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="timer" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -54,7 +54,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCC-wi-bYd" userLabel="ISO">
-                                                <rect key="frame" x="168.66666666666666" y="18.666666666666629" width="76.666666666666657" height="45"/>
+                                                <rect key="frame" x="168.66666666666666" y="0.0" width="76.666666666666657" height="45"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="sun.max" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -62,11 +62,11 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="isoButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="TSv-5C-rhZ"/>
+                                                    <action selector="isoButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="uDW-xh-rEL"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmG-81-aAG" userLabel="Focus">
-                                                <rect key="frame" x="253.33333333333334" y="20" width="76.333333333333343" height="42.333333333333343"/>
+                                                <rect key="frame" x="253.33333333333334" y="1.3333333333333712" width="76.333333333333343" height="42.333333333333336"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="viewfinder.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -74,11 +74,11 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="focusButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="HFA-gp-dcv"/>
+                                                    <action selector="focusButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="6UL-iV-7RW"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BM-EC-R7x" userLabel="Torch">
-                                                <rect key="frame" x="337.66666666666669" y="20" width="76.333333333333314" height="42.333333333333343"/>
+                                                <rect key="frame" x="337.66666666666669" y="1.3333333333333712" width="76.333333333333314" height="42.333333333333336"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" image="bolt.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
@@ -86,21 +86,16 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="torchButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="Fkr-GM-kP7"/>
+                                                    <action selector="torchButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="oqA-mX-pWn"/>
                                                 </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstItem="d9f-cE-wZk" firstAttribute="height" secondItem="e0d-gl-0Yj" secondAttribute="height" id="r1N-JC-8iA"/>
-                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="leading" secondItem="RaZ-vM-Bf4" secondAttribute="leading" id="84G-sZ-vJj"/>
-                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="width" secondItem="RaZ-vM-Bf4" secondAttribute="width" id="IfS-hg-Wuo"/>
-                                    <constraint firstItem="e0d-gl-0Yj" firstAttribute="centerX" secondItem="RaZ-vM-Bf4" secondAttribute="centerX" id="RJk-HC-kEy"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="trailing" secondItem="RaZ-vM-Bf4" secondAttribute="trailing" id="Sf1-Ta-47v"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="bottom" secondItem="RaZ-vM-Bf4" secondAttribute="bottom" id="jnI-cs-i42"/>
                                 </constraints>
@@ -108,21 +103,19 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="DOJ-jr-D88"/>
-                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="KV1-zL-EkX"/>
-                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="M2m-KP-clw"/>
-                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="QCx-WL-CSj"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" id="UKB-5E-Vy4"/>
-                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Ufu-tX-L0r"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="eTN-5R-XYX"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="g6c-KJ-ODM"/>
-                            <constraint firstItem="e0d-gl-0Yj" firstAttribute="top" secondItem="Xzt-iO-ced" secondAttribute="bottom" id="osO-rp-I9P"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="uFc-SR-pUS"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="xWo-Fm-oEW"/>
+                            <constraint firstItem="RaZ-vM-Bf4" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="yYV-JY-QuT"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ycU-UI-Rck"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="SliderControlCollectionView" destination="pNF-CU-mBS" id="ugk-9R-BmL"/>
-                        <outlet property="cameraControlsView" destination="RaZ-vM-Bf4" id="wCh-A6-jqM"/>
+                        <outlet property="cameraControlsView" destination="RaZ-vM-Bf4" id="sNs-Mc-bTy"/>
                         <outlet property="cameraView" destination="Xzt-iO-ced" id="vMy-j3-xKz"/>
                     </connections>
                 </viewController>

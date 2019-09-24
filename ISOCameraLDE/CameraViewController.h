@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CameraViewController : UIViewController <CameraControlsDelegate>
+@interface CameraViewController : UIViewController <CameraControlsDelegate, UIScrollViewDelegate>
 
 @property (nonatomic) AVCaptureDevice *videoDevice;
 

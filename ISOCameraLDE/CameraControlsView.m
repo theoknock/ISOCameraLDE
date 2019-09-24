@@ -95,14 +95,11 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
             //            [self adjustCameraSetting:([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected]) ? ControlButtonTagFocus : ControlButtonTagISO usingTouchAtPoint:CGPointZero];
             CGFloat location = [sender locationOfTouch:nil inView:sender.view.superview].x / CGRectGetWidth(self.superview.frame);
-//            CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
-            //            [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)([sender locationInView:self].x / CGRectGetWidth(scrollRect) * 10.0) inSection:0]];
-            //            [(UICollectionView *)[self viewWithTag:6] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(self.delegate.focus * 10.0) inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:TRUE]; // scrollRectToVisible:CGRectMake(scrollRect.size.width * location, scrollRect.origin.y, 150.0, scrollRect.size.height) animated:TRUE];
             if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
             {
                 [self.delegate setFocus:location];
-                NSString *numberedImageName = [NSString stringWithFormat:@"%ld.square.fill", (long)(self.delegate.focus * 10.0)];
-                [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setImage:[UIImage systemImageNamed:numberedImageName] forState:UIControlStateSelected];
+//                NSString *numberedImageName = [NSString stringWithFormat:@"%ld.square.fill", (long)(self.delegate.focus * 10.0)];
+//                [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setImage:[UIImage systemImageNamed:numberedImageName] forState:UIControlStateSelected];
             } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected])
             {
                 [self.delegate setISO:location];
@@ -139,11 +136,9 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     return self.delegate;
 }
 
-- (IBAction)record:(UIButton *)sender
-{
-    
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self.delegate toggleRecordingWithCompletionHandler:^(BOOL isRunning, NSError * _Nonnull error) {
+- (IBAction)recordActionHandler:(UIButton *)sender {
+     NSLog(@"%s", __PRETTY_FUNCTION__);
+[self.delegate toggleRecordingWithCompletionHandler:^(BOOL isRunning, NSError * _Nonnull error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [(UIButton *)[self viewWithTag:ControlButtonTagRecord] setSelected:isRunning];
             [(UIButton *)[self viewWithTag:ControlButtonTagRecord] setHighlighted:isRunning];
@@ -232,7 +227,6 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 
 - (void)toggleSelectionStateForControlButtonWithTag:(NSUInteger)buttonTag selectedState:(BOOL)isSelected
 {
-    NSLog(@"buttonTag == %d", buttonTag);
     for (NSUInteger t = 3; t < 6; t++)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -245,6 +239,8 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
                         [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
+                        NSString *torchButtonImage = [NSString stringWithFormat:(!isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
+                        [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
                     });
                 }];
         }

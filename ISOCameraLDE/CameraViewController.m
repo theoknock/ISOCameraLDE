@@ -35,11 +35,13 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 @interface CameraViewController () <AVCaptureFileOutputRecordingDelegate>
 
 @property (weak, nonatomic) IBOutlet CameraView *cameraView;
-
 @property (weak, nonatomic) IBOutlet CameraControlsView *cameraControlsView;
+
+
 
 @property (weak, nonatomic) IBOutlet UICollectionView *SliderControlCollectionView;
 @property (weak, nonatomic) IBOutlet ScaleSliderControlView *scaleSliderControlView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue;
