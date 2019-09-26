@@ -51,7 +51,7 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 
 @end
 
-@interface CameraControlsView : UIView <UIGestureRecognizerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>
+@interface CameraControlsView : UIView <UIGestureRecognizerDelegate>
 
 //+ (nonnull CameraControlsView *)cameraControls;
 

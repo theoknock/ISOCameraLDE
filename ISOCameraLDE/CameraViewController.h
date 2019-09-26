@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CameraViewController : UIViewController <CameraControlsDelegate, UIScrollViewDelegate>
+@interface CameraViewController : UIViewController <CameraControlsDelegate>
 
 @property (nonatomic) AVCaptureDevice *videoDevice;
 
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setISO:(float)ISO;
 - (void)autoExposureWithCompletionHandler:(void (^)(double ISO))completionHandler;
 
-@property (assign) float focus;
+@property (nonatomic, assign) float focus;
 - (void)setFocus:(float)focus;
 - (void)autoFocusWithCompletionHandler:(void (^)(double focus))completionHandler;
 

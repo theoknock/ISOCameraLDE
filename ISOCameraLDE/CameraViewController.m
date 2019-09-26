@@ -38,11 +38,6 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 @property (weak, nonatomic) IBOutlet CameraControlsView *cameraControlsView;
 
 
-
-@property (weak, nonatomic) IBOutlet UICollectionView *SliderControlCollectionView;
-@property (weak, nonatomic) IBOutlet ScaleSliderControlView *scaleSliderControlView;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue;
 @property (nonatomic) AVCaptureSession *session;
@@ -68,12 +63,8 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.SliderControlCollectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    [self.SliderControlCollectionView setDelegate:(id<UICollectionViewDelegate>)self.cameraControlsView];
-    [self.SliderControlCollectionView setDataSource:(id<UICollectionViewDataSource>)self.cameraControlsView];
-    
     [self.cameraControlsView setDelegate:(id<CameraControlsDelegate> _Nullable)self];
-//    [self.scaleSliderScrollView setDelegate:(id<UIScrollViewDelegate> _Nullable)self.cameraControlsView];
+    
     // Create the AVCaptureSession
     self.session = [[AVCaptureSession alloc] init];
     
@@ -199,26 +190,6 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
         previewLayer.connection.videoOrientation = (AVCaptureVideoOrientation)deviceOrientation;
     }
 }
-
-//- (void)preferredContentSizeDidChangeForChildContentContainer:(nonnull id<UIContentContainer>)container {
-//    <#code#>
-//}
-//
-//
-//- (CGSize)sizeForChildContentContainer:(nonnull id<UIContentContainer>)container withParentContainerSize:(CGSize)parentSize {
-//    <#code#>
-//}
-//
-//
-//- (void)systemLayoutFittingSizeDidChangeForChildContentContainer:(nonnull id<UIContentContainer>)container {
-//    <#code#>
-//}
-//
-//
-//- (void)willTransitionToTraitCollection:(nonnull UITraitCollection *)newCollection withTransitionCoordinator:(nonnull id<UIViewControllerTransitionCoordinator>)coordinator {
-//    <#code#>
-//}
-
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
@@ -786,7 +757,6 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     }
 }
 
-
 - (void)autoExposureWithCompletionHandler:(void (^)(double ISO))completionHandler
 {
     if (![self.videoDevice isAdjustingExposure] && [self.videoDevice lockForConfiguration:nil]) {
@@ -859,41 +829,5 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
         [self->_videoDevice unlockForConfiguration];
     });
 }
-
-- (void)scrollSliderControlToItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"Scrolling to item %lu", indexPath.item);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.SliderControlCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:TRUE]; // scrollRectToVisible:CGRectMake(scrollRect.size.width * location, scrollRect.origin.y, 150.0, scrollRect.size.height) animated:TRUE];
-    });
-}
-
-//
-//
-//
-//
-//- (void)encodeWithCoder:(nonnull NSCoder *)coder {
-//    <#code#>
-//}
-//
-//- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
-//    <#code#>
-//}
-//
-//- (void)didUpdateFocusInContext:(nonnull UIFocusUpdateContext *)context withAnimationCoordinator:(nonnull UIFocusAnimationCoordinator *)coordinator {
-//    <#code#>
-//}
-//
-//- (void)setNeedsFocusUpdate {
-//    <#code#>
-//}
-//
-//- (BOOL)shouldUpdateFocusInContext:(nonnull UIFocusUpdateContext *)context {
-//    <#code#>
-//}
-//
-//- (void)updateFocusIfNeeded {
-//    <#code#>
-//}
 
 @end

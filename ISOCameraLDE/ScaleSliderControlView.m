@@ -17,16 +17,14 @@
 
 @implementation ScaleSliderControlView
 
-
-
-
 - (void)awakeFromNib
 {
 //    self.scrollView = (UIScrollView *)[self viewWithTag:-1];
 //    [self.scrollView setDelegate:(id<UIScrollViewDelegate> _Nullable)self];
     
     self.ticks = 100;
-    
+    CGFloat inset = CGRectGetMidX(self.frame);
+    [[self scrollView] setContentInset:UIEdgeInsetsMake(0.0, inset, 0.0, inset)];
     [(ScaleView *)[self viewWithTag:-2] setDelegate:(id<ScaleViewDelegate> _Nullable)self];
 //    [self.contentView.layer setDelegate:(id<CALayerDelegate> _Nullable)self];
 //    [[self scrollView] scrollRectToVisible:CGRectMake(CGRectGetMidX(self.frame), self.frame.origin.y, self.frame.size.width, self.frame.size.height) animated:TRUE];
@@ -100,6 +98,11 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (UIScrollView *)scrollView
+{
+    return (UIScrollView *)[self viewWithTag:(NSInteger)-1];
 }
 
 @end

@@ -48,10 +48,10 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [self setOpaque:FALSE];
-    [self setBackgroundColor:[UIColor clearColor]];
-    
+//    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+//    [self setOpaque:FALSE];
+//    [self setBackgroundColor:[UIColor clearColor]];
+//
     [self setupGestureRecognizers];
 }
 
@@ -137,23 +137,13 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 }
 
 - (IBAction)recordActionHandler:(UIButton *)sender {
-     NSLog(@"%s", __PRETTY_FUNCTION__);
-[self.delegate toggleRecordingWithCompletionHandler:^(BOOL isRunning, NSError * _Nonnull error) {
+    [self.delegate toggleRecordingWithCompletionHandler:^(BOOL isRunning, NSError * _Nonnull error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [(UIButton *)[self viewWithTag:ControlButtonTagRecord] setSelected:isRunning];
             [(UIButton *)[self viewWithTag:ControlButtonTagRecord] setHighlighted:isRunning];
-            //            [(UIButton *)[self viewWithTag:4] setImage:[UIImage systemImageNamed:(isRunning) ? @"camera.circle.fill" : @"camera.circle"] forState:UIControlStateNormal];
         });
     }];
 }
-
-// When focus button is selected, the exposure duration changes to 1/30th of second
-//- (IBAction)focus:(UIButton *)sender
-//{
-//   dispatch_async(dispatch_get_main_queue(), ^{
-//         [self toggleSelectionStateForButton:sender];
-//    });
-//}
 
 static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(ExposureDurationMode exposureDurationMode)
 {
@@ -187,29 +177,6 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
     });
 }
 
-//- (IBAction)iso:(UIButton *)sender {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//         [self toggleSelectionStateForButton:sender];
-//    });
-//}
-//
-//- (IBAction)torch:(UIButton *)sender
-//{
-//    NSLog(@"torch level %f", [[self.delegate videoDevice] torchLevel]);
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self toggleSelectionStateForButton:sender];
-//    });
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
-//            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
-//            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
-////            NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
-////            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
-//            //            [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setEnabled:TRUE];
-//            //            [(UICollectionView *)[self viewWithTag:6] setHidden:!isTorchActive];
-//        }];
-//    });
-//}
 - (IBAction)isoButtonActionHandler:(UIButton *)sender
 {
     [self toggleSelectionStateForControlButtonWithTag:ControlButtonTagISO selectedState:sender.isSelected];
@@ -245,29 +212,6 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
                 }];
         }
     
-}
-
-- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    CollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    [cell.contentView setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.25]];
-    [cell setMeasuringUnit:[NSString stringWithFormat:@"| | | | %lu | | | |", indexPath.item]];
-    
-    return cell;
-}
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    return 1;
-}
-
-- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 11;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(CGRectGetWidth(self.frame), 50.0);
 }
 
 @end
