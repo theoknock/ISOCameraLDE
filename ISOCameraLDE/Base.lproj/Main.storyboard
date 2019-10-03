@@ -37,6 +37,7 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
+                                                    <action selector="cameraControlAction:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="M2D-to-cNN"/>
                                                     <action selector="recordActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="jIF-C0-Yph"/>
                                                 </connections>
                                             </button>
@@ -49,6 +50,7 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
+                                                    <action selector="cameraControlAction:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="ZVA-G0-HT5"/>
                                                     <action selector="exposureDuration:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="zet-04-fc6"/>
                                                 </connections>
                                             </button>
@@ -61,7 +63,7 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="isoButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="uDW-xh-rEL"/>
+                                                    <action selector="cameraControlAction:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="rtw-Qq-r9i"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmG-81-aAG" userLabel="Focus">
@@ -73,7 +75,7 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="focusButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="6UL-iV-7RW"/>
+                                                    <action selector="cameraControlAction:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="0fs-pB-wYJ"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BM-EC-R7x" userLabel="Torch">
@@ -85,7 +87,7 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="torchButtonActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="oqA-mX-pWn"/>
+                                                    <action selector="cameraControlAction:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="DCY-QI-6TE"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -140,6 +142,11 @@
                                     <constraint firstItem="w0N-TG-oNZ" firstAttribute="top" secondItem="e0d-gl-0Yj" secondAttribute="top" id="pLg-MN-aDD"/>
                                     <constraint firstItem="pRd-j0-q7N" firstAttribute="width" secondItem="e0d-gl-0Yj" secondAttribute="width" multiplier="2" id="ydR-v5-l2n"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="cameraControlButtons" destination="wCC-wi-bYd" id="oGc-po-FG7"/>
+                                    <outletCollection property="cameraControlButtons" destination="cmG-81-aAG" id="SFa-Xm-oc8"/>
+                                    <outletCollection property="cameraControlButtons" destination="6BM-EC-R7x" id="hd6-A9-gpK"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

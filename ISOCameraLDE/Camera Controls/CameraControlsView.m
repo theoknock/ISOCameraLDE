@@ -15,7 +15,7 @@
     CGPoint firstTouchInView;
     CAScrollLayer *scrollLayer;
     ScaleSliderLayer *scaleSliderLayer;
-    __block SetCameraPropertyBlock block;
+    __block SetCameraPropertyBlock setCameraPropertyBlock;
 }
 
 @end
@@ -57,30 +57,30 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-//    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-//    [self setOpaque:FALSE];
-//    [self setBackgroundColor:[UIColor clearColor]];
-//
+    //    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    //    [self setOpaque:FALSE];
+    //    [self setBackgroundColor:[UIColor clearColor]];
+    //
     [self setupGestureRecognizers];
     
-//    scrollLayer = [CAScrollLayer new];
-//    [scrollLayer setFrame:[self viewWithTag:6].bounds];
-////    [scrollLayer setPosition:CGPointMake(self.bounds.size.width/2, self .bounds.size.height/2)]; // 10
-//    [scrollLayer setScrollMode:kCAScrollHorizontally];
-//
-//
-//
-//    scaleSliderLayer = [ScaleSliderLayer new];
-//    CGRect frame = CGRectMake(scrollLayer.frame.origin.x, scrollLayer.frame.origin.y, scrollLayer.frame.size.width * 2.0, scrollLayer.frame.size.height);
-//    [scaleSliderLayer setFrame:frame];
-//    [scrollLayer addSublayer:scaleSliderLayer];
-//     [[[self viewWithTag:6] layer] addSublayer:scrollLayer];
-////
-//    [self.layer setPosition:scaleSliderLayer.frame.origin];
-//
-//    [scrollLayer setNeedsDisplay];
-//    [scaleSliderLayer setNeedsDisplay];
-//    [self.layer setNeedsDisplay];
+    //    scrollLayer = [CAScrollLayer new];
+    //    [scrollLayer setFrame:[self viewWithTag:6].bounds];
+    ////    [scrollLayer setPosition:CGPointMake(self.bounds.size.width/2, self .bounds.size.height/2)]; // 10
+    //    [scrollLayer setScrollMode:kCAScrollHorizontally];
+    //
+    //
+    //
+    //    scaleSliderLayer = [ScaleSliderLayer new];
+    //    CGRect frame = CGRectMake(scrollLayer.frame.origin.x, scrollLayer.frame.origin.y, scrollLayer.frame.size.width * 2.0, scrollLayer.frame.size.height);
+    //    [scaleSliderLayer setFrame:frame];
+    //    [scrollLayer addSublayer:scaleSliderLayer];
+    //     [[[self viewWithTag:6] layer] addSublayer:scrollLayer];
+    ////
+    //    [self.layer setPosition:scaleSliderLayer.frame.origin];
+    //
+    //    [scrollLayer setNeedsDisplay];
+    //    [scaleSliderLayer setNeedsDisplay];
+    //    [self.layer setNeedsDisplay];
 }
 
 - (void)setupGestureRecognizers
@@ -122,14 +122,9 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     dispatch_async(dispatch_get_main_queue(), ^{
         if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
             CGFloat location = [sender locationOfTouch:nil inView:sender.view.superview].x / CGRectGetWidth(self.superview.frame);
-
-                if (!block)
-                    block = [self.delegate setCameraProperty];
-                
-                block([self selectedCameraProperty], location);
-
-                if (sender.state == UIGestureRecognizerStateEnded)
-                    [self.delegate lockDevice];
+            setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
+            
+            setCameraPropertyBlock((sender.state == UIGestureRecognizerStateEnded) ? FALSE : TRUE, [self selectedCameraProperty], location);
         }
     });
 }
@@ -150,7 +145,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 - (void)handleTapGesture:(UITapGestureRecognizer *)sender {
     //    NSLog(@"%s", __PRETTY_FUNCTION__);
     dispatch_async(dispatch_get_main_queue(), ^{
-//        CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
+        //        CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
         if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
         {
             [self.delegate autoFocusWithCompletionHandler:^(double focus) {
@@ -198,6 +193,10 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
     }
 };
 
+- (IBAction)cameraControlAction:(id)sender {
+    [self toggleSelectionStateForControlButtonWithTag:(ControlButtonTag)[sender tag] selectedState:((UIButton *)sender).isSelected];
+}
+
 - (IBAction)exposureDuration:(UIButton *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -213,42 +212,25 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
     });
 }
 
-- (IBAction)isoButtonActionHandler:(UIButton *)sender
-{
-    [self toggleSelectionStateForControlButtonWithTag:ControlButtonTagISO selectedState:sender.isSelected];
-}
-
-- (IBAction)focusButtonActionHandler:(UIButton *)sender
-{
-    [self toggleSelectionStateForControlButtonWithTag:ControlButtonTagFocus selectedState:sender.isSelected];
-}
-
-- (IBAction)torchButtonActionHandler:(UIButton *)sender
-{
-    [self toggleSelectionStateForControlButtonWithTag:ControlButtonTagTorch selectedState:sender.isSelected];
-//    if ([sender isSelected]) { [self.delegate lockDevice]; }
-//    else { [self.delegate unlockDevice]; }
-}
-
 - (void)toggleSelectionStateForControlButtonWithTag:(NSUInteger)buttonTag selectedState:(BOOL)isSelected
 {
     for (NSUInteger t = 3; t < 6; t++)
-        {
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [(UIButton *)[self viewWithTag:t] setSelected:(buttonTag == t) ? !isSelected : FALSE];
+            [(UIButton *)[self viewWithTag:t] setHighlighted:[(UIButton *)[self viewWithTag:t] isSelected]];
+        });
+    }
+    if (buttonTag == ControlButtonTagTorch) {
+        [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [(UIButton *)[self viewWithTag:t] setSelected:(buttonTag == t) ? !isSelected : FALSE];
-                [(UIButton *)[self viewWithTag:t] setHighlighted:[(UIButton *)[self viewWithTag:t] isSelected]];
+                [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
+                [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
+                NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
+                [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
             });
-        }
-        if (buttonTag == ControlButtonTagTorch) {
-                [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
-                        [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
-                        NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
-                        [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
-                    });
-                }];
-        }
+        }];
+    }
     [[self.superview viewWithTag:7] setHidden:![[self.superview viewWithTag:7] isHidden]];
 }
 

@@ -31,7 +31,7 @@ typedef NS_ENUM(NSUInteger, CameraProperty) {
     CameraPropertyTorch = 5
 };
 
-typedef void (^SetCameraPropertyBlock)(CameraProperty property, CGFloat value);
+typedef void (^SetCameraPropertyBlock)(BOOL lockDevice, CameraProperty property, CGFloat value);
 
 @protocol CameraControlsDelegate <NSObject>
 
@@ -71,6 +71,8 @@ typedef void (^SetCameraPropertyBlock)(CameraProperty property, CGFloat value);
 
 @property (nonatomic, nullable) UIPanGestureRecognizer *panGestureRecognizer;
 @property (nonatomic, nullable) UITapGestureRecognizer *tapGestureRecognizer;
+
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cameraControlButtons;
 
 @end
 

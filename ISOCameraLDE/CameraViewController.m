@@ -345,7 +345,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
         } @catch (NSException *exception) {
             NSLog( @"Error setting exposure mode to AVCaptureExposureModeCustom:\t%@\n%@.", error.description, exception.description);
         } @finally {
-            [self.videoDevice unlockForConfiguration];
+            [self unlockDevice];
         }
         
     } );
@@ -401,45 +401,32 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
 - (SetCameraPropertyBlock)setCameraProperty
 {
-    __autoreleasing NSError *error = nil;
-    @try {
-        [self.videoDevice lockForConfiguration:&error];
-    } @catch (NSException *exception) {
-        NSLog( @"Could not lock device for configuration: %@\t%@", exception.description, error.description);
-    } @finally {
-        return ^ (CameraProperty property, CGFloat value) {
-            if (property == CameraPropertyFocus && ![self.videoDevice isAdjustingFocus]) {
-                [self.videoDevice setFocusModeLockedWithLensPosition:value completionHandler:nil];
-            } else if (property == CameraPropertyISO && ![self.videoDevice isAdjustingExposure]) {
-                float maxISO = self.videoDevice.activeFormat.maxISO;
-                float minISO = self.videoDevice.activeFormat.minISO;
-                self->_ISO = minISO + (value * (maxISO - minISO));
-                [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:self->_ISO completionHandler:nil];
-            } else if (property == CameraPropertyTorch && [self->_videoDevice isTorchActive] && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious)) {
-                [self->_videoDevice setTorchModeOnWithLevel:value error:nil];
-            }
-        };
-    }
+    return ^ (BOOL lockDevice, CameraProperty property, CGFloat value) {
+        __autoreleasing NSError *error = nil;
+        @try {
+            if (lockDevice) [self lockDevice];
+            else [self unlockDevice];
+                if (property == CameraPropertyFocus && ![self.videoDevice isAdjustingFocus]) {
+                    [self.videoDevice setFocusModeLockedWithLensPosition:value completionHandler:nil];
+                } else if (property == CameraPropertyISO && ![self.videoDevice isAdjustingExposure]) {
+                    float maxISO = self.videoDevice.activeFormat.maxISO;
+                    float minISO = self.videoDevice.activeFormat.minISO;
+                    self->_ISO = minISO + (value * (maxISO - minISO));
+                    [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:self->_ISO completionHandler:nil];
+                } else if (property == CameraPropertyTorch && [self->_videoDevice isTorchActive] && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious)) {
+                    [self->_videoDevice setTorchModeOnWithLevel:value error:nil];
+                }
+        } @catch (NSException *exception) {
+            NSLog( @"Could not lock device for configuration: %@\t%@", exception.description, error.description);
+        } @finally {
+            
+        }
+    };
 }
 
 - (void)unlockDevice
 {
     [self.videoDevice unlockForConfiguration];
-}
-
-- (IBAction)changeLensPosition:(id)sender
-{
-    UISlider *control = sender;
-    __autoreleasing NSError *error = nil;
-    @try {
-        if ( [self lockDevice] ) {
-            [self.videoDevice setFocusModeLockedWithLensPosition:control.value completionHandler:nil];
-        }
-    } @catch (NSException *exception) {
-        NSLog( @"Could not lock device for configuration: %@\t%@", exception.description, error.description);
-    } @finally {
-        [self.videoDevice unlockForConfiguration];
-    }
 }
 
 //- (void)changeISO:(id)sender
@@ -754,26 +741,8 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     } @catch (NSException *exception) {
         NSLog( @"Error setting exposure mode to AVCaptureExposureModeCustom:\t%@\n%@.", error.description, exception.description);
     } @finally {
-        [self.videoDevice unlockForConfiguration];
+        [self unlockDevice];
     }
-}
-
-- (void)setFocus:(float)focus {
-    __autoreleasing NSError *error;
-    @try {
-        if (![self.videoDevice isAdjustingFocus] && [self.videoDevice lockForConfiguration:&error]) {
-            
-            [self.videoDevice setFocusModeLockedWithLensPosition:focus completionHandler:nil];
-        } else {
-            if (![self.videoDevice isAdjustingFocus] && error)
-                NSLog( @"Could not lock device to set focus: %@", error.description );
-        }
-    } @catch (NSException *exception) {
-        NSLog( @"ERROR setting focus:%@\t%@", exception.description, error.description);
-    } @finally {
-        [self.videoDevice unlockForConfiguration];
-    }
-    
 }
 
 - (void)autoFocusWithCompletionHandler:(void (^)(double focus))completionHandler
@@ -787,7 +756,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     } @catch (NSException *exception) {
         NSLog( @"ERROR auto-focusing:%@\t%@", exception.description, error.description);
     } @finally {
-        [self.videoDevice unlockForConfiguration];
+        [self unlockDevice];
         //            while ([self.videoDevice isAdjustingFocus]) {
         //
         //            }
@@ -803,32 +772,14 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
         } @catch (NSException *exception) {
             NSLog( @"ERROR auto-focusing:\t%@", exception.description);
         } @finally {
-            [self.videoDevice unlockForConfiguration];
             while ([self.videoDevice isAdjustingExposure]) {
                 
             }
             completionHandler([self.videoDevice ISO]);
+            [self unlockDevice];
         }
     } else {
         NSLog( @"Could not lock device for focus configuration: %@", nil );
-    }
-}
-
-- (void)setISO:(float)ISO {
-    if ( [self.videoDevice lockForConfiguration:nil] && ![self.videoDevice isAdjustingExposure]) {
-        @try {
-            float maxISO = self.videoDevice.activeFormat.maxISO;
-            float minISO = self.videoDevice.activeFormat.minISO;
-            self->_ISO = minISO + (ISO * (maxISO - minISO));
-            [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:self->_ISO completionHandler:nil];
-        } @catch (NSException *exception) {
-            NSLog( @"ERROR setting ISO (%f): %@\t%f\t%f", self->_ISO, exception.description, self.videoDevice.activeFormat.minISO, self.videoDevice.activeFormat.maxISO);
-        } @finally {
-            [self.videoDevice unlockForConfiguration];
-        }
-    }
-    else {
-        NSLog( @"Could not lock device for configuration: %@", nil );
     }
 }
 
@@ -846,29 +797,8 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
         NSLog(@"Error setting torch level/mode:\t%@", exception.description);
         NSLog(@"AVCaptureDevice lockForConfiguration returned error\t%@", error.description);
     } @finally {
-        [self->_videoDevice unlockForConfiguration];
+        [self unlockDevice];
     }
-}
-
-- (void)setTorchLevel:(float)torchLevel
-{
-    NSProcessInfoThermalState thermalState = [[NSProcessInfo processInfo] thermalState];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __autoreleasing NSError *error;
-        @try {
-            if ([self->_videoDevice lockForConfiguration:&error]) {
-                if ([self->_videoDevice isTorchActive] && (thermalState != NSProcessInfoThermalStateCritical && thermalState != NSProcessInfoThermalStateSerious))
-                {
-                    [self->_videoDevice setTorchModeOnWithLevel:torchLevel error:nil];
-                    
-                }
-            }
-        } @catch (NSException *exception) {
-            NSLog(@"AVCaptureDevice lockForConfiguration returned error\t%@", error);
-        } @finally {
-            [self->_videoDevice unlockForConfiguration];
-        }
-    });
 }
 
 @end
