@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ScaleSliderControlView : UIView <UIScrollViewDelegate, ScaleViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
-@property (strong, nonatomic) UIView *contentView;
 
 @property (assign) NSInteger ticks;
 

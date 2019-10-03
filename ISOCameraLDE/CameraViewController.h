@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setTorchLevel:(float)torchLevel;
 
 - (void)scrollSliderControlToItemAtIndexPath:(NSIndexPath *)indexPath;
+- (BOOL)lockDevice;
+- (SetLensPositionBlock)setLensPosition;
+- (void)unlockDevice;
 
 @end
 

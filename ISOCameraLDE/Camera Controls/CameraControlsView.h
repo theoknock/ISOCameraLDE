@@ -12,6 +12,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^SetLensPositionBlock)(double focus);
+
 typedef NS_ENUM(NSUInteger, ControlButtonTag) {
     ControlButtonTagRecord = 1,
     ControlButtonTagExposureDuration = 2,
@@ -49,9 +51,13 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 
 - (void)scrollSliderControlToItemAtIndexPath:(NSIndexPath *)indexPath;
 
+- (BOOL)lockDevice;
+- (SetLensPositionBlock)setLensPosition;
+- (void)unlockDevice;
+
 @end
 
-@interface CameraControlsView : UIView <UIGestureRecognizerDelegate>
+@interface CameraControlsView : UIView <UIGestureRecognizerDelegate, CALayerDelegate>
 
 //+ (nonnull CameraControlsView *)cameraControls;
 

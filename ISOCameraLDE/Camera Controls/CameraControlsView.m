@@ -7,11 +7,14 @@
 //
 
 #import "CameraControlsView.h"
-#import "CollectionViewCell.h"
+//#import "CollectionViewCell.h"
+#import "ScaleSliderLayer.h"
 
 @interface CameraControlsView ()
 {
     CGPoint firstTouchInView;
+    CAScrollLayer *scrollLayer;
+    ScaleSliderLayer *scaleSliderLayer;
 }
 
 @end
@@ -21,6 +24,11 @@
 static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
 @synthesize delegate = _delegate;
+
+//+ (Class)layerClass
+//{
+//    return [ScaleSliderLayer class];
+//}
 
 - (void)setDelegate:(id<CameraControlsDelegate>)delegate
 {
@@ -53,6 +61,25 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 //    [self setBackgroundColor:[UIColor clearColor]];
 //
     [self setupGestureRecognizers];
+    
+//    scrollLayer = [CAScrollLayer new];
+//    [scrollLayer setFrame:[self viewWithTag:6].bounds];
+////    [scrollLayer setPosition:CGPointMake(self.bounds.size.width/2, self .bounds.size.height/2)]; // 10
+//    [scrollLayer setScrollMode:kCAScrollHorizontally];
+//
+//
+//
+//    scaleSliderLayer = [ScaleSliderLayer new];
+//    CGRect frame = CGRectMake(scrollLayer.frame.origin.x, scrollLayer.frame.origin.y, scrollLayer.frame.size.width * 2.0, scrollLayer.frame.size.height);
+//    [scaleSliderLayer setFrame:frame];
+//    [scrollLayer addSublayer:scaleSliderLayer];
+//     [[[self viewWithTag:6] layer] addSublayer:scrollLayer];
+////
+//    [self.layer setPosition:scaleSliderLayer.frame.origin];
+//
+//    [scrollLayer setNeedsDisplay];
+//    [scaleSliderLayer setNeedsDisplay];
+//    [self.layer setNeedsDisplay];
 }
 
 - (void)setupGestureRecognizers
@@ -92,12 +119,21 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
+        __block SetLensPositionBlock block = nil;
         if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
             //            [self adjustCameraSetting:([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected]) ? ControlButtonTagFocus : ControlButtonTagISO usingTouchAtPoint:CGPointZero];
             CGFloat location = [sender locationOfTouch:nil inView:sender.view.superview].x / CGRectGetWidth(self.superview.frame);
             if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
             {
-                [self.delegate setFocus:location];
+//                [self.delegate setFocus:location];
+                if (!block)
+                    block = [self.delegate setLensPosition];
+//                else if (sender.state == UIGestureRecognizerStateChanged)
+                    block(location);
+//                else
+                if (sender.state == UIGestureRecognizerStateEnded)
+                    [self.delegate lockDevice];
+                
 //                NSString *numberedImageName = [NSString stringWithFormat:@"%ld.square.fill", (long)(self.delegate.focus * 10.0)];
 //                [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setImage:[UIImage systemImageNamed:numberedImageName] forState:UIControlStateSelected];
             } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected])
@@ -106,7 +142,19 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
             } else if ([(UIButton *)[self viewWithTag:ControlButtonTagTorch] isSelected])
             {
                 [self.delegate setTorchLevel:location];
-            }
+            } else if (![scaleSliderLayer isHidden])
+            {
+                CGPoint offset = [self viewWithTag:6].bounds.origin;
+                offset.x -= [sender translationInView:[self viewWithTag:6]].x * 2;
+//                offset.y -= [sender translationInView:self].y;
+                //scroll the layer
+                
+                //reset the pan gesture translation
+                [sender setTranslation:CGPointZero inView:[self viewWithTag:6]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [scrollLayer scrollToPoint:offset];
+                });
+                            }
         }
     });
 }
@@ -190,6 +238,8 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 - (IBAction)torchButtonActionHandler:(UIButton *)sender
 {
     [self toggleSelectionStateForControlButtonWithTag:ControlButtonTagTorch selectedState:sender.isSelected];
+//    if ([sender isSelected]) { [self.delegate lockDevice]; }
+//    else { [self.delegate unlockDevice]; }
 }
 
 - (void)toggleSelectionStateForControlButtonWithTag:(NSUInteger)buttonTag selectedState:(BOOL)isSelected
@@ -211,7 +261,7 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
                     });
                 }];
         }
-    
+    [[self.superview viewWithTag:7] setHidden:![[self.superview viewWithTag:7] isHidden]];
 }
 
 @end

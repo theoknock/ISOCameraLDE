@@ -1,39 +1,33 @@
 //
-//  ScaleView.m
+//  ScaleSliderLayer.m
 //  ISOCameraLDE
 //
-//  Created by Xcode Developer on 9/24/19.
+//  Created by Xcode Developer on 10/3/19.
 //  Copyright © 2019 The Life of a Demoniac. All rights reserved.
 //
 
-#import "ScaleView.h"
+#import "ScaleSliderLayer.h"
 
-@implementation ScaleView
+@implementation ScaleSliderLayer
 
-@synthesize delegate = _delegate;
-
-- (id<ScaleViewDelegate>)delegate
+- (CGColorRef)backgroundColor
 {
-    return _delegate;
+    return [[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.25] CGColor];
 }
 
-- (void)setDelegate:(id<ScaleViewDelegate>)delegate
+- (BOOL)isOpaque
 {
-    _delegate = delegate;
+    return FALSE;
 }
 
-- (void)drawRect:(CGRect)rect
+- (void)drawInContext:(CGContextRef)ctx
 {
-    [super drawRect:rect];
-}
-
-- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
-{
-    CGRect bounds = [self.superview frame];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    CGRect bounds = [self bounds];
     CGContextTranslateCTM(ctx, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
 
-    unsigned int stepSize = ((unsigned int)CGRectGetWidth(bounds) * 2.0) / self.delegate.ticks;
-    for (int t = 0; t <= self.delegate.ticks; t++) {
+    unsigned int stepSize = ((unsigned int)CGRectGetWidth(bounds) * 2.0) / 100;
+    for (int t = 0; t <= 100; t++) {
         unsigned int x = ((unsigned int)CGRectGetMinX(bounds) + (stepSize * t));
         if (t % 10 == 0)
         {
