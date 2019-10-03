@@ -15,6 +15,7 @@
     CGPoint firstTouchInView;
     CAScrollLayer *scrollLayer;
     ScaleSliderLayer *scaleSliderLayer;
+    __block SetCameraPropertyBlock block;
 }
 
 @end
@@ -119,44 +120,31 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
-        __block SetLensPositionBlock block = nil;
         if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
-            //            [self adjustCameraSetting:([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected]) ? ControlButtonTagFocus : ControlButtonTagISO usingTouchAtPoint:CGPointZero];
             CGFloat location = [sender locationOfTouch:nil inView:sender.view.superview].x / CGRectGetWidth(self.superview.frame);
-            if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
-            {
-//                [self.delegate setFocus:location];
+
                 if (!block)
-                    block = [self.delegate setLensPosition];
-//                else if (sender.state == UIGestureRecognizerStateChanged)
-                    block(location);
-//                else
+                    block = [self.delegate setCameraProperty];
+                
+                block([self selectedCameraProperty], location);
+
                 if (sender.state == UIGestureRecognizerStateEnded)
                     [self.delegate lockDevice];
-                
-//                NSString *numberedImageName = [NSString stringWithFormat:@"%ld.square.fill", (long)(self.delegate.focus * 10.0)];
-//                [(UIButton *)[self viewWithTag:ControlButtonTagFocus] setImage:[UIImage systemImageNamed:numberedImageName] forState:UIControlStateSelected];
-            } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected])
-            {
-                [self.delegate setISO:location];
-            } else if ([(UIButton *)[self viewWithTag:ControlButtonTagTorch] isSelected])
-            {
-                [self.delegate setTorchLevel:location];
-            } else if (![scaleSliderLayer isHidden])
-            {
-                CGPoint offset = [self viewWithTag:6].bounds.origin;
-                offset.x -= [sender translationInView:[self viewWithTag:6]].x * 2;
-//                offset.y -= [sender translationInView:self].y;
-                //scroll the layer
-                
-                //reset the pan gesture translation
-                [sender setTranslation:CGPointZero inView:[self viewWithTag:6]];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [scrollLayer scrollToPoint:offset];
-                });
-                            }
         }
     });
+}
+
+- (CameraProperty)selectedCameraProperty
+{
+    for (NSUInteger t = 3; t < 6; t++)
+    {
+        if ([(UIButton *)[self viewWithTag:t] isSelected])
+        {
+            return t;
+        }
+    }
+    
+    return 0;
 }
 
 - (void)handleTapGesture:(UITapGestureRecognizer *)sender {

@@ -399,19 +399,25 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     }
 }
 
-- (SetLensPositionBlock)setLensPosition
+- (SetCameraPropertyBlock)setCameraProperty
 {
     __autoreleasing NSError *error = nil;
     @try {
         [self.videoDevice lockForConfiguration:&error];
-            
     } @catch (NSException *exception) {
         NSLog( @"Could not lock device for configuration: %@\t%@", exception.description, error.description);
     } @finally {
-        return ^ (double focus) {
-           if (![self.videoDevice isAdjustingFocus]) {
-               [self.videoDevice setFocusModeLockedWithLensPosition:focus completionHandler:nil];
-           }
+        return ^ (CameraProperty property, CGFloat value) {
+            if (property == CameraPropertyFocus && ![self.videoDevice isAdjustingFocus]) {
+                [self.videoDevice setFocusModeLockedWithLensPosition:value completionHandler:nil];
+            } else if (property == CameraPropertyISO && ![self.videoDevice isAdjustingExposure]) {
+                float maxISO = self.videoDevice.activeFormat.maxISO;
+                float minISO = self.videoDevice.activeFormat.minISO;
+                self->_ISO = minISO + (value * (maxISO - minISO));
+                [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:self->_ISO completionHandler:nil];
+            } else if (property == CameraPropertyTorch && [self->_videoDevice isTorchActive] && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious)) {
+                [self->_videoDevice setTorchModeOnWithLevel:value error:nil];
+            }
         };
     }
 }
@@ -618,7 +624,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 //- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 //{
 //    id newValue = change[NSKeyValueChangeNewKey];
-//    
+//
 //    if ( context == LensPositionContext ) {
 //        if ( newValue && newValue != [NSNull null] ) {
 //            AVCaptureFocusMode focusMode = self.videoDevice.focusMode;
@@ -635,7 +641,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 //        if ( newValue && newValue != [NSNull null] ) {
 //            float newISO = [newValue floatValue];
 //            AVCaptureExposureMode exposureMode = self.videoDevice.exposureMode;
-//            
+//
 //            dispatch_async( dispatch_get_main_queue(), ^{
 //                if ( exposureMode != AVCaptureExposureModeCustom ) {
 //                    self.ISOSlider.value = newISO;

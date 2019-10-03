@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)scrollSliderControlToItemAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)lockDevice;
-- (SetLensPositionBlock)setLensPosition;
+- (SetCameraPropertyBlock)setCameraProperty;
 - (void)unlockDevice;
 
 @end

@@ -12,8 +12,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^SetLensPositionBlock)(double focus);
-
 typedef NS_ENUM(NSUInteger, ControlButtonTag) {
     ControlButtonTagRecord = 1,
     ControlButtonTagExposureDuration = 2,
@@ -26,6 +24,14 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
     ExposureDurationModeNormal,
     ExposureDurationModeLong
 };
+
+typedef NS_ENUM(NSUInteger, CameraProperty) {
+    CameraPropertyFocus = 4,
+    CameraPropertyISO = 3,
+    CameraPropertyTorch = 5
+};
+
+typedef void (^SetCameraPropertyBlock)(CameraProperty property, CGFloat value);
 
 @protocol CameraControlsDelegate <NSObject>
 
@@ -52,7 +58,7 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 - (void)scrollSliderControlToItemAtIndexPath:(NSIndexPath *)indexPath;
 
 - (BOOL)lockDevice;
-- (SetLensPositionBlock)setLensPosition;
+- (SetCameraPropertyBlock)setCameraProperty;
 - (void)unlockDevice;
 
 @end
