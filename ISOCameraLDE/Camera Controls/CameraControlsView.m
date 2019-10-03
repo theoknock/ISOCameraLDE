@@ -119,27 +119,31 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 }
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)sender {
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+    //        if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
+    //            CGFloat location = [sender locationOfTouch:nil inView:sender.view.superview].x / CGRectGetWidth(self.superview.frame);
+    //            setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
+    //            setCameraPropertyBlock((sender.state == UIGestureRecognizerStateEnded) ? FALSE : TRUE, [self selectedCameraProperty], location);
+    //        }
+    //    });
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
-            CGFloat location = [sender locationOfTouch:nil inView:sender.view.superview].x / CGRectGetWidth(self.superview.frame);
-            setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
-            
-            setCameraPropertyBlock((sender.state == UIGestureRecognizerStateEnded) ? FALSE : TRUE, [self selectedCameraProperty], location);
-        }
+        CGFloat location = scrollView.contentOffset.x / CGRectGetWidth(scrollView.superview.frame);
+        setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
+        setCameraPropertyBlock((!scrollView.isDragging) ? FALSE : TRUE, [self selectedCameraProperty], location);
     });
 }
 
 - (CameraProperty)selectedCameraProperty
 {
-    for (NSUInteger t = 3; t < 6; t++)
-    {
-        if ([(UIButton *)[self viewWithTag:t] isSelected])
-        {
-            return t;
-        }
-    }
-    
-    return 0;
+    CameraProperty cameraProperty = ([self.cameraControlButtons indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        *stop = [obj isSelected];
+        return [obj isSelected];
+    }]);
+    return (cameraProperty != NSNotFound) ? cameraProperty + 3 : NSNotFound;
 }
 
 - (void)handleTapGesture:(UITapGestureRecognizer *)sender {
@@ -194,13 +198,37 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 };
 
 - (IBAction)cameraControlAction:(id)sender {
-    [self toggleSelectionStateForControlButtonWithTag:(ControlButtonTag)[sender tag] selectedState:((UIButton *)sender).isSelected];
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+//    [self toggleSelectionStateForControlButtonWithTag:(ControlButtonTag)[sender tag] selectedState:((UIButton *)sender).isSelected];
+    [self.cameraControlButtons enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [obj setSelected:([sender isEqual:obj]) ? ![sender isSelected] : FALSE];
+            [obj setHighlighted:[obj isSelected]];
+        });
+//        if ([(UIButton *)sender isEqual:[self viewWithTag:ControlButtonTagTorch]]) {
+//            [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+////                    [(UIButton *)sender setHighlighted:isTorchActive];
+////                    [(UIButton *)sender setSelected:isTorchActive];
+//                    NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
+//                    [(UIButton *)sender setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
+//                });
+//            }];
+//        }
+    }];
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self.superview viewWithTag:7] setHidden:([self selectedCameraProperty] == NSNotFound) ? TRUE : FALSE];
+    });
+    //    });
 }
 
 - (IBAction)exposureDuration:(UIButton *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setEnabled:FALSE];
+        
         ExposureDurationMode targetExposureDurationMode = ([sender isSelected]) ? ExposureDurationModeNormal : ExposureDurationModeLong;
         CMTime targetExposureDuration = exposureDurationForMode(targetExposureDurationMode);
         [self.delegate targetExposureDuration:targetExposureDuration withCompletionHandler:^(CMTime currentExposureDuration) {
@@ -214,24 +242,8 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 
 - (void)toggleSelectionStateForControlButtonWithTag:(NSUInteger)buttonTag selectedState:(BOOL)isSelected
 {
-    for (NSUInteger t = 3; t < 6; t++)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [(UIButton *)[self viewWithTag:t] setSelected:(buttonTag == t) ? !isSelected : FALSE];
-            [(UIButton *)[self viewWithTag:t] setHighlighted:[(UIButton *)[self viewWithTag:t] isSelected]];
-        });
-    }
-    if (buttonTag == ControlButtonTagTorch) {
-        [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setHighlighted:isTorchActive];
-                [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setSelected:isTorchActive];
-                NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
-                [(UIButton *)[self viewWithTag:ControlButtonTagTorch] setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
-            });
-        }];
-    }
-    [[self.superview viewWithTag:7] setHidden:![[self.superview viewWithTag:7] isHidden]];
+    
+    
 }
 
 @end

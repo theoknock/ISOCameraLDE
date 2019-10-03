@@ -63,7 +63,7 @@ typedef void (^SetCameraPropertyBlock)(BOOL lockDevice, CameraProperty property,
 
 @end
 
-@interface CameraControlsView : UIView <UIGestureRecognizerDelegate, CALayerDelegate>
+@interface CameraControlsView : UIView <UIGestureRecognizerDelegate, CALayerDelegate, UIScrollViewDelegate>
 
 //+ (nonnull CameraControlsView *)cameraControls;
 

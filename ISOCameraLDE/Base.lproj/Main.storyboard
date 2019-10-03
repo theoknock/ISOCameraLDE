@@ -37,7 +37,6 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="cameraControlAction:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="M2D-to-cNN"/>
                                                     <action selector="recordActionHandler:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="jIF-C0-Yph"/>
                                                 </connections>
                                             </button>
@@ -50,7 +49,6 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="cameraControlAction:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="ZVA-G0-HT5"/>
                                                     <action selector="exposureDuration:" destination="RaZ-vM-Bf4" eventType="touchUpInside" id="zet-04-fc6"/>
                                                 </connections>
                                             </button>
@@ -115,7 +113,7 @@
                                                 <viewLayoutGuide key="contentLayoutGuide" id="pRd-j0-q7N"/>
                                                 <viewLayoutGuide key="frameLayoutGuide" id="4cn-Xf-58S"/>
                                                 <connections>
-                                                    <outlet property="delegate" destination="w0N-TG-oNZ" id="0X6-aG-ZDd"/>
+                                                    <outlet property="delegate" destination="RaZ-vM-Bf4" id="XN3-m7-JnQ"/>
                                                 </connections>
                                             </scrollView>
                                         </subviews>

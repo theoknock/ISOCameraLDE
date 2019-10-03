@@ -405,17 +405,20 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
         __autoreleasing NSError *error = nil;
         @try {
             if (lockDevice) [self lockDevice];
-            else [self unlockDevice];
-                if (property == CameraPropertyFocus && ![self.videoDevice isAdjustingFocus]) {
-                    [self.videoDevice setFocusModeLockedWithLensPosition:value completionHandler:nil];
-                } else if (property == CameraPropertyISO && ![self.videoDevice isAdjustingExposure]) {
-                    float maxISO = self.videoDevice.activeFormat.maxISO;
-                    float minISO = self.videoDevice.activeFormat.minISO;
-                    self->_ISO = minISO + (value * (maxISO - minISO));
-                    [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:self->_ISO completionHandler:nil];
-                } else if (property == CameraPropertyTorch && [self->_videoDevice isTorchActive] && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious)) {
+            if (property == CameraPropertyFocus && ![self.videoDevice isAdjustingFocus]) {
+                [self.videoDevice setFocusModeLockedWithLensPosition:value completionHandler:nil];
+            } else if (property == CameraPropertyISO && ![self.videoDevice isAdjustingExposure]) {
+                float maxISO = self.videoDevice.activeFormat.maxISO;
+                float minISO = self.videoDevice.activeFormat.minISO;
+                self->_ISO = minISO + (value * (maxISO - minISO));
+                [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:self->_ISO completionHandler:nil];
+            } else if (property == CameraPropertyTorch && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious)) {
+                if (value != 0)
                     [self->_videoDevice setTorchModeOnWithLevel:value error:nil];
-                }
+                else
+                    [self->_videoDevice setTorchMode:AVCaptureTorchModeOff];
+            }
+            if (!lockDevice) [self unlockDevice];
         } @catch (NSException *exception) {
             NSLog( @"Could not lock device for configuration: %@\t%@", exception.description, error.description);
         } @finally {
