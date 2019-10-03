@@ -132,7 +132,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         CGFloat location = normalize(scrollView.contentOffset.x, 0.0, 1.0, -(CGRectGetMidX(scrollView.frame)), (CGRectGetMaxX(scrollView.frame)) + fabs(CGRectGetMidX(scrollView.frame)));
-        NSLog(@"location == %f\t\tmax == %f\t\tcontentOffset.x == %f", location, (CGRectGetMaxX(scrollView.frame)) + fabs(CGRectGetMidX(scrollView.frame)), scrollView.contentOffset.x);
+        location = (location < 0.0) ? 0.0 : (location > 1.0) ? 1.0 : location;
         setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
         setCameraPropertyBlock((scrollView.isTracking) ? TRUE : FALSE, [self selectedCameraProperty], location, (!scrollView.isDragging) ? TRUE : FALSE);
     });
