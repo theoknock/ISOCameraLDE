@@ -12,7 +12,7 @@
 
 - (CGColorRef)backgroundColor
 {
-    return [[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.25] CGColor];
+    return [[UIColor clearColor] CGColor];
 }
 
 - (BOOL)isOpaque
@@ -26,20 +26,20 @@
     CGRect bounds = [self bounds];
     CGContextTranslateCTM(ctx, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
 
-    unsigned int stepSize = ((unsigned int)CGRectGetWidth(bounds) * 2.0) / 100;
+    CGFloat stepSize = (CGRectGetMaxX(bounds) / 100.0);
     for (int t = 0; t <= 100; t++) {
-        unsigned int x = ((unsigned int)CGRectGetMinX(bounds) + (stepSize * t));
+        CGFloat x = (CGRectGetMinX(bounds) + (stepSize * t));
         if (t % 10 == 0)
         {
             CGContextSetStrokeColorWithColor(ctx, [[UIColor whiteColor] CGColor]);
-            CGContextSetLineWidth(ctx, 2.0);
+            CGContextSetLineWidth(ctx, 1.0);
             CGContextMoveToPoint(ctx, x, CGRectGetMidY(bounds) + (CGRectGetMidY(bounds) / 2.0));
             CGContextAddLineToPoint(ctx, x, CGRectGetMinY(bounds) + (CGRectGetMidY(bounds) / 2.0));
         }
         else
         {
             CGContextSetStrokeColorWithColor(ctx, [[UIColor whiteColor] CGColor]);
-            CGContextSetLineWidth(ctx, 1.0);
+            CGContextSetLineWidth(ctx, 0.25);
             CGContextMoveToPoint(ctx, x, CGRectGetMidY(bounds) + (CGRectGetMidY(bounds) / 4.0));
             CGContextAddLineToPoint(ctx, x, CGRectGetMinY(bounds) + (CGRectGetMidY(bounds) / 4.0));
         }

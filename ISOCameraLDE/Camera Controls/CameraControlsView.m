@@ -60,7 +60,8 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     
     [self.scaleSliderControlView addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
     
-    
+    CGFloat inset = CGRectGetMidX(self.frame);
+    [self.scaleSliderScrollView setContentInset:UIEdgeInsetsMake(0.0, inset, 0.0, inset)];
     
     //    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     //    [self setOpaque:FALSE];
@@ -111,9 +112,13 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
 - (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-  if ([object isEqual:self.scaleSliderControlView])
-      if ([keyPath isEqualToString:@"hidden"])
-          NSLog(@"ScaleSliderControlView is%@hidden", ([[change valueForKeyPath:keyPath] boolValue]) ? @"" : @" NOT ");
+    if ([object isEqual:self.scaleSliderControlView]) {
+        if ([keyPath isEqualToString:@"hidden"]) {
+            if ([self.scaleSliderControlView isHidden]) {
+                [self cameraControlAction:(UIButton *)[self viewWithTag:[self selectedCameraProperty]]];
+            }
+        }
+    }
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
@@ -154,6 +159,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         CGFloat location = normalize(scrollView.contentOffset.x, 0.0, 1.0, -(CGRectGetMidX(scrollView.frame)), (CGRectGetMaxX(scrollView.frame)) + fabs(CGRectGetMidX(scrollView.frame)));
+//        NSLog(@"location: %f, contentOffset.x: %f, MidX: %f, MaxX + MidX(abs): %f", location, scrollView.contentOffset.x, -(CGRectGetMidX(scrollView.frame)), (CGRectGetMaxX(scrollView.frame)) + fabs(CGRectGetMidX(scrollView.frame)));
         location = (location < 0.0) ? 0.0 : (location > 1.0) ? 1.0 : location;
         setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
         setCameraPropertyBlock((scrollView.isTracking) ? TRUE : FALSE, [self selectedCameraProperty], location, (!scrollView.isDragging) ? TRUE : FALSE);
@@ -228,12 +234,15 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 };
 
 - (IBAction)cameraControlAction:(id)sender {
+//    NSLog(@"sender %lu", [(UIButton *)sender tag]);
     //    dispatch_async(dispatch_get_main_queue(), ^{
 //    [self toggleSelectionStateForControlButtonWithTag:(ControlButtonTag)[sender tag] selectedState:((UIButton *)sender).isSelected];
     [self.cameraControlButtons enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [obj setSelected:([sender isEqual:obj]) ? ![sender isSelected] : FALSE];
             [obj setHighlighted:[obj isSelected]];
+            if ([obj isSelected])
+                [self.scaleSliderControlView setHidden:FALSE];
         });
 //        if ([(UIButton *)sender isEqual:[self viewWithTag:ControlButtonTagTorch]]) {
 //            [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
@@ -246,17 +255,12 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 //            }];
 //        }
     }];
-    
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.scaleSliderControlView setHidden:([self selectedCameraProperty] == NSNotFound) ? TRUE : FALSE];
-    });
     //    });
 }
 
 - (IBAction)exposureDuration:(UIButton *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSLog(@"%s", __PRETTY_FUNCTION__);
+//        NSLog(@"%s", __PRETTY_FUNCTION__);
         [sender setEnabled:FALSE];
         
         ExposureDurationMode targetExposureDurationMode = ([sender isSelected]) ? ExposureDurationModeNormal : ExposureDurationModeLong;

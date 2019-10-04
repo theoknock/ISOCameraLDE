@@ -16,7 +16,6 @@
     return [ScaleSliderLayer class];
 }
 
-
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
 }

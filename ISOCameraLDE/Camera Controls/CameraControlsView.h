@@ -26,8 +26,8 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 };
 
 typedef NS_ENUM(NSUInteger, CameraProperty) {
-    CameraPropertyFocus = 4,
     CameraPropertyISO = 3,
+    CameraPropertyFocus = 4,
     CameraPropertyTorch = 5
 };
 
