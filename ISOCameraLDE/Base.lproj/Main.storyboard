@@ -91,13 +91,13 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </stackView>
-                                    <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Mw-MC-Kxr">
+                                    <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Mw-MC-Kxr" customClass="ScaleSliderControlView">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
                                         <subviews>
                                             <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m0T-st-5p9">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
                                                 <subviews>
-                                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qJB-oS-imz" customClass="ScaleView">
+                                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qJB-oS-imz" customClass="ScaleSliderView">
                                                         <rect key="frame" x="0.0" y="0.0" width="828" height="82"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -127,25 +127,23 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="RlU-VS-wqF" firstAttribute="centerX" secondItem="e0d-gl-0Yj" secondAttribute="centerX" id="60T-nt-Rn9"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="centerX" secondItem="RaZ-vM-Bf4" secondAttribute="centerX" id="7hu-5l-Yss"/>
                                     <constraint firstItem="RlU-VS-wqF" firstAttribute="height" secondItem="e0d-gl-0Yj" secondAttribute="height" id="GSf-dO-i5i"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="centerY" secondItem="RaZ-vM-Bf4" secondAttribute="centerY" id="H4z-wg-AAy"/>
-                                    <constraint firstItem="9Mw-MC-Kxr" firstAttribute="leading" secondItem="RaZ-vM-Bf4" secondAttribute="leading" id="N4S-B9-Oor"/>
-                                    <constraint firstItem="9Mw-MC-Kxr" firstAttribute="height" secondItem="RaZ-vM-Bf4" secondAttribute="height" id="QTI-qB-rPB"/>
+                                    <constraint firstItem="9Mw-MC-Kxr" firstAttribute="bottom" secondItem="RaZ-vM-Bf4" secondAttribute="bottom" id="HNj-vb-zHH"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="top" secondItem="RaZ-vM-Bf4" secondAttribute="top" id="UmF-iJ-u5C"/>
+                                    <constraint firstItem="9Mw-MC-Kxr" firstAttribute="leading" secondItem="RaZ-vM-Bf4" secondAttribute="leading" id="WKF-pf-B6t"/>
                                     <constraint firstItem="6Dg-qW-FHO" firstAttribute="width" secondItem="e0d-gl-0Yj" secondAttribute="width" multiplier="2" id="WOx-Aa-Q1n"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="bottom" secondItem="RaZ-vM-Bf4" secondAttribute="bottom" id="WqW-oP-Lxw"/>
                                     <constraint firstItem="6Dg-qW-FHO" firstAttribute="height" secondItem="e0d-gl-0Yj" secondAttribute="height" id="apQ-xs-Lb0"/>
-                                    <constraint firstItem="RlU-VS-wqF" firstAttribute="centerY" secondItem="e0d-gl-0Yj" secondAttribute="centerY" id="cfo-qZ-MLZ"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="leading" secondItem="RaZ-vM-Bf4" secondAttribute="leading" id="dNu-ne-NDG"/>
                                     <constraint firstItem="RlU-VS-wqF" firstAttribute="width" secondItem="e0d-gl-0Yj" secondAttribute="width" id="pFn-CQ-4xU"/>
-                                    <constraint firstItem="9Mw-MC-Kxr" firstAttribute="top" secondItem="RaZ-vM-Bf4" secondAttribute="top" id="t5q-eh-XqG"/>
-                                    <constraint firstItem="9Mw-MC-Kxr" firstAttribute="width" secondItem="RaZ-vM-Bf4" secondAttribute="width" id="uUX-tz-2Jg"/>
+                                    <constraint firstItem="9Mw-MC-Kxr" firstAttribute="trailing" secondItem="RaZ-vM-Bf4" secondAttribute="trailing" id="rvv-OT-8N5"/>
                                     <constraint firstItem="e0d-gl-0Yj" firstAttribute="trailing" secondItem="RaZ-vM-Bf4" secondAttribute="trailing" id="wXV-OP-T54"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="scaleSliderControlView" destination="9Mw-MC-Kxr" id="tZ4-Ha-ggd"/>
+                                    <outlet property="scaleSliderScrollView" destination="m0T-st-5p9" id="0hf-6m-bnI"/>
                                     <outletCollection property="cameraControlButtons" destination="wCC-wi-bYd" id="oGc-po-FG7"/>
                                     <outletCollection property="cameraControlButtons" destination="cmG-81-aAG" id="SFa-Xm-oc8"/>
                                     <outletCollection property="cameraControlButtons" destination="6BM-EC-R7x" id="hd6-A9-gpK"/>
@@ -157,6 +155,7 @@
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="5sr-Pa-WZt"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="height" relation="lessThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="height" id="61O-Hz-qwg"/>
                             <constraint firstItem="RaZ-vM-Bf4" firstAttribute="top" secondItem="Xzt-iO-ced" secondAttribute="bottom" id="WAp-LW-kZ5"/>
+                            <constraint firstItem="9Mw-MC-Kxr" firstAttribute="top" secondItem="Xzt-iO-ced" secondAttribute="bottom" id="bdt-7F-aVL"/>
                             <constraint firstItem="RaZ-vM-Bf4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="cDe-aq-w18"/>
                             <constraint firstItem="RaZ-vM-Bf4" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="glq-zU-KSO"/>
                             <constraint firstItem="Xzt-iO-ced" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="gwS-jU-Rin"/>

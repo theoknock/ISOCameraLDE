@@ -57,11 +57,16 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    
+    [self.scaleSliderControlView addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
+    
+    
+    
     //    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     //    [self setOpaque:FALSE];
     //    [self setBackgroundColor:[UIColor clearColor]];
     //
-    [self setupGestureRecognizers];
+//    [self setupGestureRecognizers];
     
     //    scrollLayer = [CAScrollLayer new];
     //    [scrollLayer setFrame:[self viewWithTag:6].bounds];
@@ -83,25 +88,32 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     //    [self.layer setNeedsDisplay];
 }
 
-- (void)setupGestureRecognizers
+//- (void)setupGestureRecognizers
+//{
+//    [self setUserInteractionEnabled:TRUE];
+//    [self setMultipleTouchEnabled:TRUE];
+//    [self setExclusiveTouch:TRUE];
+//
+////    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+////    [self.panGestureRecognizer setMaximumNumberOfTouches:1];
+////    [self.panGestureRecognizer setMinimumNumberOfTouches:1];
+////    self.panGestureRecognizer.delegate = self;
+////    [self addGestureRecognizer:self.panGestureRecognizer];
+//
+//    self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+//    [self.tapGestureRecognizer setNumberOfTapsRequired:1];
+//    [self.tapGestureRecognizer setNumberOfTouchesRequired:1];
+//    self.tapGestureRecognizer.delegate = self;
+//    [self addGestureRecognizer:self.tapGestureRecognizer];
+//
+//    self.scaleSliderControlView.gestureRecognizers = @[self.tapGestureRecognizer];
+//}
+
+- (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-    [self setUserInteractionEnabled:TRUE];
-    [self setMultipleTouchEnabled:TRUE];
-    [self setExclusiveTouch:TRUE];
-    
-    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-    [self.panGestureRecognizer setMaximumNumberOfTouches:1];
-    [self.panGestureRecognizer setMinimumNumberOfTouches:1];
-    self.panGestureRecognizer.delegate = self;
-    [self addGestureRecognizer:self.panGestureRecognizer];
-    
-    self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self.tapGestureRecognizer setNumberOfTapsRequired:1];
-    [self.tapGestureRecognizer setNumberOfTouchesRequired:1];
-    self.tapGestureRecognizer.delegate = self;
-    [self addGestureRecognizer:self.tapGestureRecognizer];
-    
-    self.gestureRecognizers = @[self.panGestureRecognizer, self.tapGestureRecognizer];
+  if ([object isEqual:self.scaleSliderControlView])
+      if ([keyPath isEqualToString:@"hidden"])
+          NSLog(@"ScaleSliderControlView is%@hidden", ([[change valueForKeyPath:keyPath] boolValue]) ? @"" : @" NOT ");
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
@@ -118,7 +130,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
 }
 
-- (void)handlePanGesture:(UIPanGestureRecognizer *)sender {
+//- (void)handlePanGesture:(UIPanGestureRecognizer *)sender {
     //    dispatch_async(dispatch_get_main_queue(), ^{
     //        if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
     //            CGFloat location = [sender locationOfTouch:nil inView:sender.view.superview].x / CGRectGetWidth(self.superview.frame);
@@ -126,7 +138,17 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     //            setCameraPropertyBlock((sender.state == UIGestureRecognizerStateEnded) ? FALSE : TRUE, [self selectedCameraProperty], location);
     //        }
     //    });
-}
+//}
+
+//- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//    //        if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged) {
+//    //            CGFloat location = [sender locationOfTouch:nil inView:sender.view.superview].x / CGRectGetWidth(self.superview.frame);
+//    //            setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
+//    //            setCameraPropertyBlock((sender.state == UIGestureRecognizerStateEnded) ? FALSE : TRUE, [self selectedCameraProperty], location);
+//    //        }
+//        });
+//}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -135,9 +157,15 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         location = (location < 0.0) ? 0.0 : (location > 1.0) ? 1.0 : location;
         setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
         setCameraPropertyBlock((scrollView.isTracking) ? TRUE : FALSE, [self selectedCameraProperty], location, (!scrollView.isDragging) ? TRUE : FALSE);
-        [self.scaleSliderControlView setHidden:[scrollView isDecelerating]];
+//
     });
 }
+
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//{
+//    [self.scaleSliderControlView setHidden:TRUE];
+//}
+
 
 - (CameraProperty)selectedCameraProperty
 {
@@ -148,25 +176,25 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
     return (cameraProperty != NSNotFound) ? cameraProperty + 3 : NSNotFound;
 }
 
-- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
-    //    NSLog(@"%s", __PRETTY_FUNCTION__);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        //        CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
-        if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
-        {
-            [self.delegate autoFocusWithCompletionHandler:^(double focus) {
-                //                [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(focus) * 10.0 inSection:0]];
-            }];
-        } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected] && ![(UIButton *)[self viewWithTag:ControlButtonTagExposureDuration] isSelected])
-        {
-            [self.delegate autoExposureWithCompletionHandler:^(double ISO) {
-                //                if ([(UIButton *)[self viewWithTag:ControlButtonTagExposureDuration] isSelected]) [self.delegate setISO:ISO];
-                //                [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(ISO) * 10.0 inSection:0]];
-            }];
-        }
-        
-    });
-}
+//- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
+//    //    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        //        CGRect scrollRect = ((UICollectionView *)[self viewWithTag:6]).frame;
+//        if ([(UIButton *)[self viewWithTag:ControlButtonTagFocus] isSelected])
+//        {
+//            [self.delegate autoFocusWithCompletionHandler:^(double focus) {
+//                //                [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(focus) * 10.0 inSection:0]];
+//            }];
+//        } else if ([(UIButton *)[self viewWithTag:ControlButtonTagISO] isSelected] && ![(UIButton *)[self viewWithTag:ControlButtonTagExposureDuration] isSelected])
+//        {
+//            [self.delegate autoExposureWithCompletionHandler:^(double ISO) {
+//                //                if ([(UIButton *)[self viewWithTag:ControlButtonTagExposureDuration] isSelected]) [self.delegate setISO:ISO];
+//                //                [self.delegate scrollSliderControlToItemAtIndexPath:[NSIndexPath indexPathForItem:(long)(ISO) * 10.0 inSection:0]];
+//            }];
+//        }
+//
+//    });
+//}
 
 - (id)forwardingTargetForSelector:(SEL)aSelector {
     NSLog(@"forwardingTargetForSelector");

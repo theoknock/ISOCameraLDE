@@ -2,107 +2,49 @@
 //  ScaleSliderControlView.m
 //  ISOCameraLDE
 //
-//  Created by James Bush on 9/23/19.
+//  Created by Xcode Developer on 10/3/19.
 //  Copyright © 2019 The Life of a Demoniac. All rights reserved.
 //
 
 #import "ScaleSliderControlView.h"
 
-@interface ScaleSliderControlView ()
-{
-    CAGradientLayer *gradientLayer;
-}
-
-@end
-
 @implementation ScaleSliderControlView
 
 - (void)awakeFromNib
 {
-//    self.scrollView = (UIScrollView *)[self viewWithTag:-1];
-//    [self.scrollView setDelegate:(id<UIScrollViewDelegate> _Nullable)self];
+    [self setUserInteractionEnabled:TRUE];
+    [self setMultipleTouchEnabled:TRUE];
+    [self setExclusiveTouch:TRUE];
+        
+    self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [self.tapGestureRecognizer setNumberOfTapsRequired:1];
+    [self.tapGestureRecognizer setNumberOfTouchesRequired:1];
+    self.tapGestureRecognizer.delegate = self;
+    [self addGestureRecognizer:self.tapGestureRecognizer];
     
-    self.ticks = 100;
-    CGFloat inset = CGRectGetMidX(self.frame);
-    [[self scrollView] setContentInset:UIEdgeInsetsMake(0.0, inset, 0.0, inset)];
-    [(ScaleView *)[self viewWithTag:-2] setDelegate:(id<ScaleViewDelegate> _Nullable)self];
-//    [self.contentView.layer setDelegate:(id<CALayerDelegate> _Nullable)self];
-//    [[self scrollView] scrollRectToVisible:CGRectMake(CGRectGetMidX(self.frame), self.frame.origin.y, self.frame.size.width, self.frame.size.height) animated:TRUE];
-//    [self.layer setDelegate:(id<CALayerDelegate> _Nullable)self];
+    self.gestureRecognizers = @[self.tapGestureRecognizer];
+    
     [super awakeFromNib];
 }
 
-//
-//- (void)layoutSubviews
-//{
-//    self.scrollView.contentSize = CGSizeMake(
-//                                             self.contentView.frame.size.width,
-//                                             self.contentView.frame.size.height + 300
-//                                             );
-//}
-
-//- (UIImageView *)contentView
-//{
-//    __block UIImageView *cv = self->_contentView;
-//    if (!cv)
-//    {
-//        static dispatch_once_t onceToken;
-//        dispatch_once(&onceToken, ^{
-//            cv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contentViewImage.png"]];
-//            [cv setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width * 2.0, self.frame.size.height)];
-//        });
-//
-//        self->_contentView = cv;
-//    }
-//
-//    return cv;
-//}
-//
-//- (UIScrollView *)scrollView
-//{
-//    __block UIScrollView *sv = self->_scrollView;
-//    if (!sv)
-//    {
-//        static dispatch_once_t onceToken;
-//        dispatch_once(&onceToken, ^{
-//            //    [contentView.layer addSublayer:[self gradientLayer]];
-//            //    [gradientLayer setFrame:contentView.bounds];
-//            sv = [[UIScrollView alloc] initWithFrame:self.bounds];
-//            [sv setBackgroundColor:[UIColor grayColor]];
-//            sv.contentSize = CGSizeMake(self.frame.size.width * 2.0, self.frame.size.height);
-//            sv.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//            [sv setScrollEnabled:TRUE];
-//            [sv setContentInset:UIEdgeInsetsMake(0.0, 100.0, 0.0, 100)];
-//            [sv addSubview:[self contentView]];
-//            [self addSubview:sv];
-//            [sv setDelegate:(id<UIScrollViewDelegate>)self];
-//
-//            self->_scrollView = sv;
-//
-//        });
-//    }
-//    return sv;
-//}
-
-- (CAGradientLayer *)gradientLayer
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender
 {
-    gradientLayer = [CAGradientLayer new];
-    gradientLayer.colors = @[[UIColor clearColor], [UIColor blackColor], [UIColor blackColor], [UIColor clearColor]];
-    gradientLayer.locations = @[@(0), @(0.4), @(0.6), @(1)];
-    gradientLayer.startPoint = CGPointMake(0, 0);
-    gradientLayer.endPoint = CGPointMake(1, 0);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setHidden:TRUE];
+    });
+}
+
+- (void)show:(BOOL)show sender:(id)sender
+{
     
-    return gradientLayer;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
 }
-
-- (UIScrollView *)scrollView
-{
-    return (UIScrollView *)[self viewWithTag:(NSInteger)-1];
-}
+*/
 
 @end
