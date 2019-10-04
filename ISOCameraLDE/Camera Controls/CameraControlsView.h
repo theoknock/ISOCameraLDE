@@ -31,7 +31,7 @@ typedef NS_ENUM(NSUInteger, CameraProperty) {
     CameraPropertyTorch = 5
 };
 
-typedef void (^SetCameraPropertyValueBlock)(CGFloat value);
+typedef void (^SetCameraPropertyValueBlock)(CameraProperty cameraProperty, CGFloat value);
 
 @protocol CameraControlsDelegate <NSObject>
 

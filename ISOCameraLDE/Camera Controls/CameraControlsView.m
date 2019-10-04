@@ -166,7 +166,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 //        NSLog(@"location: %f, contentOffset.x: %f, MidX: %f, MaxX + MidX(abs): %f", location, scrollView.contentOffset.x, -(CGRectGetMidX(scrollView.frame)), (CGRectGetMaxX(scrollView.frame)) + fabs(CGRectGetMidX(scrollView.frame)));
         location = (location < 0.0) ? 0.0 : (location > 1.0) ? 1.0 : location;
         setCameraPropertyValueBlock = (!setCameraPropertyValueBlock) ? [self.delegate setCameraProperty:[self selectedCameraProperty]] : setCameraPropertyValueBlock;
-        setCameraPropertyValueBlock(location);
+        setCameraPropertyValueBlock(cameraProperty, location);
 //
     });
 }

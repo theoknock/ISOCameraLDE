@@ -392,14 +392,14 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 - (void)lockDevice
 {
-    NSLog(@"LOCK IS WAITING");
+//    NSLog(@"LOCK IS WAITING");
     dispatch_semaphore_wait([self device_lock_semaphore], DISPATCH_TIME_FOREVER);
-    NSLog(@"LOCK IS SIGNALED");
+//    NSLog(@"LOCK IS SIGNALED");
     __autoreleasing NSError *error = nil;
     @try {
         if ([self.videoDevice lockForConfiguration:&error])
         {
-            NSLog(@"LOCK IS SIGNALING");
+//            NSLog(@"LOCK IS SIGNALING");
             dispatch_semaphore_signal([self device_lock_semaphore]);
         }
     } @catch (NSException *exception) {
@@ -423,13 +423,13 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 {
     __autoreleasing NSError *error = nil;
     
-           return ^ (CGFloat value) {
+           return ^ (CameraProperty cameraProperty, CGFloat value) {
                 __autoreleasing NSError *error = nil;
                 @try {
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                        NSLog(@"BLOCK IS WAITING");
+//                        NSLog(@"BLOCK IS WAITING");
                         dispatch_semaphore_wait([self device_lock_semaphore], DISPATCH_TIME_FOREVER);
-                            NSLog(@"BLOCK IS SIGNALED");
+//                            NSLog(@"BLOCK IS SIGNALED");
                         if ( cameraProperty == CameraPropertyFocus && ![self.videoDevice isAdjustingFocus]) {
                             [self.videoDevice setFocusModeLockedWithLensPosition:value completionHandler:nil];
                         } else if (cameraProperty == CameraPropertyISO && ![self.videoDevice isAdjustingExposure]) {
@@ -445,7 +445,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
                         }
                     });
                     
-                    NSLog(@"METHOD IS SIGNALING");
+//                    NSLog(@"METHOD IS SIGNALING");
                     dispatch_semaphore_signal([self device_lock_semaphore]);
                 } @catch (NSException *exception) {
                     NSLog( @"Could not lock device for configuration: %@\t%@", exception.description, error.description);
