@@ -15,7 +15,7 @@
     CGPoint firstTouchInView;
     CAScrollLayer *scrollLayer;
     ScaleSliderLayer *scaleSliderLayer;
-    __block SetCameraPropertyBlock setCameraPropertyBlock;
+    __block SetCameraPropertyValueBlock setCameraPropertyValueBlock;
 }
 
 @end
@@ -115,7 +115,9 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     if ([object isEqual:self.scaleSliderControlView]) {
         if ([keyPath isEqualToString:@"hidden"]) {
             if ([self.scaleSliderControlView isHidden]) {
-                [self cameraControlAction:(UIButton *)[self viewWithTag:[self selectedCameraProperty]]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self cameraControlAction:(UIButton *)[self viewWithTag:[self selectedCameraProperty]]];
+                });
             }
         }
     }
@@ -157,12 +159,14 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    CameraProperty cameraProperty = [self selectedCameraProperty];
+    if (cameraProperty != NSNotFound)
     dispatch_async(dispatch_get_main_queue(), ^{
         CGFloat location = normalize(scrollView.contentOffset.x, 0.0, 1.0, -(CGRectGetMidX(scrollView.frame)), (CGRectGetMaxX(scrollView.frame)) + fabs(CGRectGetMidX(scrollView.frame)));
 //        NSLog(@"location: %f, contentOffset.x: %f, MidX: %f, MaxX + MidX(abs): %f", location, scrollView.contentOffset.x, -(CGRectGetMidX(scrollView.frame)), (CGRectGetMaxX(scrollView.frame)) + fabs(CGRectGetMidX(scrollView.frame)));
         location = (location < 0.0) ? 0.0 : (location > 1.0) ? 1.0 : location;
-        setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
-        setCameraPropertyBlock((scrollView.isTracking) ? TRUE : FALSE, [self selectedCameraProperty], location, (!scrollView.isDragging) ? TRUE : FALSE);
+        setCameraPropertyValueBlock = (!setCameraPropertyValueBlock) ? [self.delegate setCameraProperty:[self selectedCameraProperty]] : setCameraPropertyValueBlock;
+        setCameraPropertyValueBlock(location);
 //
     });
 }
@@ -179,7 +183,8 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         *stop = [obj isSelected];
         return [obj isSelected];
     }]);
-    return (cameraProperty != NSNotFound) ? cameraProperty + 3 : NSNotFound;
+    if (cameraProperty == NSNotFound) NSLog(@"cameraProperty == NSNOTFOUND");
+    return (cameraProperty != NSNotFound) ? cameraProperty + 3 : cameraProperty;
 }
 
 //- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
@@ -234,28 +239,24 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 };
 
 - (IBAction)cameraControlAction:(id)sender {
-//    NSLog(@"sender %lu", [(UIButton *)sender tag]);
-    //    dispatch_async(dispatch_get_main_queue(), ^{
-//    [self toggleSelectionStateForControlButtonWithTag:(ControlButtonTag)[sender tag] selectedState:((UIButton *)sender).isSelected];
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.scaleSliderControlView setHidden:TRUE];
+//    });
+    
     [self.cameraControlButtons enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [obj setSelected:([sender isEqual:obj]) ? ![sender isSelected] : FALSE];
-            [obj setHighlighted:[obj isSelected]];
-            if ([obj isSelected])
+            BOOL shouldSelect = ([sender isEqual:obj]) ? ![sender isSelected] : FALSE;
+            [obj setSelected:shouldSelect];
+            [obj setHighlighted:shouldSelect];
+            if (shouldSelect)
+            {
+//                NSLog(@"Value: %f", [self.delegate valueForCameraProperty:[obj tag]]);
+                CGRect scrollRect = CGRectMake(self.scaleSliderScrollView.frame.size.width * [self.delegate valueForCameraProperty:[obj tag]], self.scaleSliderScrollView.frame.origin.y, self.scaleSliderScrollView.frame.size.width, self.scaleSliderScrollView.frame.size.height);
+                [self.scaleSliderScrollView scrollRectToVisible:scrollRect animated:FALSE];
                 [self.scaleSliderControlView setHidden:FALSE];
+            }
         });
-//        if ([(UIButton *)sender isEqual:[self viewWithTag:ControlButtonTagTorch]]) {
-//            [self.delegate toggleTorchWithCompletionHandler:^(BOOL isTorchActive) {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-////                    [(UIButton *)sender setHighlighted:isTorchActive];
-////                    [(UIButton *)sender setSelected:isTorchActive];
-//                    NSString *torchButtonImage = [NSString stringWithFormat:(isTorchActive) ? @"bolt.circle.fill" : @"bolt.circle"];
-//                    [(UIButton *)sender setImage:[UIImage systemImageNamed:torchButtonImage] forState:(isTorchActive) ? UIControlStateSelected : UIControlStateNormal];
-//                });
-//            }];
-//        }
     }];
-    //    });
 }
 
 - (IBAction)exposureDuration:(UIButton *)sender {

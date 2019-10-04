@@ -31,8 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setTorchLevel:(float)torchLevel;
 
 - (void)scrollSliderControlToItemAtIndexPath:(NSIndexPath *)indexPath;
-- (BOOL)lockDevice;
-- (SetCameraPropertyBlock)setCameraProperty;
+- (void)lockDevice;
+- (SetCameraPropertyValueBlock)setCameraProperty:(CameraProperty)cameraProperty;
+- (float)valueForCameraProperty:(CameraProperty)cameraProperty;
 - (void)unlockDevice;
 
 @end

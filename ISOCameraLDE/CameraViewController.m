@@ -48,18 +48,18 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 @property (nonatomic, getter=isSessionRunning) BOOL sessionRunning;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
+@property (strong, nonatomic) dispatch_semaphore_t device_lock_semaphore;
+
 @end
 
 @implementation CameraViewController
-static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
-
-@synthesize focus = _focus, ISO = _ISO;
 
 #pragma mark View Controller Life Cycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self.cameraControlsView setDelegate:(id<CameraControlsDelegate> _Nullable)self];
     
     // Create the AVCaptureSession
@@ -347,10 +347,9 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
         
     } );
     
-    dispatch_async( dispatch_get_main_queue(), ^{
-        //        [self configureManualHUD];
-        
-    } );
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self lockDevice];
+    });
 }
 
 - (IBAction)resumeInterruptedSession:(id)sender
@@ -381,11 +380,28 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
 #pragma mark Device Configuration
 
-- (BOOL)lockDevice
+- (dispatch_semaphore_t)device_lock_semaphore {
+    dispatch_semaphore_t dls = self->_device_lock_semaphore;
+    if (!dls) {
+        dls = dispatch_semaphore_create(0);
+        self->_device_lock_semaphore = dls;
+    }
+    
+    return dls;
+}
+
+- (void)lockDevice
 {
+    NSLog(@"LOCK IS WAITING");
+    dispatch_semaphore_wait([self device_lock_semaphore], DISPATCH_TIME_FOREVER);
+    NSLog(@"LOCK IS SIGNALED");
     __autoreleasing NSError *error = nil;
     @try {
-        return [self.videoDevice lockForConfiguration:&error];
+        if ([self.videoDevice lockForConfiguration:&error])
+        {
+            NSLog(@"LOCK IS SIGNALING");
+            dispatch_semaphore_signal([self device_lock_semaphore]);
+        }
     } @catch (NSException *exception) {
         NSLog( @"Could not lock device for configuration: %@\t%@", exception.description, error.description);
     } @finally {
@@ -393,29 +409,44 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     }
 }
 
-- (SetCameraPropertyBlock)setCameraProperty
+- (void)unlockDevice
+{
+    [self.videoDevice unlockForConfiguration];
+//    dispatch_semaphore_wait(frameRenderingSemaphore, DISPATCH_TIME_NOW) != 0)
+    {
+        return;
+    }
+
+}
+
+- (SetCameraPropertyValueBlock)setCameraProperty:(CameraProperty)cameraProperty
 {
     __autoreleasing NSError *error = nil;
     
-           return ^ (BOOL lockDevice, CameraProperty property, CGFloat value, BOOL unlockDevice) {
+           return ^ (CGFloat value) {
                 __autoreleasing NSError *error = nil;
                 @try {
-                    if (lockDevice) [self lockDevice];
-
-                    if (property == CameraPropertyFocus && ![self.videoDevice isAdjustingFocus]) {
-                        [self.videoDevice setFocusModeLockedWithLensPosition:value completionHandler:nil];
-                    } else if (property == CameraPropertyISO && ![self.videoDevice isAdjustingExposure]) {
-                        float maxISO = self.videoDevice.activeFormat.maxISO;
-                        float minISO = self.videoDevice.activeFormat.minISO;
-                        self->_ISO = minISO + (value * (maxISO - minISO));
-                        [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:self->_ISO completionHandler:nil];
-                    } else if (property == CameraPropertyTorch && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious)) {
-                        if (value != 0)
-                            [self->_videoDevice setTorchModeOnWithLevel:value error:nil];
-                        else
-                            [self->_videoDevice setTorchMode:AVCaptureTorchModeOff];
-                    }
-                    if (unlockDevice) [self unlockDevice];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        NSLog(@"BLOCK IS WAITING");
+                        dispatch_semaphore_wait([self device_lock_semaphore], DISPATCH_TIME_FOREVER);
+                            NSLog(@"BLOCK IS SIGNALED");
+                        if ( cameraProperty == CameraPropertyFocus && ![self.videoDevice isAdjustingFocus]) {
+                            [self.videoDevice setFocusModeLockedWithLensPosition:value completionHandler:nil];
+                        } else if (cameraProperty == CameraPropertyISO && ![self.videoDevice isAdjustingExposure]) {
+                            float maxISO = self.videoDevice.activeFormat.maxISO;
+                            float minISO = self.videoDevice.activeFormat.minISO;
+                            self->_ISO = minISO + (value * (maxISO - minISO));
+                            [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:self->_ISO completionHandler:nil];
+                        } else if (cameraProperty == CameraPropertyTorch && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious)) {
+                            if (value != 0)
+                                [self->_videoDevice setTorchModeOnWithLevel:value error:nil];
+                            else
+                                [self->_videoDevice setTorchMode:AVCaptureTorchModeOff];
+                        }
+                    });
+                    
+                    NSLog(@"METHOD IS SIGNALING");
+                    dispatch_semaphore_signal([self device_lock_semaphore]);
                 } @catch (NSException *exception) {
                     NSLog( @"Could not lock device for configuration: %@\t%@", exception.description, error.description);
                 } @finally {
@@ -429,11 +460,6 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 //
 //    }
     
-}
-
-- (void)unlockDevice
-{
-    [self.videoDevice unlockForConfiguration];
 }
 
 //- (void)changeISO:(id)sender
@@ -733,6 +759,39 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     //            self.cameraUnavailableLabel.hidden = YES;
     //        }];
     //    }
+}
+
+- (float)valueForCameraProperty:(CameraProperty)cameraProperty
+{
+    float value;
+    switch (cameraProperty) {
+        case CameraPropertyISO:
+        {
+            float ISO = self.videoDevice.ISO;
+            float maxISO = self.videoDevice.activeFormat.maxISO;
+            float minISO = self.videoDevice.activeFormat.minISO;
+            value = (1.0 - 0.0) * (ISO - minISO) / (maxISO - minISO) + 0.0;
+            break;
+        }
+        case CameraPropertyFocus:
+        {
+            value = self.videoDevice.lensPosition;
+            break;
+        }
+        case CameraPropertyTorch:
+        {
+            value = self.videoDevice.torchLevel;
+            break;
+        }
+            
+        default:
+        {
+            value = 0.0;
+            break;
+        }
+    }
+    
+    return value;
 }
 
 - (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler

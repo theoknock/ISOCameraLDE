@@ -31,7 +31,7 @@ typedef NS_ENUM(NSUInteger, CameraProperty) {
     CameraPropertyTorch = 5
 };
 
-typedef void (^SetCameraPropertyBlock)(BOOL lockDevice, CameraProperty property, CGFloat value, BOOL unlockDevice);
+typedef void (^SetCameraPropertyValueBlock)(CGFloat value);
 
 @protocol CameraControlsDelegate <NSObject>
 
@@ -58,8 +58,9 @@ typedef void (^SetCameraPropertyBlock)(BOOL lockDevice, CameraProperty property,
 - (void)scrollSliderControlToItemAtIndexPath:(NSIndexPath *)indexPath;
 
 - (BOOL)lockDevice;
-- (SetCameraPropertyBlock)setCameraProperty;
+- (SetCameraPropertyValueBlock)setCameraProperty:(CameraProperty)cameraProperty;
 - (void)unlockDevice;
+- (float)valueForCameraProperty:(CameraProperty)cameraProperty;
 
 @end
 
@@ -74,6 +75,7 @@ typedef void (^SetCameraPropertyBlock)(BOOL lockDevice, CameraProperty property,
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cameraControlButtons;
 @property (weak, nonatomic) IBOutlet UIView *scaleSliderControlView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scaleSliderScrollView;
+@property (weak, nonatomic) IBOutlet UIStackView *cameraControlButtonsStackView;
 
 @end
 

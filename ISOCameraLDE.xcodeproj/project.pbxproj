@@ -10,12 +10,12 @@
 		8A062A082337B77B001D446A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A062A072337B77B001D446A /* Foundation.framework */; };
 		8AC8FBFF23381B2000D1E6E8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AC8FBFE23381B2000D1E6E8 /* AVFoundation.framework */; };
 		B924CACE2345C09700648522 /* ScaleSliderLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B924CACD2345C09700648522 /* ScaleSliderLayer.m */; };
+		B95AA94E2347F733002646D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DF14B522B810DE0028DC47 /* Main.storyboard */; };
 		B96EB366230FC8F40054F514 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B96EB365230FC8F40054F514 /* SceneDelegate.m */; };
 		B9A4686E2346D468007D9258 /* ScaleSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9A4686D2346D468007D9258 /* ScaleSliderView.m */; };
 		B9A468712346DBD6007D9258 /* ScaleSliderControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9A468702346DBD6007D9258 /* ScaleSliderControlView.m */; };
 		B9CEED472321BAD100DEC88A /* CameraControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CEED462321BAD100DEC88A /* CameraControlsView.m */; };
 		B9DF14AE22B810DE0028DC47 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DF14AD22B810DE0028DC47 /* AppDelegate.m */; };
-		B9DF14B722B810DE0028DC47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DF14B522B810DE0028DC47 /* Main.storyboard */; };
 		B9DF14B922B810E00028DC47 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9DF14B822B810E00028DC47 /* Assets.xcassets */; };
 		B9DF14BC22B810E00028DC47 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DF14BA22B810E00028DC47 /* LaunchScreen.storyboard */; };
 		B9DF14BF22B810E00028DC47 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DF14BE22B810E00028DC47 /* main.m */; };
@@ -185,8 +185,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9DF14BC22B810E00028DC47 /* LaunchScreen.storyboard in Resources */,
+				B95AA94E2347F733002646D1 /* Main.storyboard in Resources */,
 				B9DF14B922B810E00028DC47 /* Assets.xcassets in Resources */,
-				B9DF14B722B810DE0028DC47 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,7 +355,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blogspot.demonicactivity.bush.alan.james.ISOCameraLDE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -373,7 +373,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blogspot.demonicactivity.bush.alan.james.ISOCameraLDE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
