@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ScaleViewDelegate <NSObject>
+@protocol ScaleSliderLayerDelegate <NSObject>
 
 @property (assign) NSInteger ticks;
 
@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ScaleSliderLayer : CALayer
 
-@property (weak, nonatomic) id<ScaleViewDelegate> delegate;
+@property (weak, nonatomic) id<ScaleSliderLayerDelegate> scaleSliderLayerDelegate;
 
 @end
 

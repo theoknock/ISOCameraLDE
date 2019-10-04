@@ -12,9 +12,6 @@
 #import "CameraViewController.h"
 #import "CameraView.h"
 #import "CameraControlsView.h"
-#import "CollectionViewCell.h"
-#import "ScaleSliderControlView.h"
-#import "CameraControlsView.h"
 
 static void * SessionRunningContext = &SessionRunningContext;
 static void * LensPositionContext = &LensPositionContext;

@@ -135,6 +135,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
         location = (location < 0.0) ? 0.0 : (location > 1.0) ? 1.0 : location;
         setCameraPropertyBlock = (!setCameraPropertyBlock) ? [self.delegate setCameraProperty] : setCameraPropertyBlock;
         setCameraPropertyBlock((scrollView.isTracking) ? TRUE : FALSE, [self selectedCameraProperty], location, (!scrollView.isDragging) ? TRUE : FALSE);
+        [self.scaleSliderControlView setHidden:[scrollView isDecelerating]];
     });
 }
 
@@ -220,7 +221,7 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
     
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[self.superview viewWithTag:7] setHidden:([self selectedCameraProperty] == NSNotFound) ? TRUE : FALSE];
+        [self.scaleSliderControlView setHidden:([self selectedCameraProperty] == NSNotFound) ? TRUE : FALSE];
     });
     //    });
 }
@@ -239,12 +240,6 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
             [(UIButton *)sender setHighlighted:shouldHighlightExposureDurationModeButton];
         }];
     });
-}
-
-- (void)toggleSelectionStateForControlButtonWithTag:(NSUInteger)buttonTag selectedState:(BOOL)isSelected
-{
-    
-    
 }
 
 @end

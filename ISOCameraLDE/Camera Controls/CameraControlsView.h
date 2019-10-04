@@ -73,6 +73,7 @@ typedef void (^SetCameraPropertyBlock)(BOOL lockDevice, CameraProperty property,
 @property (nonatomic, nullable) UITapGestureRecognizer *tapGestureRecognizer;
 
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cameraControlButtons;
+@property (weak, nonatomic) IBOutlet UIView *scaleSliderControlView;
 
 @end
 
