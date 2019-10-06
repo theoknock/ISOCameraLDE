@@ -16,6 +16,7 @@
     CAScrollLayer *scrollLayer;
     ScaleSliderLayer *scaleSliderLayer;
     __block SetCameraPropertyValueBlock setCameraPropertyValueBlock;
+    CATextLayer *textLayer;
 }
 
 @end
@@ -24,7 +25,7 @@
 
 static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
-@synthesize delegate = _delegate;
+@synthesize delegate = _delegate, measuringUnit = _measuringUnit;
 
 //+ (Class)layerClass
 //{
@@ -57,6 +58,9 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    
+    textLayer = [CATextLayer layer];
+    [self.layer addSublayer:textLayer];
     
     [self.scaleSliderControlView addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
     
@@ -110,19 +114,41 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 //    self.scaleSliderControlView.gestureRecognizers = @[self.tapGestureRecognizer];
 //}
 
+- (NSNumberFormatter *)numberFormatter
+{
+    NSNumberFormatter * formatter = [[ NSNumberFormatter alloc ] init ] ;
+    [ formatter setFormatWidth:1 ] ;
+    [ formatter setPaddingCharacter:@" " ] ;
+    [ formatter setFormatterBehavior:NSNumberFormatterBehavior10_4 ] ;
+    [ formatter setNumberStyle:NSNumberFormatterDecimalStyle ] ;
+    [ formatter setMinimumFractionDigits:2 ] ;
+    [ formatter setMaximumFractionDigits:2 ] ;
+    
+    return formatter;
+}
+
 - (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     dispatch_async(dispatch_get_main_queue(), ^{
     if ([object isEqual:self.scaleSliderControlView]) {
         if ([keyPath isEqualToString:@"hidden"]) {
             if ([self.scaleSliderControlView isHidden]) {
+                [self.cameraControlButtonsStackView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([obj isKindOfClass:[UIButton class]])
+                    {
+                        NSLog(@"button %lu", [obj tag]);
+                        UIImage *large_symbol = [[(UIButton *)obj currentImage] imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithTextStyle:UIFontTextStyleLargeTitle]];
+                        [(UIButton *)obj setImage:large_symbol forState:UIControlStateNormal];
+                        [self setMeasuringUnit:[NSString stringWithFormat:@"%@", @""]];
+                    }
+                }];
                     [self cameraControlAction:(UIButton *)[self viewWithTag:[self selectedCameraProperty]]];
             } else {
                 float value = [self.delegate valueForCameraProperty:[self selectedCameraProperty]];
-                NSLog(@"Value out: %f", value);
+//                NSLog(@"Value out: %f", value);
 //                CGRect scrollRect = CGRectMake(-CGRectGetMidX(self.scaleSliderScrollView.frame) + (CGRectGetWidth(self.scaleSliderScrollView.frame) * value), self.scaleSliderScrollView.frame.origin.y, (CGRectGetMaxX(self.scaleSliderScrollView.frame)) + fabs(CGRectGetMidX(self.scaleSliderScrollView.frame)),  CGRectGetHeight(self.scaleSliderScrollView.frame));
                 [self.scaleSliderScrollView setContentOffset:CGPointMake(-CGRectGetMidX(self.scaleSliderScrollView.frame) + (self.scaleSliderScrollView.contentSize.width * value), 0.0) animated:TRUE];//  scrollRectToVisible:scrollRect animated:FALSE];
-                
+                [self setMeasuringUnit:[[self numberFormatter] stringFromNumber:[NSNumber numberWithFloat:(value * 10)]]];
             }
         }
     }
@@ -172,9 +198,10 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
             CGFloat location = normalize(scrollView.contentOffset.x, 0.0, 1.0, -(CGRectGetMidX(scrollView.frame)), (CGRectGetMaxX(scrollView.frame)) + fabs(CGRectGetMidX(scrollView.frame)));
     //        NSLog(@"location: %f, contentOffset.x: %f, MidX: %f, MaxX + MidX(abs): %f", location, scrollView.contentOffset.x, -(CGRectGetMidX(scrollView.frame)), (CGRectGetMaxX(scrollView.frame)) + fabs(CGRectGetMidX(scrollView.frame)));
             location = (location < 0.0) ? 0.0 : (location > 1.0) ? 1.0 : location;
-            NSLog(@"Value in: %f", location);
+//            NSLog(@"Value in: %f", location);
             setCameraPropertyValueBlock = (!setCameraPropertyValueBlock) ? [self.delegate setCameraProperty:[self selectedCameraProperty]] : setCameraPropertyValueBlock;
             setCameraPropertyValueBlock(cameraProperty, location);
+            [self setMeasuringUnit:[[self numberFormatter] stringFromNumber:[NSNumber numberWithFloat:(location * 10)]]];
         }
     });
 }
@@ -262,6 +289,15 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
             if (shouldSelect)
             {
                 [self.scaleSliderControlView setHidden:FALSE];
+                [self.cameraControlButtonsStackView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([obj isKindOfClass:[UIButton class]])
+                    {
+                        NSLog(@"button %lu", [obj tag]);
+                        UIImage *small_symbol = [[(UIButton *)obj currentImage] imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithTextStyle:UIFontTextStyleFootnote /* configurationWithScale:UIImageSymbolScaleSmall*/]];
+                        [(UIButton *)obj setImage:small_symbol forState:UIControlStateNormal];
+                        [self setMeasuringUnit:@"5"];
+                    }
+                }];
             }
         });
     }];
@@ -281,6 +317,54 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
             [(UIButton *)sender setHighlighted:shouldHighlightExposureDurationModeButton];
         }];
     });
+}
+
+- (NSString *)measuringUnit
+{
+    return _measuringUnit;
+}
+
+- (void)setMeasuringUnit:(NSString *)measuringUnit
+{
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        self.layer.sublayers = nil;
+//    });
+    
+    self->_measuringUnit = measuringUnit;
+    
+    NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+    centerAlignedParagraphStyle.alignment                = NSTextAlignmentCenter;
+    NSDictionary *centerAlignedTextAttributes            = @{NSForegroundColorAttributeName:[UIColor systemYellowColor],
+                                                            NSFontAttributeName:[UIFont systemFontOfSize:18.0],
+                                                            NSParagraphStyleAttributeName:centerAlignedParagraphStyle};
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:_measuringUnit
+                                                                           attributes:centerAlignedTextAttributes];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __block CGFloat textLayerFrameY = CGRectGetMinY(self.layer.bounds);
+        [textLayer setOpaque:FALSE];
+        [textLayer setAlignmentMode:kCAAlignmentCenter];
+        [textLayer setWrapped:TRUE];
+        textLayer.string = attributedString;
+        
+        CGSize textLayerframeSize = [self suggestFrameSizeWithConstraints:self.bounds.size forAttributedString:attributedString];
+        CGRect frame = CGRectMake(CGRectGetMidX(self.bounds) - 24.0, ((((CGRectGetMinY(self.bounds) + CGRectGetMidY(self.bounds)) / 2.0) + 6.0) + textLayerFrameY), 48.0, textLayerframeSize.height);
+        textLayer.frame = frame;
+        textLayerFrameY += textLayerframeSize.height;
+//        [textLayer setBackgroundColor:[UIColor redColor].CGColor];
+        
+        
+    });
+    
+}
+
+- (CGSize)suggestFrameSizeWithConstraints:(CGSize)size forAttributedString:(NSAttributedString *)attributedString
+{
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFMutableAttributedStringRef)attributedString);
+    CFRange attributedStringRange = CFRangeMake(0, attributedString.length);
+    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, attributedStringRange, NULL, size, NULL);
+    CFRelease(framesetter);
+    
+    return suggestedSize;
 }
 
 @end

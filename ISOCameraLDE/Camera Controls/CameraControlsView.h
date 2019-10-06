@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
+#import <CoreText/CoreText.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -76,6 +77,9 @@ typedef void (^SetCameraPropertyValueBlock)(CameraProperty cameraProperty, CGFlo
 @property (weak, nonatomic) IBOutlet UIView *scaleSliderControlView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scaleSliderScrollView;
 @property (weak, nonatomic) IBOutlet UIStackView *cameraControlButtonsStackView;
+
+@property (copy, nonatomic, setter=setMeasuringUnit:) NSString *measuringUnit;
+
 
 @end
 

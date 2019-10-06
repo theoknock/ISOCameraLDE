@@ -12,6 +12,8 @@
 		B924CACE2345C09700648522 /* ScaleSliderLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B924CACD2345C09700648522 /* ScaleSliderLayer.m */; };
 		B95AA94E2347F733002646D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DF14B522B810DE0028DC47 /* Main.storyboard */; };
 		B96EB366230FC8F40054F514 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B96EB365230FC8F40054F514 /* SceneDelegate.m */; };
+		B9737A77234A532600758996 /* ScaleSliderLayerTop.m in Sources */ = {isa = PBXBuildFile; fileRef = B9737A75234A522B00758996 /* ScaleSliderLayerTop.m */; };
+		B9737A7A234A537800758996 /* ScaleSliderViewTop.m in Sources */ = {isa = PBXBuildFile; fileRef = B9737A79234A537800758996 /* ScaleSliderViewTop.m */; };
 		B9A4686E2346D468007D9258 /* ScaleSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9A4686D2346D468007D9258 /* ScaleSliderView.m */; };
 		B9A468712346DBD6007D9258 /* ScaleSliderControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9A468702346DBD6007D9258 /* ScaleSliderControlView.m */; };
 		B9CEED472321BAD100DEC88A /* CameraControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CEED462321BAD100DEC88A /* CameraControlsView.m */; };
@@ -31,6 +33,10 @@
 		B924CACD2345C09700648522 /* ScaleSliderLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScaleSliderLayer.m; sourceTree = "<group>"; };
 		B96EB364230FC8F40054F514 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		B96EB365230FC8F40054F514 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		B9737A74234A522B00758996 /* ScaleSliderLayerTop.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScaleSliderLayerTop.h; sourceTree = "<group>"; };
+		B9737A75234A522B00758996 /* ScaleSliderLayerTop.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScaleSliderLayerTop.m; sourceTree = "<group>"; wrapsLines = 0; };
+		B9737A78234A537800758996 /* ScaleSliderViewTop.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScaleSliderViewTop.h; sourceTree = "<group>"; };
+		B9737A79234A537800758996 /* ScaleSliderViewTop.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScaleSliderViewTop.m; sourceTree = "<group>"; };
 		B9A4686C2346D468007D9258 /* ScaleSliderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScaleSliderView.h; sourceTree = "<group>"; };
 		B9A4686D2346D468007D9258 /* ScaleSliderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScaleSliderView.m; sourceTree = "<group>"; };
 		B9A4686F2346DBD6007D9258 /* ScaleSliderControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScaleSliderControlView.h; sourceTree = "<group>"; };
@@ -85,6 +91,10 @@
 				B9A4686D2346D468007D9258 /* ScaleSliderView.m */,
 				B924CACC2345C09700648522 /* ScaleSliderLayer.h */,
 				B924CACD2345C09700648522 /* ScaleSliderLayer.m */,
+				B9737A74234A522B00758996 /* ScaleSliderLayerTop.h */,
+				B9737A75234A522B00758996 /* ScaleSliderLayerTop.m */,
+				B9737A78234A537800758996 /* ScaleSliderViewTop.h */,
+				B9737A79234A537800758996 /* ScaleSliderViewTop.m */,
 			);
 			path = "Camera Controls";
 			sourceTree = "<group>";
@@ -202,6 +212,8 @@
 				B9A4686E2346D468007D9258 /* ScaleSliderView.m in Sources */,
 				B9CEED472321BAD100DEC88A /* CameraControlsView.m in Sources */,
 				B9A468712346DBD6007D9258 /* ScaleSliderControlView.m in Sources */,
+				B9737A77234A532600758996 /* ScaleSliderLayerTop.m in Sources */,
+				B9737A7A234A537800758996 /* ScaleSliderViewTop.m in Sources */,
 				B9DF14CA22B8126D0028DC47 /* CameraViewController.m in Sources */,
 				B96EB366230FC8F40054F514 /* SceneDelegate.m in Sources */,
 				B9DF14AE22B810DE0028DC47 /* AppDelegate.m in Sources */,

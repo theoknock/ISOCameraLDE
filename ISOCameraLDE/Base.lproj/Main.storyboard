@@ -101,12 +101,24 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="828" height="82"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
+                                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mdx-M6-Vm9" customClass="ScaleSliderViewTop">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
+                                                    <constraint firstItem="mdx-M6-Vm9" firstAttribute="width" secondItem="RlU-VS-wqF" secondAttribute="width" id="2MA-GJ-TEw"/>
+                                                    <constraint firstItem="mdx-M6-Vm9" firstAttribute="trailing" secondItem="RlU-VS-wqF" secondAttribute="trailing" id="FND-dq-iLj"/>
                                                     <constraint firstItem="qJB-oS-imz" firstAttribute="trailing" secondItem="6Dg-qW-FHO" secondAttribute="trailing" id="HSN-gV-Y4B"/>
+                                                    <constraint firstItem="mdx-M6-Vm9" firstAttribute="top" secondItem="RlU-VS-wqF" secondAttribute="top" id="O6o-Ht-ymG"/>
+                                                    <constraint firstItem="mdx-M6-Vm9" firstAttribute="height" secondItem="RlU-VS-wqF" secondAttribute="height" id="PUJ-K3-1cp"/>
                                                     <constraint firstItem="qJB-oS-imz" firstAttribute="leading" secondItem="6Dg-qW-FHO" secondAttribute="leading" id="Rgc-4y-bx2"/>
+                                                    <constraint firstItem="mdx-M6-Vm9" firstAttribute="bottom" secondItem="RlU-VS-wqF" secondAttribute="bottom" id="UtB-Jt-Vlg"/>
                                                     <constraint firstItem="qJB-oS-imz" firstAttribute="bottom" secondItem="RlU-VS-wqF" secondAttribute="bottom" id="Vey-Tg-RPd"/>
+                                                    <constraint firstItem="mdx-M6-Vm9" firstAttribute="centerX" secondItem="RlU-VS-wqF" secondAttribute="centerX" id="cLF-qv-e7n"/>
+                                                    <constraint firstItem="mdx-M6-Vm9" firstAttribute="leading" secondItem="RlU-VS-wqF" secondAttribute="leading" id="gLT-MP-Lao"/>
+                                                    <constraint firstItem="mdx-M6-Vm9" firstAttribute="centerY" secondItem="RlU-VS-wqF" secondAttribute="centerY" id="nuV-jb-LlW"/>
                                                     <constraint firstItem="qJB-oS-imz" firstAttribute="top" secondItem="RlU-VS-wqF" secondAttribute="top" id="oY0-8h-ZRE"/>
                                                 </constraints>
                                                 <viewLayoutGuide key="contentLayoutGuide" id="6Dg-qW-FHO"/>
