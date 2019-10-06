@@ -293,7 +293,7 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
                     if ([obj isKindOfClass:[UIButton class]])
                     {
                         NSLog(@"button %lu", [obj tag]);
-                        UIImage *small_symbol = [[(UIButton *)obj currentImage] imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithTextStyle:UIFontTextStyleFootnote /* configurationWithScale:UIImageSymbolScaleSmall*/]];
+                        UIImage *small_symbol = [[(UIButton *)obj currentImage] imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithTextStyle:UIFontTextStyleTitle2 /* configurationWithScale:UIImageSymbolScaleSmall*/]];
                         [(UIButton *)obj setImage:small_symbol forState:UIControlStateNormal];
                         [self setMeasuringUnit:@"5"];
                     }
