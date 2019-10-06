@@ -290,9 +290,8 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
             {
                 [self.scaleSliderControlView setHidden:FALSE];
                 [self.cameraControlButtonsStackView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([obj isKindOfClass:[UIButton class]])
+                    if ([obj isKindOfClass:[UIButton class]] && [(UIButton *)obj tag] == 3)
                     {
-                        NSLog(@"button %lu", [obj tag]);
                         UIImage *small_symbol = [[(UIButton *)obj currentImage] imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithTextStyle:UIFontTextStyleTitle2 /* configurationWithScale:UIImageSymbolScaleSmall*/]];
                         [(UIButton *)obj setImage:small_symbol forState:UIControlStateNormal];
                         [self setMeasuringUnit:@"5"];
