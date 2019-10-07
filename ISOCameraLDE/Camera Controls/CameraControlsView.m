@@ -34,9 +34,9 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
 
 - (void)setDelegate:(id<CameraControlsDelegate>)delegate
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
     _delegate = delegate;
-    NSLog(@"%@", [(NSObject *)_delegate description]);
+//    NSLog(@"%@", [(NSObject *)_delegate description]);
 }
 
 - (id<CameraControlsDelegate>)delegate
@@ -61,6 +61,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
     
     textLayer = [CATextLayer layer];
     [self.layer addSublayer:textLayer];
+    [(ScaleSliderViewTop *)self.scaleSliderViewTop setDelegate:(id<ScaleSliderViewTopDelegate> _Nullable)self];
     
     [self.scaleSliderControlView addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
     
@@ -246,7 +247,7 @@ float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min
 //}
 
 - (id)forwardingTargetForSelector:(SEL)aSelector {
-    NSLog(@"forwardingTargetForSelector");
+//    NSLog(@"forwardingTargetForSelector");
     return self.delegate;
 }
 
@@ -277,29 +278,25 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
 };
 
 - (IBAction)cameraControlAction:(id)sender {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.scaleSliderControlView setHidden:TRUE];
-//    });
-    
-    [self.cameraControlButtons enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            BOOL shouldSelect = ([sender isEqual:obj]) ? ![sender isSelected] : FALSE;
-            [obj setSelected:shouldSelect];
-            [obj setHighlighted:shouldSelect];
-            if (shouldSelect)
-            {
-                [self.scaleSliderControlView setHidden:FALSE];
-                [self.cameraControlButtonsStackView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([obj isKindOfClass:[UIButton class]] && [(UIButton *)obj tag] == 3)
-                    {
-                        UIImage *small_symbol = [[(UIButton *)obj currentImage] imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithTextStyle:UIFontTextStyleTitle2 /* configurationWithScale:UIImageSymbolScaleSmall*/]];
-                        [(UIButton *)obj setImage:small_symbol forState:UIControlStateNormal];
-                        [self setMeasuringUnit:@"5"];
-                    }
-                }];
-            }
-        });
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.cameraControlButtons enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                BOOL shouldSelect = ([sender isEqual:obj]) ? ![sender isSelected] : FALSE;
+                [obj setSelected:shouldSelect];
+                [obj setHighlighted:shouldSelect];
+                if (shouldSelect)
+                {
+                    [self.scaleSliderControlView setHidden:FALSE];
+                    [self.scaleSliderViewTop setSelectedCameraPropertyValue:[self selectedCameraPropertyFrame]];
+                    [self.scaleSliderViewTop setNeedsDisplay];
+                    UIImage *small_symbol = [[(UIButton *)obj currentImage] imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithTextStyle:UIFontTextStyleTitle2 /* configurationWithScale:UIImageSymbolScaleSmall*/]];
+                    [(UIButton *)obj setImage:small_symbol forState:UIControlStateNormal];
+                    [self setMeasuringUnit:@"5"];
+//                    NSLog(@"origin x (1): %f", ((UIButton *)obj).frame.origin.x);
+                }
+            });
+        }];
+    });
 }
 
 - (IBAction)exposureDuration:(UIButton *)sender {
@@ -334,7 +331,7 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
     NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     centerAlignedParagraphStyle.alignment                = NSTextAlignmentCenter;
     NSDictionary *centerAlignedTextAttributes            = @{NSForegroundColorAttributeName:[UIColor systemYellowColor],
-                                                            NSFontAttributeName:[UIFont systemFontOfSize:18.0],
+                                                            NSFontAttributeName:[UIFont systemFontOfSize:14.0],
                                                             NSParagraphStyleAttributeName:centerAlignedParagraphStyle};
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:_measuringUnit
                                                                            attributes:centerAlignedTextAttributes];
@@ -346,7 +343,9 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
         textLayer.string = attributedString;
         
         CGSize textLayerframeSize = [self suggestFrameSizeWithConstraints:self.bounds.size forAttributedString:attributedString];
-        CGRect frame = CGRectMake(CGRectGetMidX(self.bounds) - 24.0, ((((CGRectGetMinY(self.bounds) + CGRectGetMidY(self.bounds)) / 2.0) + 6.0) + textLayerFrameY), 48.0, textLayerframeSize.height);
+        
+        CGRect frame = CGRectMake(([[self selectedCameraPropertyFrame] CGRectValue].origin.x - ([[self selectedCameraPropertyFrame] CGRectValue].size.width / 2.0) - 24.0) + 83.0, ((((CGRectGetMinY(self.bounds) + CGRectGetMidY(self.bounds)) / 2.0) + 6.0) + textLayerFrameY), 48.0, textLayerframeSize.height);
+        
         textLayer.frame = frame;
         textLayerFrameY += textLayerframeSize.height;
 //        [textLayer setBackgroundColor:[UIColor redColor].CGColor];
@@ -364,6 +363,18 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
     CFRelease(framesetter);
     
     return suggestedSize;
+}
+
+- (NSValue *)selectedCameraPropertyFrame
+{
+    CGRect selectedCameraPropertyFrame = CGRectMake(CGRectGetMinX( (CGRect)[(UIButton *)[self viewWithTag:[self selectedCameraProperty]] frame] ),
+    CGRectGetMinY( (CGRect)[(UIButton *)[self viewWithTag:[self selectedCameraProperty]] frame] ),
+    CGRectGetWidth((CGRect)[(UIButton *)[self viewWithTag:[self selectedCameraProperty]] frame]),
+    CGRectGetHeight((CGRect)[(UIButton *)[self viewWithTag:[self selectedCameraProperty]] frame]));
+    NSValue *selectedCameraPropertyValue = [NSValue valueWithCGRect:selectedCameraPropertyFrame];
+//    NSLog(@"selectedCameraPropertyFrame (2): %f", selectedCameraPropertyFrame.origin.x);
+    
+    return selectedCameraPropertyValue;
 }
 
 @end

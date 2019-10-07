@@ -102,7 +102,7 @@
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mdx-M6-Vm9" customClass="ScaleSliderViewTop">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
+                                                        <rect key="frame" x="1" y="0.0" width="414" height="82"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                 </subviews>
@@ -157,6 +157,7 @@
                                     <outlet property="cameraControlButtonsStackView" destination="e0d-gl-0Yj" id="yzU-XK-nL7"/>
                                     <outlet property="scaleSliderControlView" destination="9Mw-MC-Kxr" id="tZ4-Ha-ggd"/>
                                     <outlet property="scaleSliderScrollView" destination="m0T-st-5p9" id="0hf-6m-bnI"/>
+                                    <outlet property="scaleSliderViewTop" destination="mdx-M6-Vm9" id="2Rt-vs-vVy"/>
                                     <outletCollection property="cameraControlButtons" destination="wCC-wi-bYd" id="oGc-po-FG7"/>
                                     <outletCollection property="cameraControlButtons" destination="cmG-81-aAG" id="SFa-Xm-oc8"/>
                                     <outletCollection property="cameraControlButtons" destination="6BM-EC-R7x" id="hd6-A9-gpK"/>

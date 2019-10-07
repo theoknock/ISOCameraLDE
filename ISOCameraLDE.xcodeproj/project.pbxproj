@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8A062A082337B77B001D446A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A062A072337B77B001D446A /* Foundation.framework */; };
-		8AC8FBFF23381B2000D1E6E8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AC8FBFE23381B2000D1E6E8 /* AVFoundation.framework */; };
 		B924CACE2345C09700648522 /* ScaleSliderLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B924CACD2345C09700648522 /* ScaleSliderLayer.m */; };
 		B95AA94E2347F733002646D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DF14B522B810DE0028DC47 /* Main.storyboard */; };
 		B96EB366230FC8F40054F514 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B96EB365230FC8F40054F514 /* SceneDelegate.m */; };
@@ -62,8 +60,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A062A082337B77B001D446A /* Foundation.framework in Frameworks */,
-				8AC8FBFF23381B2000D1E6E8 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

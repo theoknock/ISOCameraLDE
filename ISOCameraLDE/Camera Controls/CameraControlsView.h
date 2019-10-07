@@ -11,6 +11,8 @@
 #import <CoreMedia/CoreMedia.h>
 #import <CoreText/CoreText.h>
 
+#import "ScaleSliderViewTop.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, ControlButtonTag) {
@@ -65,7 +67,7 @@ typedef void (^SetCameraPropertyValueBlock)(CameraProperty cameraProperty, CGFlo
 
 @end
 
-@interface CameraControlsView : UIView <CALayerDelegate, UIScrollViewDelegate>
+@interface CameraControlsView : UIView <CALayerDelegate, UIScrollViewDelegate, ScaleSliderViewTopDelegate>
 
 //+ (nonnull CameraControlsView *)cameraControls;
 
@@ -77,8 +79,9 @@ typedef void (^SetCameraPropertyValueBlock)(CameraProperty cameraProperty, CGFlo
 @property (weak, nonatomic) IBOutlet UIView *scaleSliderControlView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scaleSliderScrollView;
 @property (weak, nonatomic) IBOutlet UIStackView *cameraControlButtonsStackView;
-
+@property (weak, nonatomic) IBOutlet ScaleSliderViewTop *scaleSliderViewTop;
 @property (copy, nonatomic, setter=setMeasuringUnit:) NSString *measuringUnit;
+- (NSValue *)selectedCameraPropertyFrame;
 
 
 @end
