@@ -27,7 +27,8 @@ typedef NS_ENUM(NSUInteger, ControlButtonTag) {
 
 typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
     ExposureDurationModeNormal,
-    ExposureDurationModeLong
+    ExposureDurationModeLong,
+    ExposureDurationModeShort
 };
 
 typedef NS_ENUM(NSUInteger, CameraProperty) {
@@ -45,14 +46,12 @@ typedef void (^SetCameraPropertyValueBlock)(CameraProperty cameraProperty, CGFlo
 
 @property (nonatomic) AVCaptureDevice *videoDevice;
 
+- (void)configureCameraForHighestFrameRate:(AVCaptureDevice *)device;
+
 - (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler;
 
-@property (assign) float ISO;
-- (void)setISO:(float)ISO;
 - (void)autoExposureWithCompletionHandler:(void (^)(double ISO))completionHandler;
 
-@property (assign) float focus;
-- (void)setFocus:(float)focus;
 - (void)autoFocusWithCompletionHandler:(void (^)(double focus))completionHandler;
 
 - (void)setTorchLevel:(float)torchLevel;
@@ -77,6 +76,8 @@ typedef void (^SetCameraPropertyValueBlock)(CameraProperty cameraProperty, CGFlo
 @property (nonatomic, assign, nullable) id<CameraControlsDelegate> delegate;
 
 //@property (nonatomic, nullable) UIPanGestureRecognizer *panGestureRecognizer;
+@property (nonatomic, nullable) UITapGestureRecognizer *tapGestureRecognizer;
+
 
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cameraControlButtons;
 @property (weak, nonatomic) IBOutlet UIView *scaleSliderControlView;
@@ -86,6 +87,7 @@ typedef void (^SetCameraPropertyValueBlock)(CameraProperty cameraProperty, CGFlo
 @property (copy, nonatomic, setter=setMeasuringUnit:) NSString *measuringUnit;
 - (NSValue *)selectedCameraPropertyFrame;
 
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *stackViewButtons;
 
 @end
 

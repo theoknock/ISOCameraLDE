@@ -6,16 +6,8 @@
 //  Copyright © 2019 The Life of a Demoniac. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface ScaleSliderControlView : UIView <UIGestureRecognizerDelegate>
-
-@property (nonatomic, nullable) UITapGestureRecognizer *tapGestureRecognizer;
-
-- (void)show:(BOOL)show sender:(id)sender;
+@interface ScaleSliderControlView : UIView
 
 @end
-
-NS_ASSUME_NONNULL_END

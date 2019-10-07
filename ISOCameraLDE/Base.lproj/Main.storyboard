@@ -173,6 +173,12 @@
                                     <outletCollection property="cameraControlButtons" destination="cmG-81-aAG" id="SFa-Xm-oc8"/>
                                     <outletCollection property="cameraControlButtons" destination="6BM-EC-R7x" id="hd6-A9-gpK"/>
                                     <outletCollection property="cameraControlButtons" destination="G0w-KL-LQQ" id="2MQ-IN-hgi"/>
+                                    <outletCollection property="stackViewButtons" destination="d9f-cE-wZk" id="6Ns-gU-OQn"/>
+                                    <outletCollection property="stackViewButtons" destination="1oe-yR-dM8" id="D34-jN-CZA"/>
+                                    <outletCollection property="stackViewButtons" destination="wCC-wi-bYd" id="Z9c-QY-s5D"/>
+                                    <outletCollection property="stackViewButtons" destination="cmG-81-aAG" id="hFS-Ee-C7c"/>
+                                    <outletCollection property="stackViewButtons" destination="6BM-EC-R7x" id="Qjp-g1-Igh"/>
+                                    <outletCollection property="stackViewButtons" destination="G0w-KL-LQQ" id="crU-Ku-q9N"/>
                                 </connections>
                             </view>
                         </subviews>

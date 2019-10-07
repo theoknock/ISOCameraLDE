@@ -40,7 +40,7 @@
 		B9A4686F2346DBD6007D9258 /* ScaleSliderControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScaleSliderControlView.h; sourceTree = "<group>"; };
 		B9A468702346DBD6007D9258 /* ScaleSliderControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScaleSliderControlView.m; sourceTree = "<group>"; wrapsLines = 0; };
 		B9CEED452321BAD100DEC88A /* CameraControlsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraControlsView.h; sourceTree = "<group>"; wrapsLines = 0; };
-		B9CEED462321BAD100DEC88A /* CameraControlsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraControlsView.m; sourceTree = "<group>"; wrapsLines = 0; };
+		B9CEED462321BAD100DEC88A /* CameraControlsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CameraControlsView.m; sourceTree = "<group>"; wrapsLines = 0; };
 		B9DF14A922B810DE0028DC47 /* ISOCameraLDE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ISOCameraLDE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9DF14AC22B810DE0028DC47 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B9DF14AD22B810DE0028DC47 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };

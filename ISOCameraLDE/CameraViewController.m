@@ -318,6 +318,8 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     dispatch_async( self.sessionQueue, ^{
         __autoreleasing NSError *error = nil;
         @try {
+            [self configureCameraForHighestFrameRate:self.videoDevice];
+            
             if ( [self.videoDevice lockForConfiguration:&error] ) {
                 if ( [self.videoDevice isFocusModeSupported:AVCaptureFocusModeLocked] ) {
                     self.videoDevice.focusMode = AVCaptureFocusModeLocked;
@@ -329,7 +331,7 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
                 
                 if ( [self.videoDevice isExposureModeSupported:AVCaptureExposureModeCustom] ) {
                     self.videoDevice.exposureMode = AVCaptureExposureModeCustom;
-                    [self.videoDevice setExposureModeCustomWithDuration:CMTimeMakeWithSeconds((1.0/3.0), 1000*1000*1000) ISO:self.videoDevice.activeFormat.minISO completionHandler:nil];
+                    [self.videoDevice setExposureModeCustomWithDuration:AVCaptureExposureDurationCurrent /*CMTimeMakeWithSeconds((1.0/3.0), 1000*1000*1000)*/ ISO:AVCaptureISOCurrent completionHandler:nil];
                     [self.videoDevice unlockForConfiguration];
                 }
                 else {
@@ -806,15 +808,46 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
     return value;
 }
 
+- (void)configureCameraForHighestFrameRate:(AVCaptureDevice *)device
+{
+    AVCaptureDeviceFormat *bestFormat = nil;
+    AVFrameRateRange *bestFrameRateRange = nil;
+    for ( AVCaptureDeviceFormat *format in [device formats] ) {
+        for ( AVFrameRateRange *range in format.videoSupportedFrameRateRanges ) {
+            if ( range.maxFrameRate > bestFrameRateRange.maxFrameRate ) {
+                bestFormat = format;
+                bestFrameRateRange = range;
+            }
+        }
+    }
+    if ( bestFormat ) {
+        __autoreleasing NSError *error = nil;
+        if ( [device lockForConfiguration:&error] == YES ) {
+            device.activeFormat = bestFormat;
+            device.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
+            device.activeVideoMaxFrameDuration = bestFrameRateRange.minFrameDuration;
+            [device unlockForConfiguration];
+        }
+        
+        if (error) NSLog(@"%@", error.description);
+    }
+}
+
 - (void)targetExposureDuration:(CMTime)exposureDuration withCompletionHandler:(void (^)(CMTime currentExposureDuration))completionHandler
 {
     __autoreleasing NSError *error = nil;
     
     @try {
         if (![self.videoDevice isAdjustingExposure] && [self.videoDevice lockForConfiguration:&error]) {
-            [self.videoDevice setExposureModeCustomWithDuration:exposureDuration ISO:[self.videoDevice ISO] completionHandler:^(CMTime syncTime) {
+            if (CMTIME_IS_INVALID(exposureDuration))
+            {
+                [self configureCameraForHighestFrameRate:self.videoDevice];
                 completionHandler([self.videoDevice exposureDuration]);
-            }];
+            } else {
+                [self.videoDevice setExposureModeCustomWithDuration:exposureDuration ISO:[self.videoDevice ISO] completionHandler:^(CMTime syncTime) {
+                    completionHandler([self.videoDevice exposureDuration]);
+                }];
+            }
         }
     } @catch (NSException *exception) {
         NSLog( @"Error setting exposure mode to AVCaptureExposureModeCustom:\t%@\n%@.", error.description, exception.description);
