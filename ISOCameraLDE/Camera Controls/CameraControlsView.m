@@ -137,7 +137,7 @@ static NSString * const reuseIdentifier = @"CollectionViewCellReuseIdentifier";
                 [self.cameraControlButtonsStackView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([obj isKindOfClass:[UIButton class]])
                     {
-                        NSLog(@"button %lu", [obj tag]);
+//                        NSLog(@"button %lu", [obj tag]);
                         UIImage *large_symbol = [[(UIButton *)obj currentImage] imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithTextStyle:UIFontTextStyleLargeTitle]];
                         [(UIButton *)obj setImage:large_symbol forState:UIControlStateNormal];
                         [self setMeasuringUnit:[NSString stringWithFormat:@"%@", @""]];

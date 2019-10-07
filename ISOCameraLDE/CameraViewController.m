@@ -421,8 +421,6 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
 
 - (SetCameraPropertyValueBlock)setCameraProperty:(CameraProperty)cameraProperty
 {
-    __autoreleasing NSError *error = nil;
-    
            return ^ (CameraProperty cameraProperty, CGFloat value) {
                 __autoreleasing NSError *error = nil;
                 @try {
@@ -442,6 +440,8 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
                                 [self->_videoDevice setTorchModeOnWithLevel:value error:nil];
                             else
                                 [self->_videoDevice setTorchMode:AVCaptureTorchModeOff];
+                        } else if (cameraProperty == CameraPropertyZoom && ![self.videoDevice isRampingVideoZoom]) {
+                            [self.videoDevice setVideoZoomFactor:(([self.videoDevice maxAvailableVideoZoomFactor] - [self.videoDevice minAvailableVideoZoomFactor]) * (value - 0.0) / (10.0 - 0.0) + [self.videoDevice minAvailableVideoZoomFactor])];
                         }
                     });
                     
@@ -781,6 +781,12 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
         case CameraPropertyTorch:
         {
             value = self.videoDevice.torchLevel;
+            break;
+        }
+        case CameraPropertyZoom:
+        {
+            float zoomFactor = self.videoDevice.videoZoomFactor;
+            value = (1.0 - 0.0) * (zoomFactor - [self.videoDevice minAvailableVideoZoomFactor]) / ([self.videoDevice maxAvailableVideoZoomFactor] - [self.videoDevice minAvailableVideoZoomFactor]) + 0.0;
             break;
         }
             

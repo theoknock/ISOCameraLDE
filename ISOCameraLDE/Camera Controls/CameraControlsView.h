@@ -20,7 +20,9 @@ typedef NS_ENUM(NSUInteger, ControlButtonTag) {
     ControlButtonTagExposureDuration = 2,
     ControlButtonTagISO   = 3,
     ControlButtonTagFocus = 4,
-    ControlButtonTagTorch = 5
+    ControlButtonTagTorch = 5,
+    ControlButtonTagZoom  = 6
+    
 };
 
 typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
@@ -29,9 +31,10 @@ typedef NS_ENUM(NSUInteger, ExposureDurationMode) {
 };
 
 typedef NS_ENUM(NSUInteger, CameraProperty) {
-    CameraPropertyISO = 3,
+    CameraPropertyISO   = 3,
     CameraPropertyFocus = 4,
-    CameraPropertyTorch = 5
+    CameraPropertyTorch = 5,
+    CameraPropertyZoom  = 6
 };
 
 typedef void (^SetCameraPropertyValueBlock)(CameraProperty cameraProperty, CGFloat value);
