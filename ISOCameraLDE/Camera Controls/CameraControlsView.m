@@ -336,19 +336,19 @@ static CMTime (^exposureDurationForMode)(ExposureDurationMode) = ^CMTime(Exposur
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:_measuringUnit
                                                                            attributes:centerAlignedTextAttributes];
     dispatch_async(dispatch_get_main_queue(), ^{
-        __block CGFloat textLayerFrameY = CGRectGetMinY(self.layer.bounds);
         [textLayer setOpaque:FALSE];
         [textLayer setAlignmentMode:kCAAlignmentCenter];
         [textLayer setWrapped:TRUE];
         textLayer.string = attributedString;
         
-        CGSize textLayerframeSize = [self suggestFrameSizeWithConstraints:self.bounds.size forAttributedString:attributedString];
-        
-        CGRect frame = CGRectMake(([[self selectedCameraPropertyFrame] CGRectValue].origin.x - ([[self selectedCameraPropertyFrame] CGRectValue].size.width / 2.0) - 24.0) + 83.0, ((((CGRectGetMinY(self.bounds) + CGRectGetMidY(self.bounds)) / 2.0) + 6.0) + textLayerFrameY), 48.0, textLayerframeSize.height);
+        CGSize textLayerframeSize = [self suggestFrameSizeWithConstraints:self.layer.bounds.size forAttributedString:attributedString]; // this creates the right size frame now (so work it back in)
+//        CGRect buttonFrame = CGRectMake([[self selectedCameraPropertyFrame] CGRectValue].origin.x, [self convertPoint:CGPointMake([[self selectedCameraPropertyFrame] CGRectValue].origin.x, [[self selectedCameraPropertyFrame] CGRectValue].origin.y) toView:self].y, [[self selectedCameraPropertyFrame] CGRectValue].origin.y, [[self selectedCameraPropertyFrame] CGRectValue].size.width, [[self selectedCameraPropertyFrame] CGRectValue].size.height);
+//        CGRect frame = [self convertRect:buttonFrame toView:self];
+        CGRect frame = CGRectMake(CGRectGetMidX([[self viewWithTag:[self selectedCameraProperty]] convertRect:[[self selectedCameraPropertyFrame] CGRectValue] toView:self]), /*(CGRectGetMidX([[self selectedCameraPropertyFrame] CGRectValue]).origin.x - ([[self selectedCameraPropertyFrame] CGRectValue].size.width / 2.0)) + 83.0*/, ((((CGRectGetMinY(self.bounds) + CGRectGetMidY(self.bounds)) / 2.0) + 6.0) + textLayerFrameY), 48.0, textLayerframeSize.height);
         
         textLayer.frame = frame;
         textLayerFrameY += textLayerframeSize.height;
-//        [textLayer setBackgroundColor:[UIColor redColor].CGColor];
+        [textLayer setBackgroundColor:[UIColor redColor].CGColor];
         
         
     });

@@ -433,15 +433,17 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
                         } else if (cameraProperty == CameraPropertyISO && ![self.videoDevice isAdjustingExposure]) {
                             float maxISO = self.videoDevice.activeFormat.maxISO;
                             float minISO = self.videoDevice.activeFormat.minISO;
-                            self->_ISO = minISO + (value * (maxISO - minISO));
-                            [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:self->_ISO completionHandler:nil];
+                            float ISO = minISO + (value * (maxISO - minISO));
+                            [self.videoDevice setExposureModeCustomWithDuration:[self.videoDevice exposureDuration] ISO:ISO completionHandler:nil];
                         } else if (cameraProperty == CameraPropertyTorch && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious)) {
                             if (value != 0)
                                 [self->_videoDevice setTorchModeOnWithLevel:value error:nil];
                             else
                                 [self->_videoDevice setTorchMode:AVCaptureTorchModeOff];
                         } else if (cameraProperty == CameraPropertyZoom && ![self.videoDevice isRampingVideoZoom]) {
-                            [self.videoDevice setVideoZoomFactor:(([self.videoDevice maxAvailableVideoZoomFactor] - [self.videoDevice minAvailableVideoZoomFactor]) * (value - 0.0) / (10.0 - 0.0) + [self.videoDevice minAvailableVideoZoomFactor])];
+                            float zoomValue = 1.0 + (value * (self.videoDevice.activeFormat.videoMaxZoomFactor - 1.0));
+                            NSLog(@"value: %f, zoomValue: %f", value, zoomValue);
+                            [self.videoDevice setVideoZoomFactor:zoomValue];
                         }
                     });
                     
@@ -783,10 +785,14 @@ typedef NS_ENUM( NSInteger, AVCamManualSetupResult ) {
             value = self.videoDevice.torchLevel;
             break;
         }
+        
+            // TO-DO: Print all values related to zoom to console to debug incorrect return value
         case CameraPropertyZoom:
         {
-            float zoomFactor = self.videoDevice.videoZoomFactor;
-            value = (1.0 - 0.0) * (zoomFactor - [self.videoDevice minAvailableVideoZoomFactor]) / ([self.videoDevice maxAvailableVideoZoomFactor] - [self.videoDevice minAvailableVideoZoomFactor]) + 0.0;
+            float zoomFactor = [self.videoDevice videoZoomFactor];
+            value = (1.0 - 0.0) * (zoomFactor - [self.videoDevice minAvailableVideoZoomFactor]) / (self.videoDevice.activeFormat.videoMaxZoomFactor - [self.videoDevice minAvailableVideoZoomFactor]) + 0.0;
+            NSLog(@"zoomFactor:  %f", self.videoDevice.activeFormat.videoMaxZoomFactor);
+            
             break;
         }
             

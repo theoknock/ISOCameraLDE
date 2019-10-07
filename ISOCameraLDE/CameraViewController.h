@@ -16,12 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) __block AVCaptureDevice *videoDevice;
 
-@property (nonatomic, assign) float ISO;
-- (void)setISO:(float)ISO;
 - (void)autoExposureWithCompletionHandler:(void (^)(double ISO))completionHandler;
 
-@property (nonatomic, assign) float focus;
-- (void)setFocus:(float)focus;
 - (void)autoFocusWithCompletionHandler:(void (^)(double focus))completionHandler;
 
 - (void)toggleRecordingWithCompletionHandler:(void (^)(BOOL isRunning, NSError *error))completionHandler;
