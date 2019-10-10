@@ -1,5 +1,5 @@
 ISOCameraLDE configures the iPhone video camera for optimal image acquisition of cloaked entities, specifically, by setting the exposure duration to 1.0/3.0.
-It facilitates the first step of a two-step process, namely, making media impressions from light that falls outside of the human visual range (but which is detectable by the camera imaging sensor).
+It facilitates the first step of a two-step process for rendering impressions of light outside of the human visual range (but which is detectable by the camera imaging sensor).
 Its interface is simplistic, limiting the accessible features to just those required to facilitate the process.
 Although some settings are automatic, there are several user-customizable settings:
 
